@@ -1,0 +1,54 @@
+/* Phase 2 additions only; Version 1 keeps its existing stylesheet. */
+/* Browser history must never look like this visitor's learning progress. */
+a:link, a:visited { color: #175eac; text-decoration: underline; }
+a:hover, a:active { color: #104778; }
+.welcome-form { display: grid; gap: .75rem; max-width: 30rem; margin: 1.5rem 0; }
+.welcome-form label { font-weight: 700; }
+.welcome-form input[type="text"] { width: 100%; box-sizing: border-box; padding: .8rem; border: 1px solid #52677b; border-radius: .4rem; font: inherit; }
+.welcome-form button { justify-self: start; }
+.visit-actions { display: flex; flex-wrap: wrap; gap: .8rem; margin: 1.5rem 0; }
+.visit-actions form { margin: 0; }
+.visit-help, #name-help { color: #40546a; line-height: 1.6; }
+.visit-error, .visit-notice { padding: 1rem; border-radius: .4rem; line-height: 1.5; }
+.visit-error { background: #fff1f0; border: 1px solid #a52a2a; color: #7b2020; }
+.visit-notice { background: #eaf6ee; border: 1px solid #39734a; color: #204c2c; }
+.subject-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 20rem), 1fr)); gap: 1rem; padding: 0; list-style: none; }
+.subject-cards li { padding: 1.1rem; border: 1px solid #ccd6e0; border-radius: .6rem; background: #f6f9fc; overflow-wrap: anywhere; }
+.subject-cards h3 { margin-top: 0; }
+.subject-heading, .available-subjects li { display: flex; align-items: center; gap: .65rem; }
+.subject-icon { width: 2rem; height: 2rem; flex: 0 0 2rem; object-fit: contain; }
+.available-subjects { display: flex; flex-wrap: wrap; gap: .85rem 1.5rem; list-style: none; padding: 0; margin: 1rem 0; }
+button:focus-visible, input:focus-visible { outline: 3px solid #175eac; outline-offset: 3px; }
+.learning-nav { display: flex; flex-wrap: wrap; gap: 1rem; align-items: center; margin: 1rem 0; }
+.button-link { display: inline-block; padding: .6rem .9rem; border-radius: .35rem; background: #245a91; color: white; text-decoration: none; }
+a.button-link:link, a.button-link:visited { color: white; text-decoration: none; }
+.button-link:hover { background: #19436d; }
+pre { padding: 1rem; border-radius: .4rem; background: #edf2f7; white-space: pre-wrap; overflow-wrap: anywhere; }
+code { overflow-wrap: anywhere; }
+.activity-form { display: grid; gap: 1.5rem; }
+.activity-form fieldset { min-width: 0; border: 1px solid #a8b7c7; border-radius: .5rem; padding: 1rem; }
+.activity-form legend { font-weight: 700; padding: 0 .4rem; overflow-wrap: anywhere; }
+.answer-choice { display: flex; gap: .7rem; align-items: flex-start; padding: .8rem .4rem; cursor: pointer; }
+.answer-choice input { flex-shrink: 0; margin-top: .35rem; }
+.answer-choice span { overflow-wrap: anywhere; }
+.activity-counts { display: flex; flex-wrap: wrap; gap: 1rem; }
+.activity-counts > div { flex: 1 1 12rem; padding: 1rem; background: #edf2f7; border-radius: .4rem; }
+.activity-counts dt { font-weight: 700; }
+.activity-counts dd { margin: .4rem 0 0; font-size: 1.5rem; }
+.activity-history { padding-left: 1.5rem; }
+.activity-history li { margin: .7rem 0; overflow-wrap: anywhere; }
+.answer-results { list-style: none; padding: 0; }
+.answer-result { padding: 1rem; margin: 1rem 0; border: 1px solid #9baec0; border-left-width: .4rem; border-radius: .4rem; overflow-wrap: anywhere; }
+.answer-result h2 { font-size: 1.15rem; }
+.correct-answer { border-left-color: #287040; }
+.incorrect-answer { border-left-color: #a52a2a; }
+a:focus-visible { outline: 3px solid #175eac; outline-offset: 3px; }
+.topic-title, .saved-status small { display: block; font-size: .875rem; font-weight: 400; margin-top: .5rem; }
+.subject-learning-links { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: .75rem; }
+.progress-table { min-width: 58rem; }
+.progress-table th:first-child { min-width: 11rem; }
+.table-container:focus-visible { outline: 3px solid #175eac; outline-offset: 3px; }
+@media (max-width: 40rem) {
+    .progress-summary { grid-template-columns: 1fr; }
+    main { padding: 1rem; }
+}

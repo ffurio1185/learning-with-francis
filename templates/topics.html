@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Learning topics | Personal Learning Application</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="{{ url_for('static', filename='topics.js') }}" defer></script>
+</head>
+<body>
+    <main>
+        <h1>Learning topics</h1>
+        <p>See your topics and their current learning status.</p>
+
+        {% if error %}
+        <p class="error-message" role="alert">{{ error }}</p>
+        {% endif %}
+
+        <section aria-labelledby="progress-heading">
+            <h2 id="progress-heading">Learning progress</h2>
+            <p class="section-hint">These counts cover all saved topics, regardless of the topic filter.</p>
+            <dl class="progress-summary">
+                {% for item in overview.status_counts %}
+                <div>
+                    <dt>{{ item.learning_status }}</dt>
+                    <dd data-summary-status="{{ item.learning_status }}">{{ item.topic_count }}</dd>
+                </div>
+                {% endfor %}
+            </dl>
+            <p class="section-hint">Practice counts and quiz scores never complete a topic. Only your personal confirmation of understanding can do that.</p>
+        </section>
+
+        {% if topics %}
+        <h2>Topics and status updates</h2>
+        <div class="topic-filter">
+            <label for="topic-filter">Filter by current status</label>
+            <select id="topic-filter" disabled>
+                <option value="All" selected>All</option>
+                <option value="Still Learning">Still Learning</option>
+                <option value="Needs Review">Needs Review</option>
+                <option value="Completed">Completed</option>
+            </select>
+        </div>
+        <p id="filter-empty-message" class="empty-message" role="status" hidden>No topics match this filter</p>
+        <div id="topics-table-container" class="table-container">
+            <table>
+                <caption>Saved learning topics</caption>
+                <thead>
+                    <tr>
+                        <th scope="col">Topic ID</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Current status</th>
+                        <th scope="col">Update status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for category_id, category_name, learning_status in topics %}
+                    <tr class="topic-row" data-learning-status="{{ learning_status }}">
+                        <td>{{ category_id }}</td>
+                        <td>{{ category_name }}</td>
+                        <td>{{ learning_status }}</td>
+                        <td>
+                            <form class="status-form" method="post"
+                                  action="{{ url_for('update_topic_status', category_id=category_id) }}">
+                                <label for="new-status-{{ category_id }}">New status</label>
+                                <select id="new-status-{{ category_id }}" name="new_status">
+                                    {% for status in ('Still Learning', 'Needs Review', 'Completed') %}
+                                    <option value="{{ status }}"{% if status == learning_status %} selected{% endif %}>{{ status }}</option>
+                                    {% endfor %}
+                                </select>
+                                <label class="confirmation-label" for="user-confirmed-{{ category_id }}">
+                                    <input type="checkbox" id="user-confirmed-{{ category_id }}"
+                                           name="user_confirmed" value="yes">
+                                    <span>I confirm that I understand this topic.</span>
+                                </label>
+                                <p class="form-hint">Confirmation is required only for Completed.</p>
+                                <p id="confirmation-error-{{ category_id }}"
+                                   class="error-message confirmation-error" role="alert" hidden></p>
+                                <button type="submit">Save</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p class="empty-message">No learning topics recorded yet.</p>
+        {% endif %}
+
+        <section aria-labelledby="practice-counts-heading">
+            <h2 id="practice-counts-heading">Practice counts by topic</h2>
+            {% if overview.topic_counts %}
+            <div class="table-container">
+                <table id="practice-counts">
+                    <caption>All saved topics, including topics with no practice</caption>
+                    <thead>
+                        <tr>
+                            <th scope="col">Topic</th>
+                            <th scope="col">Learning status</th>
+                            <th scope="col">Exercises</th>
+                            <th scope="col">Exercises completed</th>
+                            <th scope="col">Quiz attempts</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in overview.topic_counts %}
+                        <tr data-category-id="{{ item.category_id }}">
+                            <th scope="row">{{ item.category_name }}</th>
+                            <td>{{ item.learning_status }}</td>
+                            <td>{{ item.exercise_count }}</td>
+                            <td>{{ item.completed_exercises }}</td>
+                            <td>{{ item.quiz_attempt_count }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <p class="empty-message">No topic practice counts yet.</p>
+            {% endif %}
+        </section>
+
+        <section aria-labelledby="practice-history-heading">
+            <h2 id="practice-history-heading">Practice history</h2>
+            <p class="section-hint">Dates are shown in UTC. Repeated exercises and quizzes keep separate entries.</p>
+            {% if overview.practice_history %}
+            <div class="table-container history-container">
+                <table id="practice-history">
+                    <caption>Saved practice entries, newest first</caption>
+                    <thead>
+                        <tr>
+                            <th scope="col">Recorded (UTC)</th>
+                            <th scope="col">Topic</th>
+                            <th scope="col">Type / ID</th>
+                            <th scope="col">Practice</th>
+                            <th scope="col">Result</th>
+                            <th scope="col">Exercise completed (UTC)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for entry in overview.practice_history %}
+                        <tr>
+                            <td><time>{{ entry.recorded_at }}</time></td>
+                            <td>{{ entry.category_name }}</td>
+                            <td>{{ entry.practice_type }} #{{ entry.entry_id }}</td>
+                            <td>{{ entry.title }}</td>
+                            <td>{% if entry.practice_type == 'Quiz' %}{{ entry.correct_answers }} / {{ entry.total_questions }} correct{% elif entry.exercise_status == 1 %}Exercise completed{% else %}Exercise incomplete{% endif %}</td>
+                            <td>{% if entry.completed_at %}<time>{{ entry.completed_at }}</time>{% else %}—{% endif %}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <p class="empty-message">No practice recorded yet.</p>
+            {% endif %}
+        </section>
+
+        <section aria-labelledby="status-history-heading">
+            <h2 id="status-history-heading">Topic status history</h2>
+            <p class="section-hint">Only saved events are shown. Older manual test data may contain gaps; missing events have not been reconstructed.</p>
+            {% if overview.status_history %}
+            <div class="table-container history-container">
+                <table id="status-history">
+                    <caption>Saved status changes, newest first; dates are UTC</caption>
+                    <thead>
+                        <tr>
+                            <th scope="col">Changed (UTC)</th>
+                            <th scope="col">Topic</th>
+                            <th scope="col">Previous status</th>
+                            <th scope="col">New status</th>
+                            <th scope="col">Completion personally confirmed</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for entry in overview.status_history %}
+                        <tr data-history-id="{{ entry.history_id }}">
+                            <td><time>{{ entry.changed_at }}</time></td>
+                            <td>{{ entry.category_name }}</td>
+                            <td>{{ entry.previous_status if entry.previous_status is not none else 'Initial topic' }}</td>
+                            <td>{{ entry.new_status }}</td>
+                            <td>{{ 'Yes' if entry.user_confirmed else 'No' }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <p class="empty-message">No topic status history recorded yet.</p>
+            {% endif %}
+        </section>
+    </main>
+</body>
+</html>

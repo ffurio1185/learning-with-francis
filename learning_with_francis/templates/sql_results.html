@@ -1,0 +1,29 @@
+{% extends "learning_base.html" %}
+{% from "_time.html" import local_time %}
+{% block title %}{{ subject.name }} results{% endblock %}
+{% block content %}
+<h1>{{ subject.name }} {{ 'quiz results' if attempt.activity_kind == 'quiz' else 'practice result' }}</h1>
+{% if practice_navigation %}<p id="practice-progress">Question {{ practice_navigation.position }} of {{ practice_navigation.total }}</p>{% endif %}
+<p class="visit-notice" id="personal-feedback">{{ feedback }}</p>
+<p id="score">{{ visit.display_name }}, you scored <strong>{{ attempt.score }} out of {{ attempt.total_questions }}</strong>.</p>
+<p>Saved {{ local_time(attempt.submitted_at) }} (Europe/Berlin).</p>
+<ol class="answer-results">
+    {% for answer in answers %}
+    <li class="answer-result {{ 'correct-answer' if answer.is_correct else 'incorrect-answer' }}">
+        <h2>{{ answer.prompt }}</h2>
+        <p><strong>{{ 'Correct' if answer.is_correct else 'Incorrect' }}</strong></p>
+        <p>Your answer: <code>{{ answer.choices[answer.selected_option] }}</code></p>
+        <p>Correct answer: <code>{{ answer.choices[answer.correct_option] }}</code></p>
+        <p>{{ answer.explanation }}</p>
+    </li>
+    {% endfor %}
+</ol>
+<div class="learning-nav">
+    {% if practice_navigation %}
+    <a class="button-link" id="practice-next" href="{{ practice_navigation.next_url }}">{{ 'Next Question' if practice_navigation.position < practice_navigation.total else 'Finish Practice' }}</a>
+    {% else %}
+    <a class="button-link" href="{{ url_for('learning.quiz' if attempt.activity_kind == 'quiz' else 'learning.practice') }}">Try Again</a>
+    {% endif %}
+    <a href="{{ url_for('learning.lesson') }}">Review the lesson and activity history</a>
+</div>
+{% endblock %}

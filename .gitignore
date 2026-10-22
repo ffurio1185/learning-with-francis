@@ -1,0 +1,44 @@
+# Local environments and generated Python files
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+
+# Private runtime data, signing keys, credentials and environment files
+/instance/
+.env
+.env.*
+!.env.example
+session-signing-key
+.session-key-*
+*.pem
+*.key
+
+# SQLite databases, backups and sidecars
+*.db
+*.db-*
+*.sqlite
+*.sqlite-*
+*.sqlite3
+*.sqlite3-*
+*.bak
+*.backup
+*.db.*
+*.sqlite.*
+*.sqlite3.*
+
+# Classroom materials and local test/browser output
+Material_CTF/
+playwright-report/
+test-results/
+coverage/
+*.log
+.DS_Store
+Thumbs.db

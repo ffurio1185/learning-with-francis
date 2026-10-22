@@ -1,0 +1,30 @@
+{% extends "learning_base.html" %}
+{% block title %}{{ subject.name }} {{ kind }}{% endblock %}
+{% block content %}
+<h1>{{ subject.name }} {{ 'quiz' if kind == 'quiz' else 'practice exercise' }}</h1>
+{% if kind == 'practice' %}
+<p id="practice-progress">Question {{ practice_position + 1 }} of {{ practice_total }}</p>
+<p>Check your answer to see the correct answer and explanation immediately. Then choose Next Question.</p>
+{% endif %}
+<p>{{ visit.display_name }}, choose one answer for each question. You can try as often as you like.</p>
+{% if subject.slug == 'sql' %}<p>Example learners: Alex (Berlin, 22), Mia (Hamburg, 16), Sam (Berlin, 19).</p>{% endif %}
+{% if error %}<p class="visit-error" role="alert">{{ error }}</p>{% endif %}
+<form class="activity-form" method="post">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <input type="hidden" name="submission_token" value="{{ submission_token }}">
+    {% if kind == 'practice' %}<input type="hidden" name="position" value="{{ practice_position }}">{% endif %}
+    {% for question in questions %}
+    <fieldset>
+        <legend>{{ practice_position + 1 if kind == 'practice' else loop.index }}. {{ question.prompt }}</legend>
+        {% for option_id, label in question.choices.items() %}
+        <label class="answer-choice" for="{{ question.id }}-{{ option_id }}">
+            <input type="radio" id="{{ question.id }}-{{ option_id }}" name="{{ question.id }}" value="{{ option_id }}" required
+                {% if selected.get(question.id) == option_id %}checked{% endif %}>
+            <span>{{ label }}</span>
+        </label>
+        {% endfor %}
+    </fieldset>
+    {% endfor %}
+    <button type="submit">{{ 'Submit quiz' if kind == 'quiz' else 'Check answer' }}</button>
+</form>
+{% endblock %}

@@ -1,0 +1,6 @@
+{% macro local_time(value) -%}
+{%- if value -%}
+{%- set local = value | berlin_datetime -%}
+<time datetime="{{ local.isoformat() }}">{{ local.strftime('%d.%m.%Y %H:%M:%S %Z') }}</time>
+{%- else -%}—{%- endif -%}
+{%- endmacro %}

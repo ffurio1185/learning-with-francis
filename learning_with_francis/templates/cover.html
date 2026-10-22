@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#edf6ff">
+    <meta name="description" content="Welcome to Learning with Francis. A place to learn, practise, and grow at your own pace.">
+    <title>Welcome · Learning with Francis</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='cover.css') }}">
+    <script src="{{ url_for('static', filename='cover.js') }}" defer></script>
+</head>
+<body>
+    <main class="welcome-cover" id="welcome-cover" aria-labelledby="welcome-title">
+        <span class="cover-watermark" aria-hidden="true">4U</span>
+        <div class="cover-content">
+            <p class="cover-eyebrow">A little curiosity. A world of possibility.</p>
+            <h1 id="welcome-title"><span class="cover-welcome">Welcome to</span>Learning with Francis</h1>
+            <p class="cover-description">Learn something new.<br>Build understanding, one step at a time.</p>
+            <a class="cover-enter" id="cover-enter" href="{{ url_for('index') }}">
+                <span>ENTER</span><span class="enter-arrow" aria-hidden="true">→</span>
+            </a>
+        </div>
+        <p class="cover-footnote">Your space to learn, practise &amp; grow.</p>
+    </main>
+</body>
+</html>

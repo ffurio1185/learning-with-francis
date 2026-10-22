@@ -1,0 +1,6 @@
+{% macro subject_icon(name) -%}
+{%- set files = {'SQL': 'sql.svg', 'Python': 'python.svg', 'JavaScript': 'javascript.svg', 'SAP': 'sap.svg'} -%}
+{%- if name in files -%}
+<img class="subject-icon" src="{{ url_for('static', filename='subject-icons/' ~ files[name]) }}" width="32" height="32" alt="" aria-hidden="true">
+{%- endif -%}
+{%- endmacro %}

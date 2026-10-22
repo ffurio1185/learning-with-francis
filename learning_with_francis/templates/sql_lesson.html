@@ -1,0 +1,55 @@
+{% extends "learning_base.html" %}
+{% from "_time.html" import local_time %}
+{% block title %}SELECT and WHERE{% endblock %}
+{% block content %}
+<h1>SQL: SELECT and WHERE</h1>
+<p>Welcome, {{ visit.display_name }}! SQL helps you read information from tables. A table has columns (kinds of information) and rows (individual records).</p>
+<section aria-labelledby="sample-heading">
+    <h2 id="sample-heading">Our example: learners</h2>
+    <p>This small example table is lesson material. It contains fictional learners and is separate from your saved progress.</p>
+    <div class="table-container"><table>
+        <caption>learners</caption><thead><tr><th scope="col">name</th><th scope="col">city</th><th scope="col">age</th></tr></thead>
+        <tbody><tr><td>Alex</td><td>Berlin</td><td>22</td></tr><tr><td>Mia</td><td>Hamburg</td><td>16</td></tr><tr><td>Sam</td><td>Berlin</td><td>19</td></tr></tbody>
+    </table></div>
+</section>
+<section>
+    <h2>1. Choose columns with SELECT</h2>
+    <p><code>SELECT</code> says which columns to show. <code>FROM</code> says which table to read. Separate several column names with commas.</p>
+    <pre><code>SELECT name, city FROM learners;</code></pre>
+    <p>This returns Alex/Berlin, Mia/Hamburg and Sam/Berlin. It reads rows without changing them.</p>
+    <pre><code>SELECT * FROM learners;</code></pre>
+    <p>The star <code>*</code> means every column: name, city and age.</p>
+</section>
+<section>
+    <h2>2. Choose rows with WHERE</h2>
+    <p><code>WHERE</code> keeps only rows that match a condition. Text values use single quotes; numbers do not need quotes.</p>
+    <pre><code>SELECT name FROM learners WHERE city = 'Berlin';</code></pre>
+    <p>This returns Alex and Sam. <code>=</code> means equal to.</p>
+    <pre><code>SELECT name FROM learners WHERE age &gt;= 18;</code></pre>
+    <p>This also returns Alex and Sam. <code>&gt;=</code> means greater than or equal to; <code>&lt;</code> means less than; <code>&gt;</code> means greater than.</p>
+    <pre><code>SELECT name FROM learners WHERE age &lt; 18;</code></pre>
+    <p>This returns Mia. A semicolon ends each statement. Without <code>ORDER BY</code>, result order is not guaranteed; these examples focus on which rows match.</p>
+</section>
+<div class="learning-nav">
+    <a class="button-link" href="{{ url_for('learning.practice') }}">Try the practice exercises</a>
+    <a class="button-link" href="{{ url_for('learning.quiz') }}">Start SQL quiz</a>
+</div>
+<p>Practice covers ten questions, one at a time, with immediate explanations. The separate five-question quiz reveals its answers only after you submit the whole quiz.</p>
+<section aria-labelledby="activity-heading">
+    <h2 id="activity-heading">Your SQL activity</h2>
+    <dl class="activity-counts">
+        <div><dt>Practice attempts</dt><dd id="practice-count">{{ counts.practice_attempts }}</dd></div>
+        <div><dt>Exercises completed correctly</dt><dd id="exercise-count">{{ counts.exercises_completed }}</dd></div>
+        <div><dt>Quiz attempts</dt><dd id="quiz-count">{{ counts.quiz_attempts }}</dd></div>
+    </dl>
+    <p>Every new submission is a separate attempt. A correctly answered practice exercise counts as a completion. Refreshing a result or submitting the same form twice does not add another attempt.</p>
+    {% if history %}
+    <ol class="activity-history">
+        {% for attempt in history %}
+        <li><a href="{{ url_for('learning.results', attempt_id=attempt.attempt_id) }}">{{ 'SQL quiz' if attempt.activity_kind == 'quiz' else 'SQL practice' }}: {{ attempt.score }} out of {{ attempt.total_questions }}</a>
+            — {{ local_time(attempt.submitted_at) }}</li>
+        {% endfor %}
+    </ol>
+    {% else %}<p>No SQL activity recorded for this visit yet.</p>{% endif %}
+</section>
+{% endblock %}

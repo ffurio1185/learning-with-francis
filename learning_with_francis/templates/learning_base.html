@@ -1,0 +1,25 @@
+{% from "_visit_controls.html" import visit_controls with context %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}{{ subject.name }} learning{% endblock %} — Learning with Francis</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='phase2.css') }}">
+</head>
+<body>
+<main>
+    <nav class="learning-nav" aria-label="Learning navigation">
+        <a href="{{ url_for('index') }}">Learning home</a>
+        <a href="{{ url_for('progress.index') }}">My Progress</a>
+        <a href="{{ url_for('learning.lesson') }}">{{ subject.name }} lesson</a>
+    </nav>
+    <p>Learning with Francis · {{ visit.display_name }}</p>
+    {{ visit_controls() }}
+    {% block content %}{% endblock %}
+    <p class="visit-help">A score records practice, not understanding. Your topic stays unchanged. Completed always requires your personal confirmation.</p>
+    <p class="visit-help">Dates use German local time (Europe/Berlin), including daylight saving time: CET in winter and CEST in summer.</p>
+</main>
+</body>
+</html>

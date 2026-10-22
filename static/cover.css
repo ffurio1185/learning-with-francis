@@ -1,0 +1,161 @@
+/* The entrance has its own styles; the learning application is unchanged. */
+:root {
+    color-scheme: light;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    color: #163c68;
+    background: #edf6ff;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; overflow-x: clip; }
+
+.welcome-cover {
+    position: relative;
+    isolation: isolate;
+    display: grid;
+    place-items: center;
+    min-height: 100vh;
+    min-height: 100svh;
+    overflow: hidden;
+    padding: 5rem 1.5rem 6rem;
+    text-align: center;
+    background:
+        radial-gradient(ellipse at 16% 15%, #cde7ff 0, transparent 48%),
+        radial-gradient(ellipse at 90% 85%, #c5e4ff 0, transparent 48%),
+        linear-gradient(130deg, #e8f4ff, #fff 53%, #edf7ff);
+    transform-origin: center;
+}
+
+.welcome-cover::before,
+.welcome-cover::after {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    width: 72vw;
+    height: 72vw;
+    border: 1px solid rgb(74 145 211 / 12%);
+    border-radius: 50%;
+    pointer-events: none;
+}
+.welcome-cover::before { top: -52vw; right: -10vw; }
+.welcome-cover::after { bottom: -53vw; left: -12vw; }
+
+.cover-watermark {
+    position: absolute;
+    z-index: -1;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -53%);
+    color: rgb(54 130 208 / 8%);
+    font-size: clamp(17rem, 43vw, 43rem);
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -.1em;
+    padding-right: .1em;
+    user-select: none;
+    pointer-events: none;
+    animation: watermark-reveal 1.1s ease-out both;
+}
+
+.cover-content { position: relative; max-width: 66rem; }
+.cover-eyebrow {
+    margin: 0 0 2.25rem;
+    font-size: .8rem;
+    font-weight: 600;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: #416789;
+}
+h1 {
+    margin: 0;
+    font-size: clamp(2.35rem, 5.5vw, 5rem);
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -.045em;
+    text-wrap: balance;
+}
+.cover-welcome {
+    display: block;
+    margin-bottom: .75rem;
+    font-size: clamp(1.1rem, 2.3vw, 1.65rem);
+    font-weight: 400;
+    letter-spacing: .015em;
+    color: #355d85;
+}
+.cover-description {
+    margin: 1.6rem 0 2.6rem;
+    color: #416384;
+    font-size: clamp(1rem, 1.8vw, 1.15rem);
+    line-height: 1.8;
+}
+.cover-eyebrow, h1, .cover-description {
+    animation: title-reveal .85s .15s ease-out both;
+}
+
+.cover-enter,
+.cover-enter:visited {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    min-height: 3.6rem;
+    min-width: 12rem;
+    padding: 1rem 2rem;
+    border: 1px solid #135db7;
+    border-radius: .65rem;
+    color: #fff;
+    background: linear-gradient(135deg, #216fcf, #155db8);
+    box-shadow: 0 8px 24px rgb(23 92 180 / 20%);
+    font-size: .95rem;
+    font-weight: 700;
+    letter-spacing: .14em;
+    text-decoration: none;
+    transition: box-shadow .25s ease, transform .25s ease;
+    -webkit-tap-highlight-color: transparent;
+}
+.cover-enter:hover {
+    box-shadow: 0 8px 32px rgb(29 105 204 / 38%), 0 0 0 5px rgb(52 135 227 / 9%);
+    transform: translateY(-2px);
+}
+.cover-enter:focus-visible { outline: 3px solid #163c68; outline-offset: 6px; }
+.cover-enter:active { transform: scale(.98); }
+.enter-arrow { font-size: 1.4rem; line-height: 1; letter-spacing: 0; }
+.cover-footnote {
+    position: absolute;
+    bottom: 1.8rem;
+    left: 1.5rem;
+    right: 1.5rem;
+    margin: 0;
+    color: #466887;
+    font-size: .85rem;
+    line-height: 1.5;
+}
+
+.welcome-cover.is-entering { animation: open-cover 1.2s cubic-bezier(.4, 0, .2, 1) both; }
+.is-entering .cover-enter { animation: enter-pulse .3s ease-out; }
+@keyframes watermark-reveal { from { opacity: 0; } to { opacity: 1; } }
+@keyframes title-reveal {
+    from { opacity: 0; transform: translateY(14px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+@keyframes enter-pulse {
+    50% { transform: scale(1.06); box-shadow: 0 0 0 12px rgb(52 135 227 / 12%); }
+}
+@keyframes open-cover {
+    0%, 15% { opacity: 1; transform: scale(1); }
+    100% { opacity: 0; transform: scale(1.09); }
+}
+
+@media (max-width: 480px) {
+    .welcome-cover { padding: 4rem 1.25rem 6rem; }
+    .cover-eyebrow { max-width: 19rem; margin: 0 auto 1.75rem; line-height: 1.7; font-size: .7rem; }
+    .cover-watermark { font-size: 80vw; }
+    .cover-description { margin-bottom: 2rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .welcome-cover, .cover-watermark, .cover-eyebrow, h1, .cover-description, .cover-enter {
+        animation: none !important;
+        transition: none !important;
+    }
+    .cover-enter:hover, .cover-enter:active { transform: none; }
+}
