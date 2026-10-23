@@ -33,7 +33,7 @@ def run(report_dir):
             port = reservation.getsockname()[1]
         env = {**os.environ, "LWF_SECRET_KEY": secrets.token_urlsafe(48),
                "LWF_DATA_DIR": str(private / "data"), "LWF_ALLOWED_HOSTS": "127.0.0.1,localhost",
-               "LWF_BIND_HOST": "127.0.0.1", "PORT": str(port),
+               "LWF_BIND_HOST": "127.0.0.1", "PORT": str(port), "LWF_DEMO_MODE": "1",
                "GUNICORN_CMD_ARGS": "",
                "PATH": str(Path(sys.executable).parent) + os.pathsep + os.environ["PATH"],
                "PYTHONDONTWRITEBYTECODE": "1"}
@@ -77,11 +77,13 @@ def run(report_dir):
                     page.on("response", lambda response: errors.append(str(response.status)) if response.status >= 500 else None)
                     page.goto(base + "/")
                     expect(page.get_by_role("link", name="ENTER", exact=True)).to_be_visible()
+                    expect(page.get_by_role("complementary", name="Public learning demonstration")).to_contain_text("may be lost")
                     assert page.locator("audio").count() == 0
                     assert not any(".mp3" in url or "/audio/" in url for url in requested)
                     page.get_by_role("button", name="Deutsch", exact=True).click()
                     expect(page.locator("html")).to_have_attribute("lang", "de")
                     page.get_by_role("link", name="EINTRETEN", exact=True).click()
+                    expect(page.locator(".demo-notice")).to_contain_text("verloren gehen")
                     page.get_by_label("Dein Name", exact=True).fill("Release Learner")
                     page.get_by_role("button", name="Besuch starten", exact=True).click()
                     expect(page.get_by_role("heading", level=2).first).to_contain_text("Release Learner")
@@ -147,6 +149,37 @@ def run(report_dir):
                     assert rows("SELECT COUNT(*) FROM learning_attempts") == [(8,)]
                     groups.append("Independent same-name visitor has zero activity; Python rejects unconfirmed completion without JavaScript")
                     other.close()
+                    for locale, heading in (("en", "Public learning demonstration"), ("de", "Öffentliche Lern-Demo")):
+                        page.get_by_role("button", name="English" if locale == "en" else "Deutsch", exact=True).click()
+                        for width in (320, 375, 1440):
+                            page.set_viewport_size({"width": width, "height": 850})
+                            expect(page.get_by_role("complementary", name=heading)).to_be_visible()
+                            assert page.evaluate("document.documentElement.scrollWidth <= innerWidth + 1")
+                        page.add_style_tag(content="html { font-size: 200%; }")
+                        assert page.evaluate("document.documentElement.scrollWidth <= innerWidth + 1")
+                        page.reload()
+                    page.screenshot(path=str(report_dir / "free-demo-german.png"), full_page=True)
+                    groups.append("Bilingual demo notice remains readable at mobile/desktop widths and enlarged text")
+
+                    saved = path.read_bytes()
+                    process.terminate()
+                    process.wait(timeout=15)
+                    env["LWF_DATA_DIR"] = str(private / "replacement-instance")
+                    process = start_server()
+                    old_path = path
+                    path = private / "replacement-instance/learning_with_francis.db"
+                    page.goto(base + "/progress/")
+                    expect(page).to_have_url(base + "/learn/")
+                    expect(page.get_by_label("Dein Name", exact=True)).to_be_visible()
+                    assert rows("SELECT COUNT(*) FROM visits") == [(0,)]
+                    assert rows("SELECT COUNT(*) FROM learning_attempts") == [(0,)]
+                    page.get_by_label("Dein Name", exact=True).fill("Release Learner")
+                    page.get_by_role("button", name="Besuch starten", exact=True).click()
+                    page.goto(base + "/progress/")
+                    expect(page.locator("#no-activity")).to_be_visible()
+                    assert rows("SELECT COUNT(*) FROM topic_progress WHERE learning_status='Still Learning'") == [(4,)]
+                    assert old_path.read_bytes() == saved
+                    groups.append("Simulated lost Free instance storage creates fresh data; old browser session safely returns to name entry with zero activity")
                     context.close()
                 finally:
                     browser.close()

@@ -1,0 +1,7 @@
+{% if config.get('DEMO_MODE', false) %}
+<aside class="demo-notice" aria-label="{{ _('Public learning demonstration') }}">
+    <p><strong>{{ _('Public learning demonstration') }}</strong></p>
+    <p>{{ _('Learning with Francis is an evolving learning project. Progress is stored temporarily and may be lost when the service sleeps, restarts or is redeployed.') }}</p>
+    <p>{{ _('Please use a nickname and do not rely on this demo to keep your results.') }}</p>
+</aside>
+{% endif %}

@@ -11,6 +11,7 @@
 </head>
 <body>
 <main>
+    {% include '_demo_notice.html' %}
 
     {% if not language_form_id %}{% include '_language_controls.html' %}{% endif %}
     <nav class="learning-nav" aria-label="{{ _('Learning navigation') }}">

@@ -4,10 +4,10 @@ A beginner-friendly learning application for SQL, Python, JavaScript and SAP.
 Read a short lesson, practise with immediate feedback, take a quiz, and track your
 understanding at your own pace. No account, registration or password is required.
 
-**Published baseline:** Version 2.0 at `dbeae6f`.
-**Release candidate:** the approved bilingual English/German experience (L1–L5),
-connected progress tracker, subject icons, and Welcome Cover Page/About enhancement.
-Prepared in a separate clean release history; not yet committed, pushed or deployed.
+**Published application:** Version 2.0 at `c8ba21f`, including the approved bilingual
+English/German experience (L1–L5), connected progress tracker, subject icons, and
+Welcome Cover Page/About enhancement. Local Render Free demonstration changes are
+prepared for review; they have not been committed, pushed or deployed.
 This candidate contains no background audio. The approved local development
 repository is preserved separately.
 
@@ -93,6 +93,17 @@ development, not a public production server.
 **Important:** root `app.py` is the preserved Version 1 application. Use the
 `learning_with_francis:create_app` entry point above for Version 2.
 
+## Free public demonstration
+
+The prepared Render configuration uses **Free** compute in Frankfurt, with no
+persistent disk or additional database service. SQLite lives in a private runtime
+directory outside the source tree. Storage can disappear when the instance sleeps,
+restarts or is redeployed. A bilingual notice explains this before name entry and
+on learning/progress pages. Do not rely on the demonstration to retain results.
+The original local setup above does not enable this hosting-specific notice.
+
+See [the Free setup and launch requirements](docs/PUBLIC-RELEASE.md).
+
 ## Temporary visits and privacy
 
 A name is a greeting label, never an identifier. Every new visit receives a random
@@ -145,8 +156,10 @@ Run the Python and SQLite regression suite:
 .venv/bin/python -B -W error::ResourceWarning -m unittest discover -s tests -v
 ```
 
-The published source has 125 tests; L1 added 18, L2 added 16, L3 added 16
-SQL-language checks and L4 adds 18 subject-language checks (193 total). They cover both versions, database setup,
+The original published source had 125 tests; bilingual/content checks and later
+cover verification brought the application suite to 194. This Free demonstration
+candidate adds 16 production-boundary and five Free-storage/notice tests, for
+**215 tests**. They cover both versions, database setup,
 transactions, grading, repeated practice, visitor isolation, confirmation
 protection, saved history, timezone display and cover routing. Tests generate
 schema 3 data and signing keys in disposable `/tmp` directories. Version 1 tests

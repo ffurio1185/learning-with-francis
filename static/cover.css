@@ -255,3 +255,19 @@ h1 {
 @media (min-width: 481px) and (max-height: 480px) {
     .welcome-cover { padding-bottom: 7rem; }
 }
+
+/* Free public demo: server-rendered, readable without JavaScript. */
+.demo-notice {
+    box-sizing: border-box;
+    margin: 1.25rem 0;
+    padding: 1rem;
+    border: 1px solid #b8d6ee;
+    border-inline-start: 4px solid #24629a;
+    border-radius: .6rem;
+    background: #edf6ff;
+    color: #17334f;
+    font-size: 1rem;
+    line-height: 1.6;
+    overflow-wrap: anywhere;
+}
+.demo-notice p { margin: .4rem 0; }

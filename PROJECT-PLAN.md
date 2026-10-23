@@ -677,6 +677,10 @@ commit of this enhancement. Merging, pushing and deployment remain unauthorised.
 
 ## P2.6 — clean public release candidate
 
+The initial preparation below is retained as history. The later **Render Free
+public demonstration** section supersedes its paid-disk/cost/backup proposal and
+records the current published baseline and pending local changes.
+
 **Status: local technical preparation verified; open pending final publishing and
 live-deployment approvals.** Francis authorised practical local release preparation
 while preserving the current 12-hour session behavior. Earlier seven-day session
@@ -721,3 +725,68 @@ The next practical action is approval of the reviewed local release commit and i
 normal push to personal `origin/main`. Public hosting then requires approved real
 Impressum/privacy information, hosting costs and operational backup arrangements.
 These are release prerequisites, not requests to rebuild completed learning work.
+
+
+### Render Free public demonstration — local preparation, 23 October 2026
+
+**Status: implemented and locally verified; awaiting Francis's approval before any
+new commit, push or deployment. P2.6 remains open.** The approved clean application
+was already published as `c8ba21f` on personal GitHub `main`. Francis now explicitly
+chooses Free hosting with temporary data; this supersedes the earlier paid-disk
+proposal without reopening any completed milestone or approved feature.
+
+- `render.yaml` now requests one **Free** Python web service in Frankfurt, no disk,
+  paid compute, additional database or worker. Automatic deployment stays off.
+  Build/start/health remain `pip install -r requirements.txt`, `sh render-start.sh`
+  and `/healthz`. `LWF_DATA_DIR=/tmp/learning-with-francis` is private ephemeral
+  runtime storage; `LWF_DEMO_MODE=1` enables a bilingual public-demo notice. The
+  stable signing key remains outside Git in Render environment configuration.
+- The notice identifies this as an evolving learning project, recommends a
+  nickname and explains that stored progress may disappear on sleep, restart or
+  redeployment. It is server-rendered in English/German on the cover's About area,
+  before name entry, and on learning/results/progress pages, including without
+  JavaScript. The approved cover hero/animation and learning content are unchanged.
+- Startup creates fresh schema 3 with curriculum only if storage is absent;
+  existing valid storage is not deliberately erased. Tests cover both a process
+  restart with the same directory and simulated instance replacement with empty
+  storage. Stale visitor cookies safely return to name entry; a fresh random visit
+  starts with zero activity and four Still Learning subjects. Same names cannot
+  recover/share other visitors' records. The existing **12-hour** session behavior,
+  personal confirmation, reversible statuses, grading, saved answers and Berlin
+  timestamps remain unchanged. No original database is copied or upgraded.
+- **215 Python/SQLite tests passed**: 194 application, 16 production and five
+  focused Free-demo tests. **68 Chromium browser groups passed**: all 60 existing
+  regressions plus eight production/Free-demo groups using actual Gunicorn and the
+  start script. Checks include four-subject lessons/practice/quizzes, translated
+  notices, zero-activity same-name visitors, deduplication, confirmation with and
+  without JavaScript, real restart behavior, lost-storage recovery, mobile/desktop
+  layouts and enlarged text. No unexpected page/server errors were reported.
+  A first new test used the default cookie name; the test was corrected to use
+  the application's configured cookie name, with no session-code change.
+- Official Render schema validation, Free-only resource assertions, JavaScript and
+  shell syntax, dependency consistency, catalog compilation and integrity/foreign
+  key checks passed. All functional data was disposable and removed by tests.
+  Chromium/emulated viewports are not a physical-device or screen-reader audit.
+- The complete manifest contains **91 source/documentation/test files**, adding
+  only the notice partial and focused test module. No audio assets, private
+  databases, visitor records, backups or real credentials are included. Protected
+  source/classroom file hashes are rechecked before saving this release copy;
+  the approved development branches and Version 1 application files are preserved.
+
+**Operational limits:** expect cold starts and no reliable progress retention.
+No durable-storage/backup promise or paid backup service is introduced. Keep the
+workspace/service Free and avoid payment methods/paid add-ons; review usage quotas.
+Render can suspend Free services/builds when allowances are exhausted. See the
+[current deployment instructions and official sources](docs/PUBLIC-RELEASE.md).
+
+**Essential launch items still outstanding:** approved real operator/contact
+information and accessible Impressum/privacy notices describing nickname/session
+and activity data, actual retention criteria and Render processing/logs, plus
+review of the provider's processing terms. End Visit is not a deletion promise;
+no automatic 30-day retention rule has been implemented. No private identity or
+address is invented or exposed here. Free hosting does not remove applicable
+German information or data-protection duties.
+
+The next practical action is Francis's approval of these local changes before a
+new personal-GitHub commit/push, followed by separately authorised **Free** Render
+setup. No new commit, push, purchase, service creation or deployment is performed.

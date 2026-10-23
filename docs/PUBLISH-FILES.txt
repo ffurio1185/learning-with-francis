@@ -25,6 +25,7 @@ learning_with_francis/security.py
 learning_with_francis/sql_content.py
 learning_with_francis/sql_display.py
 learning_with_francis/subjects.py
+learning_with_francis/templates/_demo_notice.html
 learning_with_francis/templates/_language_controls.html
 learning_with_francis/templates/_subject_icon.html
 learning_with_francis/templates/_time.html
@@ -72,6 +73,7 @@ tests/browser_sql_language.py
 tests/browser_subject_language.py
 tests/browser_welcome_cover.py
 tests/fixtures/version1-schema.sql
+tests/test_free_demo.py
 tests/test_interface_language.py
 tests/test_language.py
 tests/test_learning_overview.py

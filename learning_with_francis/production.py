@@ -21,7 +21,7 @@ def production_config(environ=None):
     directory = Path(env.get("LWF_DATA_DIR", ""))
     source = Path(__file__).resolve().parents[1]
     if not directory.is_absolute() or directory == Path("/"):
-        raise RuntimeError("Set LWF_DATA_DIR to an absolute private persistent directory.")
+        raise RuntimeError("Set LWF_DATA_DIR to an absolute private runtime directory.")
     directory = directory.resolve()
     if directory == source or directory.is_relative_to(source):
         raise RuntimeError("Production data must be outside the source and public static directories.")
@@ -30,7 +30,11 @@ def production_config(environ=None):
     hostname = re.compile(r"(?=.{1,253}$)[a-z0-9](?:[a-z0-9.-]*[a-z0-9])?$")
     if not hosts or any(not hostname.fullmatch(host) or ".." in host for host in hosts):
         raise RuntimeError("Set LWF_ALLOWED_HOSTS to exact hostnames without schemes, ports or wildcards.")
+    demo_mode = env.get("LWF_DEMO_MODE", "0")
+    if demo_mode not in ("0", "1"):
+        raise RuntimeError("Set LWF_DEMO_MODE to 0 or 1.")
     return {
+        "DEMO_MODE": demo_mode == "1",
         "DATABASE": str(directory / "learning_with_francis.db"),
         "SECRET_KEY": secret,
         "TRUSTED_HOSTS": hosts,

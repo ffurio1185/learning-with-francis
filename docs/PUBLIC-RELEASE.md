@@ -1,96 +1,98 @@
-# Public release candidate
+# Render Free public demonstration
 
-This is a local, uncommitted release candidate. No push, resource purchase or
-deployment is authorised by preparing it.
+## Scope and source
 
-## Source and publishing destination
+Published application: `c8ba21f` on personal
+[GitHub main](https://github.com/ffurio1185/learning-with-francis).
+The current local changes prepare Free hosting only; commit/push/deployment each
+still require owner approval. Classroom and original development repositories,
+original databases, backups and visitor records are outside this release.
+The clean history contains no audio assets/player or music-bearing commits.
+Do not merge the separate development history into this public release.
 
-- Personal repository: https://github.com/ffurio1185/learning-with-francis
-- Future destination: `origin/main`, after approval of the exact commit and push.
-- Clean history starts at published `dbeae6f7549da79d0b0aab172e2efcde2e3aa1fe`.
-- Approved application files come from snapshot `37e712f`, including bilingual
-  L1–L5 functionality and the approved cover/About/button enhancement.
-- No music-bearing commit is imported. Do not merge or push the other local
-  feature branch into this release: its history is deliberately kept separate.
-- There are no audio assets or players in this candidate. The original approved
-  local music experience remains untouched in its own repository/branch.
+## Exact Free settings
 
-## Prepared runtime
+| Setting | Value |
+| --- | --- |
+| Service | One Python Web Service, **Free**, Frankfurt |
+| Source | `ffurio1185/learning-with-francis`, branch `main` |
+| Build | `pip install -r requirements.txt` |
+| Start | `sh render-start.sh` |
+| Application | `wsgi:app` (not Version 1's root `app.py`) |
+| Health | `/healthz` |
+| Python | `3.14.4` |
+| `LWF_DATA_DIR` | `/tmp/learning-with-francis` |
+| `LWF_DEMO_MODE` | `1` |
+| `LWF_SECRET_KEY` | Generate once in Render; keep stable and outside Git |
+| Host validation | Render's `RENDER_EXTERNAL_HOSTNAME`; explicit `LWF_ALLOWED_HOSTS` only for additional exact domains |
+| Automatic deployment | Off; review changes before manual deployment |
+| Persistent disks, Postgres, paid workers/cron | **None** |
 
-Render settings are in `render.yaml`: one paid web instance in Frankfurt, 1 GB
-persistent disk mounted at `/var/data`, automatic deploys off. This file creates
-nothing until the owner explicitly connects/applies it in Render.
+`render.yaml` configures these settings but creates nothing locally. The start
+script privately creates schema 3 if absent, validates existing storage without
+reset/upgrade, then runs one Gunicorn worker with four threads on Render's `$PORT`.
+Only curriculum metadata is seeded; there are no demonstration visitors/results.
+Never upload an existing database or signing key. HTTPS, Secure/HttpOnly/SameSite
+cookies, host checks and production security headers remain required.
 
-Use `pip install -r requirements.txt` to build, then `sh render-start.sh` to start.
-The start script validates or initialises the fresh schema-3 database at runtime,
-then starts Gunicorn on `$PORT`. It never resets or upgrades an existing database.
-Do not use `gunicorn app:app`: root `app.py` is the preserved Version 1 tracker.
+## Limitations and cost boundary
 
-The production entry point needs `LWF_DATA_DIR` and a stable random `LWF_SECRET_KEY`
-outside Git. Render can generate the secret once; retain it across redeploys.
-Host validation uses `RENDER_EXTERNAL_HOSTNAME` on Render; custom domains require
-explicit comma-separated `LWF_ALLOWED_HOSTS`. Production cookies are Secure,
-HttpOnly and SameSite=Lax. Render must provide HTTPS. No arbitrary proxy headers
-are trusted by the application. `/healthz` checks the expected database.
+Render's Free service sleeps after 15 minutes idle; waking can take about a minute.
+Its filesystem can be discarded on sleep, restart or redeployment, and Free cannot
+attach a persistent disk. The workspace shares 750 Free instance hours per month.
+Bandwidth/build allowances also apply: without a payment method, exhausted
+allowances suspend service/builds; with a payment method, supplementary usage can
+be billed. Use a Free workspace/service, avoid paid add-ons and review the current
+usage dashboard. This configuration requests no paid resource; it is not a promise
+of unlimited usage. Do not add a payment method or approve an upgrade automatically.
+See [Render Free limitations](https://render.com/docs/free).
 
-The existing 12-hour session and signed form-token behavior is unchanged. This is
-not a new absolute visit-age guarantee or a promise of cross-browser recovery.
-Names do not retrieve old results. End/New Visit revokes previous access while
-retaining records; closing a browser may restore a session. No automatic cleanup
-or seven-day session setting has been introduced.
+The bilingual notice says this is an evolving learning project with temporary
+progress. It appears in the cover's About area, before nickname entry, and on
+lessons, practice, quizzes/results and My Progress. No JavaScript is needed to
+read it. The existing cover hero, animation and learning logic are unchanged.
 
-Only curriculum metadata is initialised: four subjects and four topics, with zero
-visits, attempts, answers, progress rows or status-history rows. Actual activity
-starts with a visitor's own new visit. Do not upload local or preview databases.
-The real production disk will exist only after an authorised Render deployment.
+The existing **12-hour** session/form-token behavior is preserved. A stable secret
+does not preserve a lost database. If a returning cookie references an absent
+visit, the app safely returns to name entry. Starting again creates a random new
+identity and zero activity, even with the same nickname. Same-name visitors never
+share progress. End Visit removes browser access, not retained database rows.
+No account recovery, exact deletion schedule or guaranteed retention is promised.
+A normal process restart on the same remaining directory preserves records; the
+app does not deliberately wipe them at startup.
 
-## Required before public deployment
+There is no backup/recovery guarantee for this disposable demonstration and no
+paid backup service to configure. Original local backups remain protected. Any
+future durable hosting or backup workflow needs separate approval.
 
-1. Supply and approve the real operator/contact details and English/German
-   Impressum/privacy information, accessible before collecting visitor data.
-   Do not put private correspondence, unnecessary contact details or secrets in Git.
-2. Agree the public-data retention and privacy-request procedure; the earlier
-   30-day/7-day/30-day suggestions were preliminary and are not implemented here.
-   The current program retains old rows. Do not publish a notice claiming otherwise.
-3. Approve the actual hosting/backup bill and processor terms. Current illustrative
-   base is about US$7/month compute + US$0.25/month for a 1 GB disk, before tax,
-   external backups and usage extras; US$10 is a target, not a guaranteed cap.
-4. Arrange consistent, encrypted off-disk backups and a successful restore test.
-   Use SQLite's online backup API, not an uncoordinated live-file copy. An unrelated
-   Render cron service cannot mount the web service's private disk. Define an
-   affordable schedule/destination before promising recovery times. Keep encryption
-   keys separately and reapply deletions/revocations if recovering older data.
+## Essential before public launch
 
-These are deployment prerequisites, not reasons to rebuild approved learning
-features. Operator details and live-service decisions remain under Francis's
-control. No legal compliance, completed backup service or live persistence is
-claimed by this local technical preparation.
+1. Supply and approve the real operator identity, service/contact address and
+   project contact email for the applicable German Impressum. Make legal/privacy
+   pages reachable from the cover and before nickname entry. No private operator
+   details or placeholder legal assurances have been published by this work.
+2. Supply an accurate privacy notice: nickname, random visit identifier, session
+   cookie, answers/scores/dates, purposes/legal basis, Render processing/logs and
+   any transfers, retention criteria, contact and data rights. A nickname and
+   temporary storage do not automatically make this anonymous or exempt from GDPR.
+   No 30-day deletion or seven-day log policy is implemented. Confirm actual
+   provider retention/processor terms; do not promise immediate deletion on End Visit.
+3. With approval, push only the reviewed manifest to personal `origin/main`, then
+   create the **Free** service with no disk/add-ons. Check the dashboard says Free
+   before deploying. No purchase or resource creation is authorised yet.
+4. After deployment approval, check public HTTPS, trusted hostname, health, both
+   languages, a fresh visitor, all learning features and confirmation protection.
+   Explain cold start and storage-loss behavior to reviewers. Obtain Francis's
+   live review; local tests cannot verify Render's actual public service.
 
-## Verification and publishing procedure
+Legal references: [German DDG §5](https://www.gesetze-im-internet.de/ddg/__5.html)
+(applies within its statutory scope), [German media-law information requirements](https://www.die-medienanstalten.de/aufgaben/aufsicht/impressumspflicht/), and [European Commission data-information obligations](https://commission.europa.eu/law/law-topic/data-protection/information-business-and-organisations/obligations_en).
+This checklist is not a legal compliance certification. Free educational hosting
+alone does not settle Impressum or data-protection applicability.
 
-1. Review `docs/PUBLISH-FILES.txt` and the local verification report. Only these
-   files are intended for the candidate commit. Databases, keys, visitor records,
-   reports and environments stay outside the source tree or ignored.
-2. With explicit authorisation, create a new release commit on the clean candidate
-   branch using the repository-local noreply author identity. Review its full tree
-   and every reachable commit/object. Never add the private feature branch or tags.
-3. Recheck the live remote `main`. If it has changed from `dbeae6f`, stop and review
-   instead of force-pushing. After approval, push the exact reviewed candidate commit
-   to `refs/heads/main` without force. No push is authorised yet.
-4. Only after deployment approval, apply Render settings, configure secrets and
-   initialise fresh production storage. Confirm HTTPS, cookie behavior and health.
-5. Verify a fictional new visit, all subjects, bilingual forms, scoring, personal
-   completion confirmation and persistence through a controlled service restart
-   and redeploy. Check real backup success/restore and obtain Francis's live review.
-
-Source references checked during preparation:
-[Render Flask](https://render.com/docs/deploy-flask),
-[disks](https://render.com/docs/disks),
-[Blueprint fields](https://render.com/docs/blueprint-spec),
-[Python runtime](https://render.com/docs/python-version),
-[pricing](https://render.com/pricing), and
-[Flask configuration](https://flask.palletsprojects.com/en/stable/config/).
-
-The application's own software-license choice remains separate from the existing
-third-party icon notices. Public repository availability alone is not a software
-license. Preserve those notices in any release.
+Technical references checked 23 October 2026:
+[Blueprint specification](https://render.com/docs/blueprint-spec),
+[Flask deployment](https://render.com/docs/deploy-flask),
+[Python runtime](https://render.com/docs/python-version).
+Preserve the local third-party icon notices. The overall software-license decision
+remains separate; no new external assets or services are added here.

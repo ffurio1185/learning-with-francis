@@ -2110,3 +2110,15 @@ msgid ""
 msgstr ""
 "Jede überprüfte Übungsantwort ist ein Versuch; jede richtige Antwort zählt als abgeschlossene "
 "Übung. Wiederholte Runden behalten ihre eigenen Ergebnisse mit Datum."
+
+#: learning_with_francis/templates/_demo_notice.html
+msgid "Public learning demonstration"
+msgstr "Öffentliche Lern-Demo"
+
+#: learning_with_francis/templates/_demo_notice.html
+msgid "Learning with Francis is an evolving learning project. Progress is stored temporarily and may be lost when the service sleeps, restarts or is redeployed."
+msgstr "Learning with Francis ist ein Lernprojekt, das laufend weiterentwickelt wird. Dein Fortschritt wird nur vorübergehend gespeichert und kann verloren gehen, wenn der Dienst in den Ruhezustand wechselt, neu startet oder erneut bereitgestellt wird."
+
+#: learning_with_francis/templates/_demo_notice.html
+msgid "Please use a nickname and do not rely on this demo to keep your results."
+msgstr "Bitte verwende einen Spitznamen und verlasse dich nicht darauf, dass diese Demo deine Ergebnisse dauerhaft speichert."

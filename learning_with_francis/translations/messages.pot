@@ -2092,3 +2092,15 @@ msgid ""
 "completed exercise entry. Repeated rounds retain their separate dated "
 "results."
 msgstr ""
+
+#: learning_with_francis/templates/_demo_notice.html
+msgid "Public learning demonstration"
+msgstr ""
+
+#: learning_with_francis/templates/_demo_notice.html
+msgid "Learning with Francis is an evolving learning project. Progress is stored temporarily and may be lost when the service sleeps, restarts or is redeployed."
+msgstr ""
+
+#: learning_with_francis/templates/_demo_notice.html
+msgid "Please use a nickname and do not rely on this demo to keep your results."
+msgstr ""

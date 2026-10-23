@@ -16,6 +16,7 @@
     {% set language_form_id = 'welcome-form' if setup_ready and not visit else none %}
     {% if visit or not setup_ready %}{% include '_language_controls.html' %}{% endif %}
         <h1>Learning with Francis</h1>
+        {% include '_demo_notice.html' %}
         {% if setup_ready %}
         {% for message in get_flashed_messages() %}
         <p class="visit-notice" role="status">{{ message }}</p>
