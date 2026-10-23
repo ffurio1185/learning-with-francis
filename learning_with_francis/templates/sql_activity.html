@@ -1,30 +1,33 @@
 {% extends "learning_base.html" %}
-{% block title %}{{ subject.name }} {{ kind }}{% endblock %}
+{% set language_form_id = "activity-form" %}
+{% block title %}{{ _('%(subject)s quiz', subject=subject.name) if kind == 'quiz' else _('%(subject)s practice', subject=subject.name) }}{% endblock %}
 {% block content %}
-<h1>{{ subject.name }} {{ 'quiz' if kind == 'quiz' else 'practice exercise' }}</h1>
+<h1>{{ _('%(subject)s quiz', subject=subject.name) if kind == 'quiz' else _('%(subject)s practice exercise', subject=subject.name) }}</h1>
 {% if kind == 'practice' %}
-<p id="practice-progress">Question {{ practice_position + 1 }} of {{ practice_total }}</p>
-<p>Check your answer to see the correct answer and explanation immediately. Then choose Next Question.</p>
+<p id="practice-progress">{{ _('Question %(position)s of %(total)s', position=practice_position + 1, total=practice_total) }}</p>
+<p>{{ _('Check your answer to see the correct answer and explanation immediately. Then choose Next Question.') }}</p>
 {% endif %}
-<p>{{ visit.display_name }}, choose one answer for each question. You can try as often as you like.</p>
-{% if subject.slug == 'sql' %}<p>Example learners: Alex (Berlin, 22), Mia (Hamburg, 16), Sam (Berlin, 19).</p>{% endif %}
+<p>{{ _('%(name)s, choose one answer for each question. You can try as often as you like.', name=visit.display_name) }}</p>
+{% if subject.slug == 'sql' %}<p>{{ _('Example learners: Alex (Berlin, 22), Mia (Hamburg, 16), Sam (Berlin, 19).') }}</p>{% endif %}
 {% if error %}<p class="visit-error" role="alert">{{ error }}</p>{% endif %}
-<form class="activity-form" method="post">
+<form id="activity-form" class="activity-form" method="post">
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
     <input type="hidden" name="submission_token" value="{{ submission_token }}">
+    <input type="hidden" name="return_token" value="{{ language_return_token() }}">
     {% if kind == 'practice' %}<input type="hidden" name="position" value="{{ practice_position }}">{% endif %}
     {% for question in questions %}
     <fieldset>
-        <legend>{{ practice_position + 1 if kind == 'practice' else loop.index }}. {{ question.prompt }}</legend>
+        <legend lang="{{ learning_content_language }}">{{ practice_position + 1 if kind == 'practice' else loop.index }}. {{ question.prompt }}</legend>
         {% for option_id, label in question.choices.items() %}
         <label class="answer-choice" for="{{ question.id }}-{{ option_id }}">
-            <input type="radio" id="{{ question.id }}-{{ option_id }}" name="{{ question.id }}" value="{{ option_id }}" required
-                {% if selected.get(question.id) == option_id %}checked{% endif %}>
-            <span>{{ label }}</span>
+            <input type="radio" data-required-message="{{ _('Please choose an answer.') }}" id="{{ question.id }}-{{ option_id }}" name="{{ question.id }}" value="{{ option_id }}" required
+                {% if selected.get(question.id, language_draft.get(question.id)) == option_id %}checked{% endif %}>
+            <span lang="{{ learning_content_language }}">{{ label }}</span>
         </label>
         {% endfor %}
     </fieldset>
     {% endfor %}
-    <button type="submit">{{ 'Submit quiz' if kind == 'quiz' else 'Check answer' }}</button>
+    <button type="submit">{{ _('Submit quiz') if kind == 'quiz' else _('Check answer') }}</button>
 </form>
+{% include '_language_controls.html' %}
 {% endblock %}

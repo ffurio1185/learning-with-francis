@@ -1,26 +1,43 @@
 <!doctype html>
-<html lang="en">
+<html lang="{{ current_language }}">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="theme-color" content="#edf6ff">
-    <meta name="description" content="Welcome to Learning with Francis. A place to learn, practise, and grow at your own pace.">
-    <title>Welcome · Learning with Francis</title>
+    <meta name="description" content="{{ _('Welcome to Learning with Francis. A place to learn, practise, and grow at your own pace.') }}">
+    <title>{{ _('Welcome') }} · Learning with Francis</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='cover.css') }}">
     <script src="{{ url_for('static', filename='cover.js') }}" defer></script>
 </head>
 <body>
     <main class="welcome-cover" id="welcome-cover" aria-labelledby="welcome-title">
         <span class="cover-watermark" aria-hidden="true">4U</span>
+        {% set cover_controls = true %}
+        {% include '_language_controls.html' %}
         <div class="cover-content">
-            <p class="cover-eyebrow">A little curiosity. A world of possibility.</p>
-            <h1 id="welcome-title"><span class="cover-welcome">Welcome to</span>Learning with Francis</h1>
-            <p class="cover-description">Learn something new.<br>Build understanding, one step at a time.</p>
+            {% if error %}<p class="language-error" role="alert">{{ error }}</p>{% endif %}
+            <p class="cover-eyebrow">{{ _('A little curiosity. A world of possibility.') }}</p>
+            <h1 id="welcome-title"><span class="cover-welcome">{{ _('Welcome to') }}</span>Learning with Francis</h1>
+            <p class="cover-description">{{ _('Learn something new.') }}<br>{{ _('Build understanding, one step at a time.') }}</p>
             <a class="cover-enter" id="cover-enter" href="{{ url_for('index') }}">
-                <span>ENTER</span><span class="enter-arrow" aria-hidden="true">→</span>
+                <span>{{ _('ENTER') }}</span><span class="enter-arrow" aria-hidden="true">→</span>
             </a>
         </div>
-        <p class="cover-footnote">Your space to learn, practise &amp; grow.</p>
+        <p class="cover-footnote">
+            {{ _('Your space to learn, practise & grow.') }}
+            <a class="cover-discover" href="#about-learning">
+                <span>{{ _('Discover the project') }}</span><span aria-hidden="true">↓</span>
+            </a>
+        </p>
     </main>
+    <section class="cover-about" id="about-learning" aria-labelledby="about-title" tabindex="-1">
+        <div class="cover-about-content">
+            <h2 id="about-title">{{ _('About Learning with Francis') }}</h2>
+            <p>{{ _('Learning with Francis is an interactive learning platform designed to make learning more organized, engaging, and meaningful.') }}</p>
+            <p>{{ _('What began as a personal learning progress tracker in Version 1 has evolved into an interactive learning experience in Version 2, featuring lessons, practice exercises, quizzes, and personal progress tracking.') }}</p>
+            <p>{{ _('This project continues to grow alongside its creator’s learning journey, with new ideas and opportunities for future development.') }}</p>
+            <p class="cover-creator">{{ _('Concept, Design & Development by Francis Furio') }}</p>
+        </div>
+    </section>
 </body>
 </html>

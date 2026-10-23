@@ -155,3 +155,25 @@ Subject logos and their notices are retained in
 [the subject-icon documentation](../static/subject-icons/README.md). Francis Furio
 is the project author; third-party notices are not replaced by a project-wide
 licence. Runtime credentials and saved visitor data are never documentation assets.
+
+
+## Bilingual development (L1–L4)
+
+The independent feature branch adds Flask-Babel and English/German interfaces;
+the approved published source remains on `main`. L1–L3 have personal approval.
+L4 extends the SQL approach to Python, JavaScript and SAP lessons, practice, quiz
+questions, explanations and feedback, and awaits personal review. See the root
+README and translation maintenance notes.
+
+Language changes preserve visit identity and saved activity. The signed cookie
+can carry a small one-time name/answer draft during a native language switch; it
+is not encrypted and contains no scores or answer keys. The draft is consumed on
+the matching page and discarded at visit boundaries. Existing owner checks,
+transactions, grading and explicit completion confirmation remain in force.
+
+
+L3/L4 share view helpers and extraction markers without changing canonical question
+objects, grading, executable examples, content-version IDs or saved snapshots.
+Lookups include the topic, because different subjects reuse question IDs. Known
+snapshots translate only at render time. Unknown historical wording retains its
+original text. No migrations, accounts or new activity features are introduced.

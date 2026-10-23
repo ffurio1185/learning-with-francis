@@ -2,26 +2,29 @@
 {% from "_visit_controls.html" import visit_controls with context %}
 {% from "_subject_icon.html" import subject_icon %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ current_language }}">
 <head>
+    <script src="{{ url_for('static', filename='phase2-interface.js') }}" defer></script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>My Progress — Learning with Francis</title>
+    <title>{{ _('My Progress — Learning with Francis') }}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='phase2.css') }}">
-    <script src="{{ url_for('static', filename='topics.js') }}" defer></script>
+    <script src="{{ url_for('static', filename='phase2-topics.js') }}" defer></script>
 </head>
 <body>
-<main>
-    <nav class="learning-nav" aria-label="Learning navigation">
-        <a href="{{ url_for('index') }}">Learning home</a>
-        <a href="{{ url_for('progress.index') }}" aria-current="page">My Progress</a>
+<main class="progress-page">
+
+    {% include '_language_controls.html' %}
+    <nav class="learning-nav" aria-label="{{ _('Learning navigation') }}">
+        <a href="{{ url_for('index') }}">{{ _('Learning home') }}</a>
+        <a href="{{ url_for('progress.index') }}" aria-current="page">{{ _('My Progress') }}</a>
     </nav>
-    <h1>My Progress</h1>
+    <h1>{{ _('My Progress') }}</h1>
     <p>Learning with Francis · {{ visit.display_name }}</p>
-    <p>These records belong only to your current visit. Starting a new visit creates fresh progress.</p>
-    <p id="visit-started">Current visit started: {{ local_time(visit.started_at) }} (Europe/Berlin).</p>
-    <p class="visit-help">Opening another tab or returning to this page continues the same visit. Tabs in the same browser profile share progress. To begin with zero activity, choose Start New Visit and enter your name again.</p>
+    <p>{{ _('These records belong only to your current visit. Starting a new visit creates fresh progress.') }}</p>
+    <p id="visit-started">{{ _('Current visit started:') }} {{ local_time(visit.started_at) }} (Europe/Berlin).</p>
+    <p class="visit-help">{{ _('Opening another tab or returning to this page continues the same visit. Tabs in the same browser profile share progress. To begin with zero activity, choose Start New Visit and enter your name again.') }}</p>
     {{ visit_controls() }}
     {% for message in get_flashed_messages() %}
     <p class="visit-notice" role="status">{{ message }}</p>
@@ -29,64 +32,64 @@
     {% if error %}<p class="visit-error" role="alert">{{ error }}</p>{% endif %}
 
     <section aria-labelledby="summary-heading">
-        <h2 id="summary-heading">Your learning summary</h2>
+        <h2 id="summary-heading">{{ _('Your learning summary') }}</h2>
         <dl class="progress-summary">
             {% for item in overview.status_counts %}
-            <div><dt>{{ item.learning_status }}</dt><dd data-summary-status="{{ item.learning_status }}">{{ item.topic_count }}</dd></div>
+            <div><dt>{{ status_label(item.learning_status) }}</dt><dd data-summary-status="{{ item.learning_status }}">{{ item.topic_count }}</dd></div>
             {% endfor %}
         </dl>
         <dl class="activity-counts">
-            <div><dt>Practice attempts</dt><dd id="total-practice">{{ overview.totals.practice_attempts }}</dd></div>
-            <div><dt>Completed exercises</dt><dd id="total-exercises">{{ overview.totals.exercises_completed }}</dd></div>
-            <div><dt>Quiz attempts</dt><dd id="total-quizzes">{{ overview.totals.quiz_attempts }}</dd></div>
+            <div><dt>{{ _('Practice attempts') }}</dt><dd id="total-practice">{{ overview.totals.practice_attempts }}</dd></div>
+            <div><dt>{{ _('Completed exercises') }}</dt><dd id="total-exercises">{{ overview.totals.exercises_completed }}</dd></div>
+            <div><dt>{{ _('Quiz attempts') }}</dt><dd id="total-quizzes">{{ overview.totals.quiz_attempts }}</dd></div>
         </dl>
-        <p class="section-hint">Totals cover all four subjects, regardless of the filter. Each checked practice answer is one attempt; each correct practice answer is a completed exercise. Repeated practice counts again. Each submitted quiz counts once, regardless of its five answers.</p>
-        <p class="visit-help">Scores record activity, not understanding. Only you can confirm when you understand a topic and want to mark it Completed.</p>
+        <p class="section-hint">{{ _('Totals cover all four subjects, regardless of the filter. Each checked practice answer is one attempt; each correct practice answer is a completed exercise. Repeated practice counts again. Each submitted quiz counts once, regardless of its five answers.') }}</p>
+        <p class="visit-help">{{ _('Scores record activity, not understanding. Only you can confirm when you understand a topic and want to mark it Completed.') }}</p>
     </section>
 
     <section aria-labelledby="subjects-heading">
-        <h2 id="subjects-heading">Your subjects and learning statuses</h2>
+        <h2 id="subjects-heading">{{ _('Your subjects and learning statuses') }}</h2>
         {% if overview.topics %}
         <div class="topic-filter">
-            <label for="topic-filter">Filter by saved status</label>
+            <label for="topic-filter">{{ _('Filter by saved status') }}</label>
             <select id="topic-filter" disabled>
-                <option value="All" selected>All</option>
-                {% for status in statuses %}<option value="{{ status }}">{{ status }}</option>{% endfor %}
+                <option value="All" selected>{{ _('All') }}</option>
+                {% for status in statuses %}<option value="{{ status }}">{{ status_label(status) }}</option>{% endfor %}
             </select>
         </div>
-        <p id="filter-empty-message" class="empty-message" role="status" hidden>No topics match this filter</p>
-        <div id="topics-table-container" class="table-container" tabindex="0" role="region" aria-label="Subject progress table">
+        <p id="filter-empty-message" class="empty-message" role="status" hidden>{{ _('No topics match this filter') }}</p>
+        <div id="topics-table-container" class="table-container" tabindex="0" role="region" aria-label="{{ _('Subject progress table') }}">
             <table class="progress-table">
-                <caption>Your saved progress, including subjects with no activity</caption>
-                <thead><tr><th scope="col">Subject and learning links</th><th scope="col">Current status</th><th scope="col">Practice attempts</th><th scope="col">Completed exercises</th><th scope="col">Quiz attempts</th><th scope="col">Update status</th></tr></thead>
+                <caption>{{ _('Your saved progress, including subjects with no activity') }}</caption>
+                <thead><tr><th scope="col">{{ _('Subject and learning links') }}</th><th scope="col">{{ _('Current status') }}</th><th scope="col">{{ _('Practice attempts') }}</th><th scope="col">{{ _('Completed exercises') }}</th><th scope="col">{{ _('Quiz attempts') }}</th><th scope="col">{{ _('Update status') }}</th></tr></thead>
                 <tbody>
                     {% for item in overview.topics %}
                     <tr class="topic-row" data-learning-status="{{ item.learning_status }}" data-subject="{{ item.subject_id }}">
-                        <th scope="row"><span class="subject-heading">{{ subject_icon(item.name) }}<span>{{ item.name }}</span></span><span class="topic-title">{{ item.title }}</span>
+                        <th scope="row"><span class="subject-heading">{{ subject_icon(item.name) }}<span>{{ item.name }}</span></span><span class="topic-title"> <span lang="{{ learning_title_language(item.subject_id, item.title) }}">{{ learning_title(item.subject_id, item.title) }}</span></span>
                             <span class="subject-learning-links">
-                                <a href="{{ url_for('learning.lesson', subject=item.subject_id) }}">Lesson</a>
-                                <a href="{{ url_for('learning.practice', subject=item.subject_id) }}">Practice</a>
-                                <a href="{{ url_for('learning.quiz', subject=item.subject_id) }}">Quiz</a>
+                                <a href="{{ url_for('learning.lesson', subject=item.subject_id) }}">{{ _('Lesson') }}</a>
+                                <a href="{{ url_for('learning.practice', subject=item.subject_id) }}">{{ _('Practice') }}</a>
+                                <a href="{{ url_for('learning.quiz', subject=item.subject_id) }}">{{ _('Quiz') }}</a>
                             </span>
                         </th>
-                        <td class="saved-status">{{ item.learning_status }}{% if item.understanding_confirmed_at %}<small>Confirmed {{ local_time(item.understanding_confirmed_at) }}</small>{% endif %}</td>
+                        <td class="saved-status">{{ status_label(item.learning_status) }}{% if item.understanding_confirmed_at %}<small>{{ _('Confirmed') }} {{ local_time(item.understanding_confirmed_at) }}</small>{% endif %}</td>
                         <td class="practice-count">{{ item.practice_attempts }}</td>
                         <td class="exercise-count">{{ item.exercises_completed }}</td>
                         <td class="quiz-count">{{ item.quiz_attempts }}</td>
                         <td>
-                            <form class="status-form" method="post" action="{{ url_for('progress.update_status', topic_id=item.topic_id) }}">
+                            <form class="status-form" data-confirmation-message="{{ _('Please confirm that you understand this topic.') }}" method="post" action="{{ url_for('progress.update_status', topic_id=item.topic_id) }}">
                                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                                <label for="new-status-{{ item.topic_id }}">New status for {{ item.name }}</label>
+                                <label for="new-status-{{ item.topic_id }}">{{ _('New status for %(subject)s', subject=item.name) }}</label>
                                 <select id="new-status-{{ item.topic_id }}" name="new_status">
-                                    {% for status in statuses %}<option value="{{ status }}"{% if status == item.learning_status %} selected{% endif %}>{{ status }}</option>{% endfor %}
+                                    {% for status in statuses %}<option value="{{ status }}"{% if status == item.learning_status %} selected{% endif %}>{{ status_label(status) }}</option>{% endfor %}
                                 </select>
                                 <label class="confirmation-label" for="confirm-{{ item.topic_id }}">
                                     <input type="checkbox" id="confirm-{{ item.topic_id }}" name="user_confirmed" value="yes">
-                                    <span>I confirm that I understand this topic.</span>
+                                    <span>{{ _('I confirm that I understand this topic.') }}</span>
                                 </label>
-                                <p class="form-hint">Required for Completed. You can return to Needs Review or Still Learning at any time.</p>
+                                <p class="form-hint">{{ _('Required for Completed. You can return to Needs Review or Still Learning at any time.') }}</p>
                                 <p class="error-message confirmation-error" role="alert" hidden></p>
-                                <button type="submit">Save</button>
+                                <button type="submit">{{ _('Save') }}</button>
                             </form>
                         </td>
                     </tr>
@@ -94,41 +97,41 @@
                 </tbody>
             </table>
         </div>
-        {% else %}<p class="empty-message">No learning topics recorded for this visit.</p>{% endif %}
+        {% else %}<p class="empty-message">{{ _('No learning topics recorded for this visit.') }}</p>{% endif %}
     </section>
 
     <section aria-labelledby="activity-heading">
-        <h2 id="activity-heading">Practice and quiz history</h2>
-        <p>Saved activity, newest first. All dates use German local time (Europe/Berlin), including daylight saving time: CET in winter and CEST in summer. Open results to see your answers and explanations.</p>
+        <h2 id="activity-heading">{{ _('Practice and quiz history') }}</h2>
+        <p>{{ _('Saved activity, newest first. All dates use German local time (Europe/Berlin), including daylight saving time: CET in winter and CEST in summer. Open results to see your answers and explanations.') }}</p>
         {% if overview.activity %}
-        <div class="table-container history-container" tabindex="0" role="region" aria-label="Activity history">
+        <div class="table-container history-container" tabindex="0" role="region" aria-label="{{ _('Activity history') }}">
             <table id="activity-history">
-                <caption>Your actual practice and quiz results</caption>
-                <thead><tr><th scope="col">Date (Europe/Berlin)</th><th scope="col">Subject</th><th scope="col">Activity</th><th scope="col">Result</th><th scope="col">Answers</th></tr></thead>
+                <caption>{{ _('Your actual practice and quiz results') }}</caption>
+                <thead><tr><th scope="col">{{ _('Date (Europe/Berlin)') }}</th><th scope="col">{{ _('Subject') }}</th><th scope="col">{{ _('Activity') }}</th><th scope="col">{{ _('Result') }}</th><th scope="col">{{ _('Answers') }}</th></tr></thead>
                 <tbody>{% for entry in overview.activity %}
-                    <tr><td>{{ local_time(entry.submitted_at) }}</td><td>{{ entry.name }}</td><td>{{ 'Practice' if entry.activity_kind == 'practice' else 'Quiz' }}</td>
-                        <td>{{ entry.score }} / {{ entry.total_questions }} correct{% if entry.activity_kind == 'practice' %} — {{ 'Exercise completed' if entry.score == 1 else 'Try again' }}{% endif %}</td>
-                        <td><a href="{{ url_for('learning.results', subject=entry.subject_id, attempt_id=entry.attempt_id) }}">View results</a></td></tr>
+                    <tr><td>{{ local_time(entry.submitted_at) }}</td><td>{{ entry.name }}</td><td>{{ _('Practice') if entry.activity_kind == 'practice' else _('Quiz') }}</td>
+                        <td>{{ _('%(score)s / %(total)s correct', score=entry.score, total=entry.total_questions) }}{% if entry.activity_kind == 'practice' %} — {{ _('Exercise completed') if entry.score == 1 else _('Try again') }}{% endif %}</td>
+                        <td><a href="{{ url_for('learning.results', subject=entry.subject_id, attempt_id=entry.attempt_id) }}">{{ _('View results') }}</a></td></tr>
                 {% endfor %}</tbody>
             </table>
         </div>
-        {% else %}<p class="empty-message" id="no-activity">No practice or quiz activity yet. Open a subject to get started.</p>{% endif %}
+        {% else %}<p class="empty-message" id="no-activity">{{ _('No practice or quiz activity yet. Open a subject to get started.') }}</p>{% endif %}
     </section>
 
     <section aria-labelledby="status-history-heading">
-        <h2 id="status-history-heading">Learning-status history</h2>
-        <p id="initial-history-help">Every new visit starts with four entries marked Visit started — Still Learning, one for each subject. These record your starting statuses, not practice, quiz attempts or completed exercises.</p>
+        <h2 id="status-history-heading">{{ _('Learning-status history') }}</h2>
+        <p id="initial-history-help">{{ _('Every new visit starts with four entries marked Visit started — Still Learning, one for each subject. These record your starting statuses, not practice, quiz attempts or completed exercises.') }}</p>
         {% if overview.history %}
-        <div class="table-container history-container" tabindex="0" role="region" aria-label="Learning-status history">
+        <div class="table-container history-container" tabindex="0" role="region" aria-label="{{ _('Learning-status history') }}">
             <table id="status-history">
-                <caption>Your initial statuses and later changes, newest first (Europe/Berlin)</caption>
-                <thead><tr><th scope="col">Date (Europe/Berlin)</th><th scope="col">Subject</th><th scope="col">Previous status</th><th scope="col">New status</th><th scope="col">Personal completion confirmation</th></tr></thead>
+                <caption>{{ _('Your initial statuses and later changes, newest first (Europe/Berlin)') }}</caption>
+                <thead><tr><th scope="col">{{ _('Date (Europe/Berlin)') }}</th><th scope="col">{{ _('Subject') }}</th><th scope="col">{{ _('Previous status') }}</th><th scope="col">{{ _('New status') }}</th><th scope="col">{{ _('Personal completion confirmation') }}</th></tr></thead>
                 <tbody>{% for entry in overview.history %}
-                    <tr><td>{{ local_time(entry.changed_at) }}</td><td>{{ entry.name }}</td><td>{{ entry.previous_status or 'Visit started' }}</td><td>{{ entry.new_status }}</td><td>{{ 'Yes' if entry.user_confirmed else 'Not applicable' }}</td></tr>
+                    <tr><td>{{ local_time(entry.changed_at) }}</td><td>{{ entry.name }}</td><td>{{ status_label(entry.previous_status) if entry.previous_status else _('Visit started') }}</td><td>{{ status_label(entry.new_status) }}</td><td>{{ _('Yes') if entry.user_confirmed else _('Not applicable') }}</td></tr>
                 {% endfor %}</tbody>
             </table>
         </div>
-        {% else %}<p class="empty-message">No status history recorded for this visit.</p>{% endif %}
+        {% else %}<p class="empty-message">{{ _('No status history recorded for this visit.') }}</p>{% endif %}
     </section>
 </main>
 </body>

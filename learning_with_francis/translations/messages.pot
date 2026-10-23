@@ -1,0 +1,2094 @@
+# Translations template for Learning with Francis.
+# Copyright (C) 2026 Francis Furio
+# This file is distributed under the same license as the Learning with
+# Francis project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: Learning with Francis VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2026-10-22 22:29+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.18.0\n"
+
+#: learning_with_francis/__init__.py:79
+msgid "You do not have access to this page."
+msgstr ""
+
+#: learning_with_francis/__init__.py:80
+msgid "This page or result is not available for your visit."
+msgstr ""
+
+#: learning_with_francis/__init__.py:81
+msgid "This action is not available with that request method."
+msgstr ""
+
+#: learning_with_francis/__init__.py:82 learning_with_francis/learning.py:115
+msgid "This form was already submitted with different answers. Use Try Again."
+msgstr ""
+
+#: learning_with_francis/__init__.py:83
+msgid "This submission is too large. Please submit a smaller form."
+msgstr ""
+
+#: learning_with_francis/__init__.py:86
+msgid "The request could not be processed. Please try again."
+msgstr ""
+
+#: learning_with_francis/__init__.py:101 learning_with_francis/__init__.py:114
+#: learning_with_francis/i18n.py:49 learning_with_francis/i18n.py:59
+#: learning_with_francis/learning.py:170 learning_with_francis/learning.py:200
+msgid "This form has expired. Please try again."
+msgstr ""
+
+#: learning_with_francis/__init__.py:119
+msgid "Start a fresh visit below."
+msgstr ""
+
+#: learning_with_francis/__init__.py:119
+msgid "Your visit has ended. Your saved history is retained."
+msgstr ""
+
+#: learning_with_francis/i18n.py:53
+msgid "Please choose English or German."
+msgstr ""
+
+#: learning_with_francis/i18n.py:67
+msgid "Still Learning"
+msgstr ""
+
+#: learning_with_francis/i18n.py:68
+msgid "Needs Review"
+msgstr ""
+
+#: learning_with_francis/i18n.py:68
+msgid "Completed"
+msgstr ""
+
+#: learning_with_francis/learning.py:68
+msgid "This activity form has expired or is invalid. Please open it again."
+msgstr ""
+
+#: learning_with_francis/learning.py:73
+msgid ""
+"This activity form belongs to a different visit or activity. Please open "
+"it again."
+msgstr ""
+
+#: learning_with_francis/learning.py:84
+msgid "Please submit answers only for this activity's questions."
+msgstr ""
+
+#: learning_with_francis/learning.py:88
+msgid "Please choose one listed answer for every question."
+msgstr ""
+
+#: learning_with_francis/learning.py:204
+msgid "This practice question is invalid. Please start again."
+msgstr ""
+
+#: learning_with_francis/learning.py:206
+msgid "This form does not match the displayed question. Please try again."
+msgstr ""
+
+#: learning_with_francis/learning.py:212
+msgid "Please answer the earlier practice questions first."
+msgstr ""
+
+#: learning_with_francis/learning.py:248
+msgid "This practice form has expired or is invalid. Please start again."
+msgstr ""
+
+#: learning_with_francis/learning.py:254
+msgid ""
+"This practice form belongs to a different visit or round. Please start "
+"again."
+msgstr ""
+
+#: learning_with_francis/progress.py:71
+msgid "Choose Still Learning, Needs Review, or Completed."
+msgstr ""
+
+#: learning_with_francis/progress.py:73
+msgid "Confirmation must come from your confirmation checkbox."
+msgstr ""
+
+#: learning_with_francis/progress.py:75
+msgid "Please confirm that you understand this topic before selecting Completed."
+msgstr ""
+
+#: learning_with_francis/progress.py:121
+msgid "This form has expired. Please reload My Progress and try again."
+msgstr ""
+
+#: learning_with_francis/progress.py:125
+msgid "Please choose one learning status."
+msgstr ""
+
+#: learning_with_francis/progress.py:130
+msgid ""
+"Your learning status is saved. Practice and quiz results stay separate "
+"from understanding."
+msgstr ""
+
+#: learning_with_francis/sql_content.py:13
+msgid "Which query shows only the names of learners whose city is Berlin?"
+msgstr ""
+
+#: learning_with_francis/sql_content.py:17
+msgid ""
+"SELECT name chooses the name column. WHERE city = 'Berlin' keeps only "
+"rows for Berlin."
+msgstr ""
+
+#: learning_with_francis/sql_content.py:18
+msgid "Which query shows every column from the learners table?"
+msgstr ""
+
+#: learning_with_francis/sql_content.py:21
+msgid ""
+"The star (*) after SELECT means every column. Here that means name, city "
+"and age."
+msgstr ""
+
+#: learning_with_francis/sql_content.py:22
+msgid "Which query displays only the age column?"
+msgstr ""
+
+#: learning_with_francis/sql_content.py:25
+msgid ""
+"Put the column you want after SELECT. SELECT age reads only the age "
+"column."
+msgstr ""
+
+#: learning_with_francis/sql_content.py:26
+msgid "How do you display the name and age columns together?"
+msgstr ""
+
+#: learning_with_francis/sql_content.py:29
+msgid "A comma separates column names. SELECT name, age displays both columns."
+msgstr ""
+
+#: learning_with_francis/sql_content.py:30
+msgid "In SELECT name FROM learners;, what does FROM learners tell SQL?"
+msgstr ""
+
+#: learning_with_francis/sql_content.py:31
+msgid "Read rows from the learners table"
+msgstr ""
+
+#: learning_with_francis/sql_content.py:31
+msgid "Display a column called learners"
+msgstr ""
+
+#: learning_with_francis/sql_content.py:32
+msgid "Keep only learners called name"
+msgstr ""
+
+#: learning_with_francis/sql_content.py:33
+msgid ""
+"FROM identifies the table to read. SELECT identifies the columns to "
+"display."
+msgstr ""
+
+#: learning_with_francis/sql_content.py:34
+msgid "Which name matches SELECT name FROM learners WHERE age < 18;?"
+msgstr ""
+
+#: learning_with_francis/sql_content.py:36
+msgid "Mia is 16, so she matches age < 18. Alex is 22 and Sam is 19."
+msgstr ""
+
+#: learning_with_francis/sql_content.py:37
+msgid "Which learners match WHERE age >= 18?"
+msgstr ""
+
+#: learning_with_francis/sql_content.py:38
+msgid "Alex and Sam"
+msgstr ""
+
+#: learning_with_francis/sql_content.py:38
+msgid "Only Mia"
+msgstr ""
+
+#: learning_with_francis/sql_content.py:38
+msgid "All three learners"
+msgstr ""
+
+#: learning_with_francis/sql_content.py:39
+msgid ""
+"Greater than or equal to 18 includes Alex (22) and Sam (19). Mia (16) "
+"does not match."
+msgstr ""
+
+#: learning_with_francis/sql_content.py:40
+msgid "Which condition keeps only learners whose city is Hamburg?"
+msgstr ""
+
+#: learning_with_francis/sql_content.py:42
+msgid ""
+"Compare the city column with the text 'Hamburg'. Single quotes identify "
+"the text value."
+msgstr ""
+
+#: learning_with_francis/sql_content.py:43
+msgid "Which name matches SELECT name FROM learners WHERE age = 19;?"
+msgstr ""
+
+#: learning_with_francis/sql_content.py:45
+msgid ""
+"The equals sign keeps an exact match. Sam is 19, so only Sam's row is "
+"returned."
+msgstr ""
+
+#: learning_with_francis/sql_content.py:46
+msgid "Which name matches SELECT name FROM learners WHERE age > 20;?"
+msgstr ""
+
+#: learning_with_francis/sql_content.py:48
+msgid ""
+"The > symbol means greater than. Alex is 22, so he is the only learner "
+"older than 20."
+msgstr ""
+
+#: learning_with_francis/sql_content.py:52
+msgid "What does SELECT choose in a query?"
+msgstr ""
+
+#: learning_with_francis/sql_content.py:53
+msgid "The table's name"
+msgstr ""
+
+#: learning_with_francis/sql_content.py:53
+msgid "The columns to display"
+msgstr ""
+
+#: learning_with_francis/sql_content.py:53
+msgid "The rows to delete"
+msgstr ""
+
+#: learning_with_francis/sql_content.py:54
+msgid "The column names after SELECT decide which columns appear in the result."
+msgstr ""
+
+#: learning_with_francis/sql_content.py:55
+msgid "Which query displays the name and city columns for every learner?"
+msgstr ""
+
+#: learning_with_francis/sql_content.py:58
+msgid ""
+"Separate selected column names with a comma. FROM names the table: "
+"learners."
+msgstr ""
+
+#: learning_with_francis/sql_content.py:59
+msgid "Which query displays learners aged 18 or older?"
+msgstr ""
+
+#: learning_with_francis/sql_content.py:62
+msgid ""
+"WHERE age >= 18 keeps rows where age is greater than or equal to 18. The "
+"star selects every column."
+msgstr ""
+
+#: learning_with_francis/sql_content.py:63
+msgid "Which WHERE condition correctly matches the text value Berlin?"
+msgstr ""
+
+#: learning_with_francis/sql_content.py:65
+msgid ""
+"Text values use single quotes. The equals sign compares the city column "
+"with the text 'Berlin'."
+msgstr ""
+
+#: learning_with_francis/sql_content.py:66
+msgid ""
+"Using the lesson's learners table, which name is returned by SELECT name "
+"FROM learners WHERE age < 18;?"
+msgstr ""
+
+#: learning_with_francis/sql_content.py:68
+msgid ""
+"Mia is 16, so her row matches age < 18. Alex (22) and Sam (19) do not "
+"match."
+msgstr ""
+
+#: learning_with_francis/sql_display.py:9
+#: learning_with_francis/templates/sql_lesson.html:3
+msgid "SELECT and WHERE"
+msgstr ""
+
+#: learning_with_francis/sql_display.py:9
+msgid "Reading tables with SELECT and WHERE"
+msgstr ""
+
+#: learning_with_francis/sql_display.py:69
+#, python-format
+msgid "Well done, %(name)s! You solved the practice exercise."
+msgstr ""
+
+#: learning_with_francis/sql_display.py:70
+#, python-format
+msgid "Keep practicing, %(name)s! Read the explanation and try again."
+msgstr ""
+
+#: learning_with_francis/sql_display.py:72
+#, python-format
+msgid "Keep practicing, %(name)s! Review the lesson and try again. You can do it!"
+msgstr ""
+
+#: learning_with_francis/sql_display.py:74
+#, python-format
+msgid ""
+"Well done, %(name)s! You passed the quiz. Keep practicing to improve your"
+" score!"
+msgstr ""
+
+#: learning_with_francis/sql_display.py:75
+#, python-format
+msgid ""
+"Congratulations, %(name)s! Perfect score! You answered all five questions"
+" correctly!"
+msgstr ""
+
+#: learning_with_francis/subjects.py:42
+msgid "What does age = 20 do?"
+msgstr ""
+
+#: learning_with_francis/subjects.py:42
+msgid "Stores 20 under the name age"
+msgstr ""
+
+#: learning_with_francis/subjects.py:42
+msgid "Prints 20"
+msgstr ""
+
+#: learning_with_francis/subjects.py:42
+msgid "Defines a function"
+msgstr ""
+
+#: learning_with_francis/subjects.py:42
+msgid "The equals sign assigns a value to a variable name."
+msgstr ""
+
+#: learning_with_francis/subjects.py:43
+msgid "Which value is a string?"
+msgstr ""
+
+#: learning_with_francis/subjects.py:43
+msgid ""
+"Quotes mark text. 'Hello' is a string; 20 is an integer and False is a "
+"boolean."
+msgstr ""
+
+#: learning_with_francis/subjects.py:44
+msgid "What is count after count = 2 followed by count = count + 3?"
+msgstr ""
+
+#: learning_with_francis/subjects.py:44
+msgid "Read the old value 2, add 3, then store 5 in count."
+msgstr ""
+
+#: learning_with_francis/subjects.py:45
+msgid "Which keyword defines a Python function?"
+msgstr ""
+
+#: learning_with_francis/subjects.py:45
+msgid "Use def, a function name, parentheses and a colon to define a function."
+msgstr ""
+
+#: learning_with_francis/subjects.py:46
+msgid "Which line calls a function named greet?"
+msgstr ""
+
+#: learning_with_francis/subjects.py:46
+msgid "Parentheses call a function. A definition alone does not run its body."
+msgstr ""
+
+#: learning_with_francis/subjects.py:47
+msgid "In def add_one(number):, what is number?"
+msgstr ""
+
+#: learning_with_francis/subjects.py:47
+msgid "The result"
+msgstr ""
+
+#: learning_with_francis/subjects.py:47
+msgid "A table"
+msgstr ""
+
+#: learning_with_francis/subjects.py:47
+msgid "An input parameter"
+msgstr ""
+
+#: learning_with_francis/subjects.py:47
+msgid "A parameter is a name for a value supplied when a function is called."
+msgstr ""
+
+#: learning_with_francis/subjects.py:48
+msgid "What does return do inside a function?"
+msgstr ""
+
+#: learning_with_francis/subjects.py:48
+msgid "Sends a value back to the caller"
+msgstr ""
+
+#: learning_with_francis/subjects.py:48
+msgid "Always prints text"
+msgstr ""
+
+#: learning_with_francis/subjects.py:48
+msgid "Starts a browser"
+msgstr ""
+
+#: learning_with_francis/subjects.py:48
+msgid "return ends the function call and supplies its result to the caller."
+msgstr ""
+
+#: learning_with_francis/subjects.py:49
+msgid "If add_one returns number + 1, what is add_one(4)?"
+msgstr ""
+
+#: learning_with_francis/subjects.py:49
+msgid "The argument 4 becomes number, so number + 1 gives 5."
+msgstr ""
+
+#: learning_with_francis/subjects.py:50
+msgid "What marks a function's body in Python?"
+msgstr ""
+
+#: learning_with_francis/subjects.py:50
+msgid "Quotation marks"
+msgstr ""
+
+#: learning_with_francis/subjects.py:50
+msgid "A semicolon only"
+msgstr ""
+
+#: learning_with_francis/subjects.py:50
+msgid "Indentation"
+msgstr ""
+
+#: learning_with_francis/subjects.py:50
+msgid ""
+"Indented statements belong to the function. Use consistent indentation, "
+"normally four spaces."
+msgstr ""
+
+#: learning_with_francis/subjects.py:51
+msgid "Why store result = add_one(4)?"
+msgstr ""
+
+#: learning_with_francis/subjects.py:51
+msgid "It deletes the function"
+msgstr ""
+
+#: learning_with_francis/subjects.py:51
+msgid "It lets you reuse the returned value"
+msgstr ""
+
+#: learning_with_francis/subjects.py:51
+msgid "It prints automatically"
+msgstr ""
+
+#: learning_with_francis/subjects.py:51
+msgid ""
+"The return value 5 is assigned to result. You can use it later or print "
+"it."
+msgstr ""
+
+#: learning_with_francis/subjects.py:54
+msgid "What value is stored by name = 'Mia'?"
+msgstr ""
+
+#: learning_with_francis/subjects.py:54
+msgid "The number 3"
+msgstr ""
+
+#: learning_with_francis/subjects.py:54
+msgid "The text Mia"
+msgstr ""
+
+#: learning_with_francis/subjects.py:54
+msgid "A boolean"
+msgstr ""
+
+#: learning_with_francis/subjects.py:54
+msgid "Quoted text is a string. The variable name refers to that text."
+msgstr ""
+
+#: learning_with_francis/subjects.py:55
+msgid "What is points after points = 3; points = points + 2?"
+msgstr ""
+
+#: learning_with_francis/subjects.py:55
+msgid "The second assignment adds 2 to the previous value 3."
+msgstr ""
+
+#: learning_with_francis/subjects.py:56
+msgid "Which definition returns its input plus one?"
+msgstr ""
+
+#: learning_with_francis/subjects.py:56
+msgid "The first function uses its parameter value and returns value + 1."
+msgstr ""
+
+#: learning_with_francis/subjects.py:57
+msgid "How do you call add_one with the number 6?"
+msgstr ""
+
+#: learning_with_francis/subjects.py:57
+msgid "Put the supplied value inside parentheses after the function name."
+msgstr ""
+
+#: learning_with_francis/subjects.py:58
+msgid "How does return differ from print()?"
+msgstr ""
+
+#: learning_with_francis/subjects.py:58
+msgid "Both always save to SQLite"
+msgstr ""
+
+#: learning_with_francis/subjects.py:58
+msgid "return displays a webpage"
+msgstr ""
+
+#: learning_with_francis/subjects.py:58
+msgid "return supplies a result; print displays output"
+msgstr ""
+
+#: learning_with_francis/subjects.py:58
+msgid ""
+"A caller can store and reuse a returned value. print writes output "
+"instead."
+msgstr ""
+
+#: learning_with_francis/subjects.py:63
+msgid "Which value is a JavaScript string?"
+msgstr ""
+
+#: learning_with_francis/subjects.py:63
+msgid "Quoted text is a string. Numbers and booleans are different value types."
+msgstr ""
+
+#: learning_with_francis/subjects.py:64
+msgid "Which declaration allows later reassignment?"
+msgstr ""
+
+#: learning_with_francis/subjects.py:64
+msgid "Use let for a variable whose value will be reassigned."
+msgstr ""
+
+#: learning_with_francis/subjects.py:65
+msgid "What does const prevent?"
+msgstr ""
+
+#: learning_with_francis/subjects.py:65
+msgid "All clicks"
+msgstr ""
+
+#: learning_with_francis/subjects.py:65
+msgid "Reading the variable"
+msgstr ""
+
+#: learning_with_francis/subjects.py:65
+msgid "Reassigning that variable binding"
+msgstr ""
+
+#: learning_with_francis/subjects.py:65
+msgid ""
+"A const binding cannot be reassigned. It does not freeze an object's "
+"properties."
+msgstr ""
+
+#: learning_with_francis/subjects.py:66
+msgid "What does document.querySelector('#message') select?"
+msgstr ""
+
+#: learning_with_francis/subjects.py:66
+msgid "Every button"
+msgstr ""
+
+#: learning_with_francis/subjects.py:66
+msgid "The first element with id message"
+msgstr ""
+
+#: learning_with_francis/subjects.py:66
+msgid "A database row"
+msgstr ""
+
+#: learning_with_francis/subjects.py:66
+msgid "The # selector matches an HTML id. querySelector returns the first match."
+msgstr ""
+
+#: learning_with_francis/subjects.py:67
+msgid "What is returned if querySelector finds no match?"
+msgstr ""
+
+#: learning_with_francis/subjects.py:67
+msgid "An empty paragraph"
+msgstr ""
+
+#: learning_with_francis/subjects.py:67
+msgid "The number 1"
+msgstr ""
+
+#: learning_with_francis/subjects.py:67
+msgid ""
+"A missing match returns null. Check it before accessing element "
+"properties."
+msgstr ""
+
+#: learning_with_francis/subjects.py:68
+msgid "Which property changes an element's plain text?"
+msgstr ""
+
+#: learning_with_francis/subjects.py:68
+msgid "Assign a string to textContent to replace an element's text."
+msgstr ""
+
+#: learning_with_francis/subjects.py:69
+msgid "Which event name represents a button press with a mouse?"
+msgstr ""
+
+#: learning_with_francis/subjects.py:69
+msgid ""
+"A click listener runs when a click event occurs, including keyboard "
+"activation of a button."
+msgstr ""
+
+#: learning_with_francis/subjects.py:70
+msgid "Which method registers an event handler?"
+msgstr ""
+
+#: learning_with_francis/subjects.py:70
+msgid "addEventListener connects an event name to a function that will handle it."
+msgstr ""
+
+#: learning_with_francis/subjects.py:71
+msgid "When does the function passed to a click listener normally run?"
+msgstr ""
+
+#: learning_with_francis/subjects.py:71
+msgid "When the variable is declared"
+msgstr ""
+
+#: learning_with_francis/subjects.py:71
+msgid "Before the page exists"
+msgstr ""
+
+#: learning_with_francis/subjects.py:71
+msgid "When the click event occurs"
+msgstr ""
+
+#: learning_with_francis/subjects.py:71
+msgid ""
+"Registering the handler waits for future events. It does not call the "
+"handler immediately."
+msgstr ""
+
+#: learning_with_francis/subjects.py:72
+msgid "Why place a simple DOM script after the HTML it uses?"
+msgstr ""
+
+#: learning_with_francis/subjects.py:72
+msgid "To create a login"
+msgstr ""
+
+#: learning_with_francis/subjects.py:72
+msgid "So the elements exist before selection"
+msgstr ""
+
+#: learning_with_francis/subjects.py:72
+msgid "To turn text into SQL"
+msgstr ""
+
+#: learning_with_francis/subjects.py:72
+msgid "The browser parses those elements first, so querySelector can find them."
+msgstr ""
+
+#: learning_with_francis/subjects.py:75
+msgid "Which value is a boolean?"
+msgstr ""
+
+#: learning_with_francis/subjects.py:75
+msgid "Unquoted true is a boolean. 'true' is text."
+msgstr ""
+
+#: learning_with_francis/subjects.py:76
+msgid "What can follow let score = 1; to change score to 2?"
+msgstr ""
+
+#: learning_with_francis/subjects.py:76
+msgid "The equals sign assigns the new value. let allows reassignment."
+msgstr ""
+
+#: learning_with_francis/subjects.py:77
+msgid "How do you select the element with id greeting?"
+msgstr ""
+
+#: learning_with_francis/subjects.py:77
+msgid "The # character identifies an id in a CSS selector."
+msgstr ""
+
+#: learning_with_francis/subjects.py:78
+msgid "Which statement replaces a selected element's text?"
+msgstr ""
+
+#: learning_with_francis/subjects.py:78
+msgid "Assigning textContent updates plain text in the DOM."
+msgstr ""
+
+#: learning_with_francis/subjects.py:79
+msgid "What does button.addEventListener('click', handler) do?"
+msgstr ""
+
+#: learning_with_francis/subjects.py:79
+msgid "Calls handler immediately"
+msgstr ""
+
+#: learning_with_francis/subjects.py:79
+msgid "Saves a quiz score"
+msgstr ""
+
+#: learning_with_francis/subjects.py:79
+msgid "Registers handler to run on a click"
+msgstr ""
+
+#: learning_with_francis/subjects.py:79
+msgid "The function is passed as a handler. The event triggers it later."
+msgstr ""
+
+#: learning_with_francis/subjects.py:84
+msgid "What does ERP stand for?"
+msgstr ""
+
+#: learning_with_francis/subjects.py:84
+msgid ""
+"ERP means Enterprise Resource Planning: connected software for core "
+"business processes."
+msgstr ""
+
+#: learning_with_francis/subjects.py:85
+msgid "Why connect purchasing, inventory and finance?"
+msgstr ""
+
+#: learning_with_francis/subjects.py:85
+msgid "To hide all records"
+msgstr ""
+
+#: learning_with_francis/subjects.py:85
+msgid "To share consistent business information"
+msgstr ""
+
+#: learning_with_francis/subjects.py:85
+msgid "To remove every business rule"
+msgstr ""
+
+#: learning_with_francis/subjects.py:85
+msgid ""
+"Shared information helps departments coordinate without retyping the same"
+" facts independently."
+msgstr ""
+
+#: learning_with_francis/subjects.py:86
+msgid "Which is an example of master data?"
+msgstr ""
+
+#: learning_with_francis/subjects.py:86
+msgid "Today's delivery event"
+msgstr ""
+
+#: learning_with_francis/subjects.py:86
+msgid "One supplier invoice"
+msgstr ""
+
+#: learning_with_francis/subjects.py:86
+msgid "A supplier's address"
+msgstr ""
+
+#: learning_with_francis/subjects.py:86
+msgid ""
+"Master data describes reusable business entities such as suppliers, "
+"customers and materials."
+msgstr ""
+
+#: learning_with_francis/subjects.py:87
+msgid "Which is transactional data?"
+msgstr ""
+
+#: learning_with_francis/subjects.py:87
+msgid "A material description"
+msgstr ""
+
+#: learning_with_francis/subjects.py:87
+msgid "A particular purchase order"
+msgstr ""
+
+#: learning_with_francis/subjects.py:87
+msgid "A supplier's contact details"
+msgstr ""
+
+#: learning_with_francis/subjects.py:87
+msgid ""
+"A purchase order records a specific business event rather than general "
+"supplier information."
+msgstr ""
+
+#: learning_with_francis/subjects.py:88
+msgid "A shop buys chairs from a supplier. Which document records what it orders?"
+msgstr ""
+
+#: learning_with_francis/subjects.py:88 learning_with_francis/subjects.py:98
+msgid "Purchase order"
+msgstr ""
+
+#: learning_with_francis/subjects.py:88
+msgid "Customer payment"
+msgstr ""
+
+#: learning_with_francis/subjects.py:88
+msgid "Website stylesheet"
+msgstr ""
+
+#: learning_with_francis/subjects.py:88
+msgid ""
+"A purchase order records the goods and quantities being ordered from a "
+"supplier."
+msgstr ""
+
+#: learning_with_francis/subjects.py:89
+msgid "The ordered chairs arrive. Which step records their arrival?"
+msgstr ""
+
+#: learning_with_francis/subjects.py:89
+msgid "Send a sales quote"
+msgstr ""
+
+#: learning_with_francis/subjects.py:89
+msgid "Register a new learner"
+msgstr ""
+
+#: learning_with_francis/subjects.py:89
+msgid "Post a goods receipt"
+msgstr ""
+
+#: learning_with_francis/subjects.py:89
+msgid ""
+"A goods receipt records that goods have been received. In this stock "
+"example it updates inventory."
+msgstr ""
+
+#: learning_with_francis/subjects.py:90
+msgid ""
+"After receiving a supplier invoice, what should the company do before "
+"payment?"
+msgstr ""
+
+#: learning_with_francis/subjects.py:90
+msgid "Check it against the order and receipt"
+msgstr ""
+
+#: learning_with_francis/subjects.py:90
+msgid "Always pay without checking"
+msgstr ""
+
+#: learning_with_francis/subjects.py:90
+msgid "Delete the supplier"
+msgstr ""
+
+#: learning_with_francis/subjects.py:90
+msgid ""
+"Checking the order, receipt and invoice helps identify quantity or price "
+"differences before payment."
+msgstr ""
+
+#: learning_with_francis/subjects.py:91
+msgid "Which is a simplified purchasing sequence?"
+msgstr ""
+
+#: learning_with_francis/subjects.py:91
+msgid "Pay, delete, forget"
+msgstr ""
+
+#: learning_with_francis/subjects.py:91
+msgid "Purchase order, goods receipt, invoice check, payment"
+msgstr ""
+
+#: learning_with_francis/subjects.py:91
+msgid "Customer payment, customer order, purchase order"
+msgstr ""
+
+#: learning_with_francis/subjects.py:91
+msgid ""
+"This common stock-purchasing example connects buying, receiving and "
+"finance; real workflows can vary."
+msgstr ""
+
+#: learning_with_francis/subjects.py:92
+msgid ""
+"A customer orders products from the shop. Which document records that "
+"request?"
+msgstr ""
+
+#: learning_with_francis/subjects.py:92
+msgid "Supplier invoice"
+msgstr ""
+
+#: learning_with_francis/subjects.py:92
+msgid "Goods receipt from a supplier"
+msgstr ""
+
+#: learning_with_francis/subjects.py:92
+msgid "Sales order"
+msgstr ""
+
+#: learning_with_francis/subjects.py:92
+msgid "A sales order records what the business agrees to supply to a customer."
+msgstr ""
+
+#: learning_with_francis/subjects.py:93
+msgid "What is this SAP lesson designed to teach?"
+msgstr ""
+
+#: learning_with_francis/subjects.py:93
+msgid "How to access a real company's SAP system"
+msgstr ""
+
+#: learning_with_francis/subjects.py:93
+msgid "Basic connected business-process concepts"
+msgstr ""
+
+#: learning_with_francis/subjects.py:93
+msgid "That a quiz score proves business expertise"
+msgstr ""
+
+#: learning_with_francis/subjects.py:93
+msgid ""
+"These are simplified learning scenarios. They do not run SAP transactions"
+" or confirm your understanding automatically."
+msgstr ""
+
+#: learning_with_francis/subjects.py:96
+msgid "What is a main purpose of ERP?"
+msgstr ""
+
+#: learning_with_francis/subjects.py:96
+msgid "Only drawing webpages"
+msgstr ""
+
+#: learning_with_francis/subjects.py:96
+msgid "Connecting core business processes and data"
+msgstr ""
+
+#: learning_with_francis/subjects.py:96
+msgid "Replacing all human decisions"
+msgstr ""
+
+#: learning_with_francis/subjects.py:96
+msgid ""
+"ERP connects business work such as sales, procurement, inventory and "
+"finance."
+msgstr ""
+
+#: learning_with_francis/subjects.py:97
+msgid "Which item is master data?"
+msgstr ""
+
+#: learning_with_francis/subjects.py:97
+msgid "One goods receipt"
+msgstr ""
+
+#: learning_with_francis/subjects.py:97
+msgid "One invoice"
+msgstr ""
+
+#: learning_with_francis/subjects.py:97
+msgid "A customer's address"
+msgstr ""
+
+#: learning_with_francis/subjects.py:97
+msgid ""
+"A customer's address is reusable business information; invoices and "
+"receipts describe specific events."
+msgstr ""
+
+#: learning_with_francis/subjects.py:98
+msgid "Which document orders goods from a supplier?"
+msgstr ""
+
+#: learning_with_francis/subjects.py:98
+msgid "Sales invoice to a customer"
+msgstr ""
+
+#: learning_with_francis/subjects.py:98
+msgid "Browser event"
+msgstr ""
+
+#: learning_with_francis/subjects.py:98
+msgid ""
+"A purchase order specifies a business's requested goods or services from "
+"a supplier."
+msgstr ""
+
+#: learning_with_francis/subjects.py:99
+msgid "In the chair example, what records delivery into stock?"
+msgstr ""
+
+#: learning_with_francis/subjects.py:99
+msgid "A new variable"
+msgstr ""
+
+#: learning_with_francis/subjects.py:99
+msgid "A goods receipt"
+msgstr ""
+
+#: learning_with_francis/subjects.py:99
+msgid "A customer payment"
+msgstr ""
+
+#: learning_with_francis/subjects.py:99
+msgid ""
+"The goods receipt records incoming goods and updates stock in this "
+"example."
+msgstr ""
+
+#: learning_with_francis/subjects.py:100
+msgid "Why check a supplier invoice against its order and receipt?"
+msgstr ""
+
+#: learning_with_francis/subjects.py:100
+msgid "To change learning status"
+msgstr ""
+
+#: learning_with_francis/subjects.py:100
+msgid "To skip inventory records"
+msgstr ""
+
+#: learning_with_francis/subjects.py:100
+msgid "To find differences before payment"
+msgstr ""
+
+#: learning_with_francis/subjects.py:100
+msgid ""
+"Comparing these records helps check that billed quantities and prices "
+"match the agreed and received goods."
+msgstr ""
+
+#: learning_with_francis/subjects.py:105
+msgid "Variables and simple functions"
+msgstr ""
+
+#: learning_with_francis/subjects.py:106
+msgid "Values, DOM elements, and events"
+msgstr ""
+
+#: learning_with_francis/subjects.py:107
+msgid "Basic ERP concepts and business-process scenarios"
+msgstr ""
+
+#: learning_with_francis/templates/foundation.html:48
+#: learning_with_francis/visitors.py:13
+msgid "Please enter your name."
+msgstr ""
+
+#: learning_with_francis/visitors.py:16
+msgid "Please enter a name between 1 and 50 characters."
+msgstr ""
+
+#: learning_with_francis/visitors.py:21
+msgid "Use letters, spaces, apostrophes or hyphens for your name."
+msgstr ""
+
+#: learning_with_francis/templates/_language_controls.html:5
+msgid "Language"
+msgstr ""
+
+#: learning_with_francis/templates/_time.html:4
+msgid "CEST"
+msgstr ""
+
+#: learning_with_francis/templates/_time.html:4
+msgid "CET"
+msgstr ""
+
+#: learning_with_francis/templates/_visit_controls.html:2
+msgid "Temporary visit controls"
+msgstr ""
+
+#: learning_with_francis/templates/_visit_controls.html:5
+msgid "End Visit"
+msgstr ""
+
+#: learning_with_francis/templates/_visit_controls.html:9
+msgid "Start New Visit"
+msgstr ""
+
+#: learning_with_francis/templates/_visit_controls.html:12
+msgid ""
+"End Visit before handing this browser to someone else. Closing and "
+"reopening the browser may restore this visit. Start New Visit ends it and"
+" asks for a name again, then creates a new identity with zero activity "
+"and all four subjects Still Learning. Previous results stay saved and "
+"cannot be recovered by entering the same name."
+msgstr ""
+
+#: learning_with_francis/templates/cover.html:7
+msgid ""
+"Welcome to Learning with Francis. A place to learn, practise, and grow at"
+" your own pace."
+msgstr ""
+
+#: learning_with_francis/templates/cover.html:8
+msgid "Welcome"
+msgstr ""
+
+#: learning_with_francis/templates/cover.html:19
+msgid "A little curiosity. A world of possibility."
+msgstr ""
+
+#: learning_with_francis/templates/cover.html:20
+msgid "Welcome to"
+msgstr ""
+
+#: learning_with_francis/templates/cover.html:21
+msgid "Learn something new."
+msgstr ""
+
+#: learning_with_francis/templates/cover.html:21
+msgid "Build understanding, one step at a time."
+msgstr ""
+
+#: learning_with_francis/templates/cover.html:23
+msgid "ENTER"
+msgstr ""
+
+#: learning_with_francis/templates/cover.html:27
+msgid "Your space to learn, practise & grow."
+msgstr ""
+
+#: learning_with_francis/templates/cover.html:29
+msgid "Discover the project"
+msgstr ""
+
+#: learning_with_francis/templates/cover.html:35
+msgid "About Learning with Francis"
+msgstr ""
+
+#: learning_with_francis/templates/cover.html:36
+msgid ""
+"Learning with Francis is an interactive learning platform designed to "
+"make learning more organized, engaging, and meaningful."
+msgstr ""
+
+#: learning_with_francis/templates/cover.html:37
+msgid ""
+"What began as a personal learning progress tracker in Version 1 has "
+"evolved into an interactive learning experience in Version 2, featuring "
+"lessons, practice exercises, quizzes, and personal progress tracking."
+msgstr ""
+
+#: learning_with_francis/templates/cover.html:38
+msgid ""
+"This project continues to grow alongside its creator’s learning journey, "
+"with new ideas and opportunities for future development."
+msgstr ""
+
+#: learning_with_francis/templates/cover.html:39
+msgid "Concept, Design & Development by Francis Furio"
+msgstr ""
+
+#: learning_with_francis/templates/foundation.html:25
+#, python-format
+msgid "Welcome to Learning with Francis, %(name)s!"
+msgstr ""
+
+#: learning_with_francis/templates/foundation.html:26
+#: learning_with_francis/templates/progress.html:26
+msgid "Current visit started:"
+msgstr ""
+
+#: learning_with_francis/templates/foundation.html:27
+msgid ""
+"This visit has its own progress. Finishing a visit keeps its records but "
+"removes access from this browser."
+msgstr ""
+
+#: learning_with_francis/templates/foundation.html:28
+msgid ""
+"Opening another tab continues this visit. Choose Start New Visit below to"
+" begin again with zero practice and quiz activity."
+msgstr ""
+
+#: learning_with_francis/templates/foundation.html:30
+msgid "Your learning subjects"
+msgstr ""
+
+#: learning_with_francis/templates/foundation.html:31
+#: learning_with_francis/templates/learning_base.html:18
+#: learning_with_francis/templates/progress.html:21
+#: learning_with_francis/templates/progress.html:23
+msgid "My Progress"
+msgstr ""
+
+#: learning_with_francis/templates/foundation.html:31
+msgid "— view your statuses, practice counts, quiz scores and history."
+msgstr ""
+
+#: learning_with_francis/templates/foundation.html:35
+#, python-format
+msgid "Open %(subject)s lesson"
+msgstr ""
+
+#: learning_with_francis/templates/foundation.html:42
+msgid "Start your learning visit"
+msgstr ""
+
+#: learning_with_francis/templates/foundation.html:43
+msgid ""
+"Enter a temporary name for greetings. No account, login or registration "
+"is needed."
+msgstr ""
+
+#: learning_with_francis/templates/foundation.html:47
+msgid "Your name"
+msgstr ""
+
+#: learning_with_francis/templates/foundation.html:51
+msgid "Use 1–50 characters: letters, spaces, apostrophes or hyphens."
+msgstr ""
+
+#: learning_with_francis/templates/foundation.html:52
+msgid "Start Visit"
+msgstr ""
+
+#: learning_with_francis/templates/foundation.html:55
+msgid ""
+"Progress belongs to this browser visit, not your name. Tabs in the same "
+"browser share a visit. Use End Visit before handing the browser to "
+"someone else. Closing a window may not end a restored browser session. "
+"Old visits cannot be reopened by entering a name."
+msgstr ""
+
+#: learning_with_francis/templates/foundation.html:57
+msgid ""
+"SQL, Python, JavaScript and SAP each have a beginner lesson, ten practice"
+" questions and a five-question quiz available during a visit."
+msgstr ""
+
+#: learning_with_francis/templates/foundation.html:58
+msgid "Available subjects"
+msgstr ""
+
+#: learning_with_francis/templates/foundation.html:65
+msgid "Database setup is needed before this application is ready."
+msgstr ""
+
+#: learning_with_francis/templates/foundation.html:66
+msgid "Follow the setup instructions in"
+msgstr ""
+
+#: learning_with_francis/templates/interface_error.html:5
+#: learning_with_francis/templates/interface_error.html:11
+msgid "Request error"
+msgstr ""
+
+#: learning_with_francis/templates/interface_error.html:13
+#: learning_with_francis/templates/learning_base.html:17
+#: learning_with_francis/templates/progress.html:20
+msgid "Learning home"
+msgstr ""
+
+#: learning_with_francis/templates/learning_base.html:8
+#, python-format
+msgid "%(subject)s learning"
+msgstr ""
+
+#: learning_with_francis/templates/learning_base.html:16
+#: learning_with_francis/templates/progress.html:19
+msgid "Learning navigation"
+msgstr ""
+
+#: learning_with_francis/templates/learning_base.html:19
+#, python-format
+msgid "%(subject)s lesson"
+msgstr ""
+
+#: learning_with_francis/templates/learning_base.html:24
+msgid ""
+"A score records practice, not understanding. Your topic stays unchanged. "
+"Completed always requires your personal confirmation."
+msgstr ""
+
+#: learning_with_francis/templates/learning_base.html:25
+msgid ""
+"Dates use German local time (Europe/Berlin), including daylight saving "
+"time: CET in winter and CEST in summer."
+msgstr ""
+
+#: learning_with_francis/templates/practice_complete.html:2
+#, python-format
+msgid "%(subject)s practice complete"
+msgstr ""
+
+#: learning_with_francis/templates/practice_complete.html:4
+msgid "Practice complete!"
+msgstr ""
+
+#: learning_with_francis/templates/practice_complete.html:5
+#, python-format
+msgid ""
+"Well done, %(name)s! You have practised all %(total)s %(subject)s "
+"questions."
+msgstr ""
+
+#: learning_with_francis/templates/practice_complete.html:6
+msgid ""
+"Your answers and explanations are saved in your visit's activity history."
+" You can practise again as often as you like."
+msgstr ""
+
+#: learning_with_francis/templates/practice_complete.html:7
+#, python-format
+msgid ""
+"Finishing this practice round does not mark your %(subject)s "
+"understanding Completed."
+msgstr ""
+
+#: learning_with_francis/templates/practice_complete.html:9
+msgid "Start Practicing Again"
+msgstr ""
+
+#: learning_with_francis/templates/practice_complete.html:10
+#: learning_with_francis/templates/sql_results.html:28
+msgid "Review the lesson and activity history"
+msgstr ""
+
+#: learning_with_francis/templates/progress.html:10
+msgid "My Progress — Learning with Francis"
+msgstr ""
+
+#: learning_with_francis/templates/progress.html:25
+msgid ""
+"These records belong only to your current visit. Starting a new visit "
+"creates fresh progress."
+msgstr ""
+
+#: learning_with_francis/templates/progress.html:27
+msgid ""
+"Opening another tab or returning to this page continues the same visit. "
+"Tabs in the same browser profile share progress. To begin with zero "
+"activity, choose Start New Visit and enter your name again."
+msgstr ""
+
+#: learning_with_francis/templates/progress.html:35
+msgid "Your learning summary"
+msgstr ""
+
+#: learning_with_francis/templates/progress.html:42
+#: learning_with_francis/templates/progress.html:64
+#: learning_with_francis/templates/sql_lesson.html:43
+#: learning_with_francis/templates/subject_lesson.html:81
+msgid "Practice attempts"
+msgstr ""
+
+#: learning_with_francis/templates/progress.html:43
+#: learning_with_francis/templates/progress.html:64
+msgid "Completed exercises"
+msgstr ""
+
+#: learning_with_francis/templates/progress.html:44
+#: learning_with_francis/templates/progress.html:64
+#: learning_with_francis/templates/sql_lesson.html:45
+#: learning_with_francis/templates/subject_lesson.html:83
+msgid "Quiz attempts"
+msgstr ""
+
+#: learning_with_francis/templates/progress.html:46
+msgid ""
+"Totals cover all four subjects, regardless of the filter. Each checked "
+"practice answer is one attempt; each correct practice answer is a "
+"completed exercise. Repeated practice counts again. Each submitted quiz "
+"counts once, regardless of its five answers."
+msgstr ""
+
+#: learning_with_francis/templates/progress.html:47
+msgid ""
+"Scores record activity, not understanding. Only you can confirm when you "
+"understand a topic and want to mark it Completed."
+msgstr ""
+
+#: learning_with_francis/templates/progress.html:51
+msgid "Your subjects and learning statuses"
+msgstr ""
+
+#: learning_with_francis/templates/progress.html:54
+msgid "Filter by saved status"
+msgstr ""
+
+#: learning_with_francis/templates/progress.html:56
+msgid "All"
+msgstr ""
+
+#: learning_with_francis/templates/progress.html:60
+msgid "No topics match this filter"
+msgstr ""
+
+#: learning_with_francis/templates/progress.html:61
+msgid "Subject progress table"
+msgstr ""
+
+#: learning_with_francis/templates/progress.html:63
+msgid "Your saved progress, including subjects with no activity"
+msgstr ""
+
+#: learning_with_francis/templates/progress.html:64
+msgid "Subject and learning links"
+msgstr ""
+
+#: learning_with_francis/templates/progress.html:64
+msgid "Current status"
+msgstr ""
+
+#: learning_with_francis/templates/progress.html:64
+msgid "Update status"
+msgstr ""
+
+#: learning_with_francis/templates/progress.html:70
+msgid "Lesson"
+msgstr ""
+
+#: learning_with_francis/templates/progress.html:71
+#: learning_with_francis/templates/progress.html:112
+msgid "Practice"
+msgstr ""
+
+#: learning_with_francis/templates/progress.html:72
+#: learning_with_francis/templates/progress.html:112
+msgid "Quiz"
+msgstr ""
+
+#: learning_with_francis/templates/progress.html:75
+msgid "Confirmed"
+msgstr ""
+
+#: learning_with_francis/templates/progress.html:80
+msgid "Please confirm that you understand this topic."
+msgstr ""
+
+#: learning_with_francis/templates/progress.html:82
+#, python-format
+msgid "New status for %(subject)s"
+msgstr ""
+
+#: learning_with_francis/templates/progress.html:88
+msgid "I confirm that I understand this topic."
+msgstr ""
+
+#: learning_with_francis/templates/progress.html:90
+msgid ""
+"Required for Completed. You can return to Needs Review or Still Learning "
+"at any time."
+msgstr ""
+
+#: learning_with_francis/templates/progress.html:92
+msgid "Save"
+msgstr ""
+
+#: learning_with_francis/templates/progress.html:100
+msgid "No learning topics recorded for this visit."
+msgstr ""
+
+#: learning_with_francis/templates/progress.html:104
+msgid "Practice and quiz history"
+msgstr ""
+
+#: learning_with_francis/templates/progress.html:105
+msgid ""
+"Saved activity, newest first. All dates use German local time "
+"(Europe/Berlin), including daylight saving time: CET in winter and CEST "
+"in summer. Open results to see your answers and explanations."
+msgstr ""
+
+#: learning_with_francis/templates/progress.html:107
+msgid "Activity history"
+msgstr ""
+
+#: learning_with_francis/templates/progress.html:109
+msgid "Your actual practice and quiz results"
+msgstr ""
+
+#: learning_with_francis/templates/progress.html:110
+#: learning_with_francis/templates/progress.html:128
+msgid "Date (Europe/Berlin)"
+msgstr ""
+
+#: learning_with_francis/templates/progress.html:110
+#: learning_with_francis/templates/progress.html:128
+msgid "Subject"
+msgstr ""
+
+#: learning_with_francis/templates/progress.html:110
+msgid "Activity"
+msgstr ""
+
+#: learning_with_francis/templates/progress.html:110
+msgid "Result"
+msgstr ""
+
+#: learning_with_francis/templates/progress.html:110
+msgid "Answers"
+msgstr ""
+
+#: learning_with_francis/templates/progress.html:113
+#, python-format
+msgid "%(score)s / %(total)s correct"
+msgstr ""
+
+#: learning_with_francis/templates/progress.html:113
+msgid "Exercise completed"
+msgstr ""
+
+#: learning_with_francis/templates/progress.html:113
+msgid "Try again"
+msgstr ""
+
+#: learning_with_francis/templates/progress.html:114
+msgid "View results"
+msgstr ""
+
+#: learning_with_francis/templates/progress.html:118
+msgid "No practice or quiz activity yet. Open a subject to get started."
+msgstr ""
+
+#: learning_with_francis/templates/progress.html:122
+#: learning_with_francis/templates/progress.html:125
+msgid "Learning-status history"
+msgstr ""
+
+#: learning_with_francis/templates/progress.html:123
+msgid ""
+"Every new visit starts with four entries marked Visit started — Still "
+"Learning, one for each subject. These record your starting statuses, not "
+"practice, quiz attempts or completed exercises."
+msgstr ""
+
+#: learning_with_francis/templates/progress.html:127
+msgid "Your initial statuses and later changes, newest first (Europe/Berlin)"
+msgstr ""
+
+#: learning_with_francis/templates/progress.html:128
+msgid "Previous status"
+msgstr ""
+
+#: learning_with_francis/templates/progress.html:128
+msgid "New status"
+msgstr ""
+
+#: learning_with_francis/templates/progress.html:128
+msgid "Personal completion confirmation"
+msgstr ""
+
+#: learning_with_francis/templates/progress.html:130
+msgid "Visit started"
+msgstr ""
+
+#: learning_with_francis/templates/progress.html:130
+msgid "Yes"
+msgstr ""
+
+#: learning_with_francis/templates/progress.html:130
+msgid "Not applicable"
+msgstr ""
+
+#: learning_with_francis/templates/progress.html:134
+msgid "No status history recorded for this visit."
+msgstr ""
+
+#: learning_with_francis/templates/sql_activity.html:3
+#: learning_with_francis/templates/sql_activity.html:5
+#: learning_with_francis/templates/sql_lesson.html:51
+#: learning_with_francis/templates/subject_lesson.html:88
+#, python-format
+msgid "%(subject)s quiz"
+msgstr ""
+
+#: learning_with_francis/templates/sql_activity.html:3
+#: learning_with_francis/templates/sql_lesson.html:51
+#: learning_with_francis/templates/subject_lesson.html:88
+#, python-format
+msgid "%(subject)s practice"
+msgstr ""
+
+#: learning_with_francis/templates/sql_activity.html:5
+#, python-format
+msgid "%(subject)s practice exercise"
+msgstr ""
+
+#: learning_with_francis/templates/sql_activity.html:7
+#: learning_with_francis/templates/sql_results.html:6
+#, python-format
+msgid "Question %(position)s of %(total)s"
+msgstr ""
+
+#: learning_with_francis/templates/sql_activity.html:8
+msgid ""
+"Check your answer to see the correct answer and explanation immediately. "
+"Then choose Next Question."
+msgstr ""
+
+#: learning_with_francis/templates/sql_activity.html:10
+#, python-format
+msgid ""
+"%(name)s, choose one answer for each question. You can try as often as "
+"you like."
+msgstr ""
+
+#: learning_with_francis/templates/sql_activity.html:11
+msgid "Example learners: Alex (Berlin, 22), Mia (Hamburg, 16), Sam (Berlin, 19)."
+msgstr ""
+
+#: learning_with_francis/templates/sql_activity.html:23
+msgid "Please choose an answer."
+msgstr ""
+
+#: learning_with_francis/templates/sql_activity.html:30
+msgid "Submit quiz"
+msgstr ""
+
+#: learning_with_francis/templates/sql_activity.html:30
+msgid "Check answer"
+msgstr ""
+
+#: learning_with_francis/templates/sql_lesson.html:6
+msgid "SQL: SELECT and WHERE"
+msgstr ""
+
+#: learning_with_francis/templates/sql_lesson.html:7
+#, python-format
+msgid ""
+"Welcome, %(name)s! SQL helps you read information from tables. A table "
+"has columns (kinds of information) and rows (individual records)."
+msgstr ""
+
+#: learning_with_francis/templates/sql_lesson.html:9
+msgid "Our example: learners"
+msgstr ""
+
+#: learning_with_francis/templates/sql_lesson.html:10
+msgid ""
+"This small example table is lesson material. It contains fictional "
+"learners and is separate from your saved progress."
+msgstr ""
+
+#: learning_with_francis/templates/sql_lesson.html:17
+msgid "1. Choose columns with SELECT"
+msgstr ""
+
+#: learning_with_francis/templates/sql_lesson.html:18
+msgid "says which columns to show."
+msgstr ""
+
+#: learning_with_francis/templates/sql_lesson.html:18
+msgid "says which table to read. Separate several column names with commas."
+msgstr ""
+
+#: learning_with_francis/templates/sql_lesson.html:20
+msgid ""
+"This returns Alex/Berlin, Mia/Hamburg and Sam/Berlin. It reads rows "
+"without changing them."
+msgstr ""
+
+#: learning_with_francis/templates/sql_lesson.html:22
+msgid "The star"
+msgstr ""
+
+#: learning_with_francis/templates/sql_lesson.html:22
+msgid "means every column: name, city and age."
+msgstr ""
+
+#: learning_with_francis/templates/sql_lesson.html:25
+msgid "2. Choose rows with WHERE"
+msgstr ""
+
+#: learning_with_francis/templates/sql_lesson.html:26
+msgid ""
+"keeps only rows that match a condition. Text values use single quotes; "
+"numbers do not need quotes."
+msgstr ""
+
+#: learning_with_francis/templates/sql_lesson.html:28
+msgid "This returns Alex and Sam."
+msgstr ""
+
+#: learning_with_francis/templates/sql_lesson.html:28
+msgid "means equal to."
+msgstr ""
+
+#: learning_with_francis/templates/sql_lesson.html:30
+msgid "This also returns Alex and Sam."
+msgstr ""
+
+#: learning_with_francis/templates/sql_lesson.html:30
+msgid "means greater than or equal to;"
+msgstr ""
+
+#: learning_with_francis/templates/sql_lesson.html:30
+msgid "means less than;"
+msgstr ""
+
+#: learning_with_francis/templates/sql_lesson.html:30
+msgid "means greater than."
+msgstr ""
+
+#: learning_with_francis/templates/sql_lesson.html:32
+msgid "This returns Mia. A semicolon ends each statement. Without"
+msgstr ""
+
+#: learning_with_francis/templates/sql_lesson.html:32
+msgid ""
+", result order is not guaranteed; these examples focus on which rows "
+"match."
+msgstr ""
+
+#: learning_with_francis/templates/sql_lesson.html:36
+#: learning_with_francis/templates/subject_lesson.html:74
+msgid "Try the practice exercises"
+msgstr ""
+
+#: learning_with_francis/templates/sql_lesson.html:37
+#: learning_with_francis/templates/subject_lesson.html:75
+#, python-format
+msgid "Start %(subject)s quiz"
+msgstr ""
+
+#: learning_with_francis/templates/sql_lesson.html:39
+msgid ""
+"Practice covers ten questions, one at a time, with immediate "
+"explanations. The separate five-question quiz reveals its answers only "
+"after you submit the whole quiz."
+msgstr ""
+
+#: learning_with_francis/templates/sql_lesson.html:41
+#: learning_with_francis/templates/subject_lesson.html:79
+#, python-format
+msgid "Your %(subject)s activity"
+msgstr ""
+
+#: learning_with_francis/templates/sql_lesson.html:44
+#: learning_with_francis/templates/subject_lesson.html:82
+msgid "Exercises completed correctly"
+msgstr ""
+
+#: learning_with_francis/templates/sql_lesson.html:47
+msgid ""
+"Every new submission is a separate attempt. A correctly answered practice"
+" exercise counts as a completion. Refreshing a result or submitting the "
+"same form twice does not add another attempt."
+msgstr ""
+
+#: learning_with_francis/templates/sql_lesson.html:51
+#: learning_with_francis/templates/sql_results.html:8
+#: learning_with_francis/templates/subject_lesson.html:88
+#, python-format
+msgid "%(score)s out of %(total)s"
+msgstr ""
+
+#: learning_with_francis/templates/sql_lesson.html:55
+#: learning_with_francis/templates/subject_lesson.html:90
+#, python-format
+msgid "No %(subject)s activity recorded for this visit yet."
+msgstr ""
+
+#: learning_with_francis/templates/sql_results.html:3
+#, python-format
+msgid "%(subject)s results"
+msgstr ""
+
+#: learning_with_francis/templates/sql_results.html:5
+#, python-format
+msgid "%(subject)s quiz results"
+msgstr ""
+
+#: learning_with_francis/templates/sql_results.html:5
+#, python-format
+msgid "%(subject)s practice result"
+msgstr ""
+
+#: learning_with_francis/templates/sql_results.html:8
+#, python-format
+msgid "%(name)s, you scored"
+msgstr ""
+
+#: learning_with_francis/templates/sql_results.html:9
+msgid "Saved"
+msgstr ""
+
+#: learning_with_francis/templates/sql_results.html:13
+msgid ""
+"This saved answer uses earlier wording and is shown in its original "
+"language."
+msgstr ""
+
+#: learning_with_francis/templates/sql_results.html:15
+msgid "Correct"
+msgstr ""
+
+#: learning_with_francis/templates/sql_results.html:15
+msgid "Incorrect"
+msgstr ""
+
+#: learning_with_francis/templates/sql_results.html:16
+msgid "Your answer:"
+msgstr ""
+
+#: learning_with_francis/templates/sql_results.html:17
+msgid "Correct answer:"
+msgstr ""
+
+#: learning_with_francis/templates/sql_results.html:24
+msgid "Next Question"
+msgstr ""
+
+#: learning_with_francis/templates/sql_results.html:24
+msgid "Finish Practice"
+msgstr ""
+
+#: learning_with_francis/templates/sql_results.html:26
+msgid "Try Again"
+msgstr ""
+
+#: learning_with_francis/templates/subject_lesson.html:7
+#, python-format
+msgid ""
+"Welcome, %(name)s! Read the short examples, then practise one question at"
+" a time. The separate quiz checks five answers together."
+msgstr ""
+
+#: learning_with_francis/templates/subject_lesson.html:10
+msgid "1. Give values a name"
+msgstr ""
+
+#: learning_with_francis/templates/subject_lesson.html:11
+msgid "A variable name refers to a value. Assignment uses"
+msgstr ""
+
+#: learning_with_francis/templates/subject_lesson.html:11
+msgid ". Quoted text is a string; a whole number is an integer."
+msgstr ""
+
+#: learning_with_francis/templates/subject_lesson.html:11
+msgid "and"
+msgstr ""
+
+#: learning_with_francis/templates/subject_lesson.html:11
+msgid "are booleans."
+msgstr ""
+
+#: learning_with_francis/templates/subject_lesson.html:17
+msgid ""
+"The right side of an assignment is evaluated first. The old count is 2; "
+"adding 3 and assigning again makes count 5."
+msgstr ""
+
+#: learning_with_francis/templates/subject_lesson.html:20
+msgid "2. Put a reusable task in a function"
+msgstr ""
+
+#: learning_with_francis/templates/subject_lesson.html:21
+msgid ""
+"defines a function. A parameter names an input. Indent the function body,"
+" normally with four spaces. Defining a function does not call it."
+msgstr ""
+
+#: learning_with_francis/templates/subject_lesson.html:27
+msgid "The call supplies 4 as the argument for number."
+msgstr ""
+
+#: learning_with_francis/templates/subject_lesson.html:27
+msgid "sends 5 back; the caller stores it in result."
+msgstr ""
+
+#: learning_with_francis/templates/subject_lesson.html:27
+msgid "displays output rather than returning that result for reuse."
+msgstr ""
+
+#: learning_with_francis/templates/subject_lesson.html:31
+msgid "1. Values and variable bindings"
+msgstr ""
+
+#: learning_with_francis/templates/subject_lesson.html:32
+msgid "JavaScript uses values such as numbers, quoted strings and booleans ("
+msgstr ""
+
+#: learning_with_francis/templates/subject_lesson.html:32
+msgid "or"
+msgstr ""
+
+#: learning_with_francis/templates/subject_lesson.html:32
+msgid "). Use"
+msgstr ""
+
+#: learning_with_francis/templates/subject_lesson.html:32
+msgid "for a binding you will reassign."
+msgstr ""
+
+#: learning_with_francis/templates/subject_lesson.html:32
+msgid ""
+"prevents reassignment of the binding; it does not freeze an object's "
+"properties."
+msgstr ""
+
+#: learning_with_francis/templates/subject_lesson.html:39
+msgid "2. Find an element and react to a click"
+msgstr ""
+
+#: learning_with_francis/templates/subject_lesson.html:40
+msgid "The DOM is the browser's object representation of HTML."
+msgstr ""
+
+#: learning_with_francis/templates/subject_lesson.html:40
+msgid "finds the first element matching a CSS selector. A"
+msgstr ""
+
+#: learning_with_francis/templates/subject_lesson.html:40
+msgid "selects an id. A missing match returns"
+msgstr ""
+
+#: learning_with_francis/templates/subject_lesson.html:52
+msgid "This example puts the script after its elements."
+msgstr ""
+
+#: learning_with_francis/templates/subject_lesson.html:52
+msgid "registers a function; it runs when the click happens."
+msgstr ""
+
+#: learning_with_francis/templates/subject_lesson.html:52
+msgid "changes plain text. This is a code-reading example, not a live editor."
+msgstr ""
+
+#: learning_with_francis/templates/subject_lesson.html:56
+msgid "1. Connected business information"
+msgstr ""
+
+#: learning_with_francis/templates/subject_lesson.html:57
+msgid ""
+"ERP means Enterprise Resource Planning. SAP provides ERP software "
+"connecting areas such as purchasing, inventory, sales and finance. "
+"Sharing information helps departments work from consistent records."
+msgstr ""
+
+#: learning_with_francis/templates/subject_lesson.html:58
+msgid "Master data"
+msgstr ""
+
+#: learning_with_francis/templates/subject_lesson.html:58
+msgid ""
+"describes reusable entities: a supplier's address, a customer or a "
+"material."
+msgstr ""
+
+#: learning_with_francis/templates/subject_lesson.html:58
+msgid "Transactional data"
+msgstr ""
+
+#: learning_with_francis/templates/subject_lesson.html:58
+msgid ""
+"records particular events, such as one purchase order, goods receipt or "
+"invoice."
+msgstr ""
+
+#: learning_with_francis/templates/subject_lesson.html:61
+msgid "2. A shop orders chairs"
+msgstr ""
+
+#: learning_with_francis/templates/subject_lesson.html:63
+msgid "Create a"
+msgstr ""
+
+#: learning_with_francis/templates/subject_lesson.html:63
+msgid "purchase order"
+msgstr ""
+
+#: learning_with_francis/templates/subject_lesson.html:63
+msgid "specifying the chairs and quantity requested from a supplier."
+msgstr ""
+
+#: learning_with_francis/templates/subject_lesson.html:64
+msgid "When the chairs arrive, record a"
+msgstr ""
+
+#: learning_with_francis/templates/subject_lesson.html:64
+msgid "goods receipt"
+msgstr ""
+
+#: learning_with_francis/templates/subject_lesson.html:64
+msgid ". For this stock example, inventory increases."
+msgstr ""
+
+#: learning_with_francis/templates/subject_lesson.html:65
+msgid "Check the supplier's"
+msgstr ""
+
+#: learning_with_francis/templates/subject_lesson.html:65
+msgid "invoice"
+msgstr ""
+
+#: learning_with_francis/templates/subject_lesson.html:65
+msgid "against the order and received goods; investigate differences."
+msgstr ""
+
+#: learning_with_francis/templates/subject_lesson.html:66
+msgid "Arrange"
+msgstr ""
+
+#: learning_with_francis/templates/subject_lesson.html:66
+msgid "payment"
+msgstr ""
+
+#: learning_with_francis/templates/subject_lesson.html:66
+msgid "after the appropriate checks."
+msgstr ""
+
+#: learning_with_francis/templates/subject_lesson.html:68
+msgid "For a sale, a"
+msgstr ""
+
+#: learning_with_francis/templates/subject_lesson.html:68
+msgid "sales order"
+msgstr ""
+
+#: learning_with_francis/templates/subject_lesson.html:68
+msgid ""
+"records what the customer orders; delivery, customer invoicing and "
+"payment follow in a simplified example. These are typical learning "
+"scenarios, not fixed rules for every SAP installation. Configuration and "
+"real workflows vary."
+msgstr ""
+
+#: learning_with_francis/templates/subject_lesson.html:69
+msgid ""
+"This lesson teaches concepts. It does not connect to SAP, run business "
+"transactions or provide professional certification."
+msgstr ""
+
+#: learning_with_francis/templates/subject_lesson.html:77
+msgid ""
+"Practice gives feedback after every question. The quiz reveals answers "
+"and explanations only after all five answers are submitted. Both can be "
+"repeated without a limit."
+msgstr ""
+
+#: learning_with_francis/templates/subject_lesson.html:85
+msgid ""
+"Each checked practice answer is an attempt; each correct one counts as a "
+"completed exercise entry. Repeated rounds retain their separate dated "
+"results."
+msgstr ""

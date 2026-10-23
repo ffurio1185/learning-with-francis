@@ -4,9 +4,12 @@ from pathlib import Path
 
 from datetime import timedelta
 
-from flask import Flask, flash, redirect, render_template, request, session, url_for
+from flask import Flask, flash, g, redirect, render_template, request, session, url_for
 
-from . import db
+from flask_babel import gettext
+from werkzeug.exceptions import HTTPException
+
+from . import db, i18n
 from .security import csrf_token, load_signing_key, valid_csrf
 from . import visitors
 from .learning import bp as learning_blueprint
@@ -34,6 +37,8 @@ def create_app(test_config=None):
         SESSION_COOKIE_SECURE=False,
         PERMANENT_SESSION_LIFETIME=timedelta(hours=12),
         MAX_CONTENT_LENGTH=64 * 1024,
+        BABEL_DEFAULT_LOCALE="en",
+        BABEL_TRANSLATION_DIRECTORIES="translations",
     )
     if test_config is not None:
         app.config.update(test_config)
@@ -41,6 +46,7 @@ def create_app(test_config=None):
         app.config["SECRET_KEY"] = load_signing_key(app.config["SECRET_KEY_FILE"])
 
     db.init_app(app)
+    i18n.init_app(app)
     app.register_blueprint(learning_blueprint)
     app.register_blueprint(progress_blueprint)
     app.jinja_env.globals["csrf_token"] = csrf_token
@@ -53,6 +59,8 @@ def create_app(test_config=None):
         return response
 
     def render_home(error=None, status=200, entered_name=""):
+        if not error:
+            entered_name = getattr(g, "language_draft", {}).get("visitor_name", entered_name)
         subjects = db.get_db().execute("SELECT name FROM subjects ORDER BY display_order").fetchall()
         visit = visitors.active_visit(session.get("visit_id"))
         if visit is None:
@@ -66,6 +74,19 @@ def create_app(test_config=None):
     def unavailable(error):
         return render_template("foundation.html", setup_ready=False, subjects=[]), 503
 
+    @app.errorhandler(HTTPException)
+    def interface_error(error):
+        messages = {403: gettext("You do not have access to this page."),
+                    404: gettext("This page or result is not available for your visit."),
+                    405: gettext("This action is not available with that request method."),
+                    409: gettext("This form was already submitted with different answers. Use Try Again."),
+                    413: gettext("This submission is too large. Please submit a smaller form.")}
+        response = error.get_response()
+        response.set_data(render_template("interface_error.html", code=error.code,
+                          message=messages.get(error.code, gettext("The request could not be processed. Please try again."))))
+        response.content_type = "text/html; charset=utf-8"
+        return response
+
     @app.get("/")
     def cover():
         return render_template("cover.html")
@@ -77,25 +98,25 @@ def create_app(test_config=None):
     @app.post("/visits/start")
     def start_visit():
         if not valid_csrf(request.form.get("csrf_token")):
-            return render_home("This form has expired. Please try again.", 400)
+            return render_home(gettext("This form has expired. Please try again."), 400)
         names = request.form.getlist("visitor_name")
         try:
             name = visitors.validate_name(names[0] if len(names) == 1 else None)
         except ValueError as error:
             return render_home(str(error), 400, entered_name=names[0] if names else "")
         visit_id = visitors.start_visit(name, session.get("visit_id"))
-        session.clear()
+        i18n.clear_visit_session()
         session["visit_id"] = visit_id
         return redirect(url_for("index"), code=303)
 
     def finish_visit(new_visit=False):
         if not valid_csrf(request.form.get("csrf_token")):
-            return render_home("This form has expired. Please try again.", 400)
+            return render_home(gettext("This form has expired. Please try again."), 400)
         visit = visitors.active_visit(session.get("visit_id"))
         if visit:
             visitors.end_visit(visit["visit_id"])
-        session.clear()
-        flash("Start a fresh visit below." if new_visit else "Your visit has ended. Your saved history is retained.")
+        i18n.clear_visit_session()
+        flash(gettext("Start a fresh visit below.") if new_visit else gettext("Your visit has ended. Your saved history is retained."))
         return redirect(url_for("index"), code=303)
 
     @app.post("/visits/end")

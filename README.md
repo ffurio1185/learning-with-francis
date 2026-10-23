@@ -4,10 +4,16 @@ A beginner-friendly learning application for SQL, Python, JavaScript and SAP.
 Read a short lesson, practise with immediate feedback, take a quiz, and track your
 understanding at your own pace. No account, registration or password is required.
 
-**Current version:** approved Version 2.0 learning functionality, including the
-connected progress tracker and Welcome Cover Page. Public deployment is not yet
-configured. This independent source snapshot comes from approved commit
-`fe77b84e06ff82f54c28bb780a03196909f6a03a`.
+**Published baseline:** Version 2.0 at `dbeae6f`.
+**Release candidate:** the approved bilingual English/German experience (L1–L5),
+connected progress tracker, subject icons, and Welcome Cover Page/About enhancement.
+Prepared in a separate clean release history; not yet committed, pushed or deployed.
+This candidate contains no background audio. The approved local development
+repository is preserved separately.
+
+See [Public release preparation](docs/PUBLIC-RELEASE.md), the
+[exact publishing manifest](docs/PUBLISH-FILES.txt), and
+[verification evidence](docs/RELEASE-VERIFICATION.md).
 
 ## What you can do
 
@@ -42,7 +48,7 @@ inline confirmation hints are JavaScript enhancements, backed by Python validati
 | Browser | HTML, CSS and plain JavaScript |
 | Verification | Python unittest, SQLite checks and optional Chromium/Playwright checks |
 
-The approved snapshot uses `Flask==3.1.3`. Python 3.14.4 on Ubuntu/WSL is the
+The approved snapshot uses `Flask==3.1.3`; L1 adds `Flask-Babel==4.0.0`. Python 3.14.4 on Ubuntu/WSL is the
 verified development environment. The system must provide timezone data for
 `Europe/Berlin`. Browser verification tools are optional and separate from runtime
 requirements.
@@ -120,7 +126,8 @@ app.py, database.py        Preserved Version 1 application and database function
 templates/topics.html     Preserved Version 1 page
 PROJECT-PLAN.md           Public milestone history, approvals and current scope
 AGENTS.md, .agents/       Current project-specific learning guidance
-requirements.txt          Application dependency
+requirements.txt          Application dependencies
+babel.cfg                 Translation extraction configuration
 ```
 
 The application runs independently of its original development repository and
@@ -138,14 +145,21 @@ Run the Python and SQLite regression suite:
 .venv/bin/python -B -W error::ResourceWarning -m unittest discover -s tests -v
 ```
 
-The approved source has 125 tests, covering both versions, database setup,
+The published source has 125 tests; L1 added 18, L2 added 16, L3 added 16
+SQL-language checks and L4 adds 18 subject-language checks (193 total). They cover both versions, database setup,
 transactions, grading, repeated practice, visitor isolation, confirmation
 protection, saved history, timezone display and cover routing. Tests generate
 schema 3 data and signing keys in disposable `/tmp` directories. Version 1 tests
 create their own database from `tests/fixtures/version1-schema.sql`; no original
 database is required.
 
-Optional real-browser drivers are `tests/browser_phase2_progress.py` (19 groups)
+The L1 driver `tests/browser_language.py` adds six language/accessibility groups.
+L2 adds eight groups in `tests/browser_interface_language.py` for native language
+forms, drafts, German progress controls, validation and isolation. L3 adds six
+SQL-language groups in `tests/browser_sql_language.py`. L4 adds 14 groups in
+`tests/browser_subject_language.py` for the remaining content (60 groups total).
+
+Optional existing real-browser drivers are `tests/browser_phase2_progress.py` (19 groups)
 and `tests/browser_welcome_cover.py` (seven groups). They require separately
 installed Playwright and Chromium, start their own loopback server, and remove
 their disposable test databases. With those tools available, run:
@@ -153,10 +167,73 @@ their disposable test databases. With those tools available, run:
 ```sh
 python -B tests/browser_phase2_progress.py --report-dir /tmp/francis-progress-checks
 python -B tests/browser_welcome_cover.py --report-dir /tmp/francis-cover-checks
+python -B tests/browser_language.py --report-dir /tmp/francis-language-checks
+python -B tests/browser_interface_language.py --report-dir /tmp/francis-interface-checks
+python -B tests/browser_sql_language.py --report-dir /tmp/francis-sql-language-checks
+python -B tests/browser_subject_language.py --report-dir /tmp/francis-subject-language-checks
 ```
 
 Use the Python environment containing Flask and Playwright for these optional
 commands. Reports and screenshots should stay outside the publishable source.
+
+## English/German support — L1 to L4
+
+Choose **English** (US flag) or **Deutsch** (German flag) on the cover or application
+pages. English is the default for a new browser cookie; browser headers do not
+change it automatically. The protected language POST returns to the same interface
+page. The cover's animation is unchanged. All four subjects now support both
+languages: lesson prose, ten practice questions each, five quiz questions each,
+explanations, topic titles and personalized feedback. Code examples and technical
+identifiers retain their original syntax. Pages declare their content language.
+
+The language code is kept in the signed session, separately from visit identity.
+It survives navigation, End Visit and Start New Visit. Visit changes still clear
+identity and activity tokens. Tabs share a cookie; closing a browser does not
+reliably end a visit or clear a restored language preference.
+
+Language buttons on the name, practice and quiz forms use native HTML form
+submission, including without JavaScript. They bypass required-answer checks for
+that display change only. Small, allowed draft fields are carried through a
+one-time signed-session draft and restored on the matching page for the same visit.
+Drafts may briefly contain the entered name or selected option IDs; signed cookies
+are not encrypted. No scores, results or understanding are saved by a language
+change. A pending quiz keeps its submission token; a practice round keeps its
+position. Normal submission still runs all existing Python validation and grading.
+End/New Visit drops drafts. Confirmation boxes always start unchecked.
+
+Return destinations are signed, visit-bound, time-limited and restricted to local
+application GET routes. CSRF protection, escaping, HttpOnly/SameSite cookies and
+no-store pages remain. Future HTTPS deployment must enable Secure cookies.
+Browser-native messages with JavaScript disabled follow the browser's own locale;
+the application's Python errors are translated. With JavaScript, required-input
+and confirmation hints use the selected interface language.
+
+Status labels translate to „Noch am Lernen“, „Wiederholung nötig“ and „Abgeschlossen“.
+Database values and form identifiers remain the original English codes; switching
+languages never writes progress. UTC storage is unchanged. German timestamps show
+MEZ/MESZ, with the same Europe/Berlin rules and machine-readable offsets.
+
+Flask-Babel uses English source/fallback text and German editable/compiled catalogs
+in `learning_with_francis/translations/de/LC_MESSAGES/`. Both `.po` and `.mo` are
+supplied so a clean checkout works. See
+[translation maintenance](learning_with_francis/translations/README.md).
+
+### Learning content and saved results (L3–L4)
+
+English remains the canonical source for all four subjects. `N_` marks wording for translation but
+returns the original English string. `sql_display.py` creates translated view
+copies; Python still grades with the original IDs and answer keys. Saved-answer
+translation is scoped by topic as well as exact wording. SQL commands,
+table/column names, quoted values and sample rows are unchanged. Quiz keys and
+explanations remain hidden until submission; practice reveals them immediately
+after checking an answer.
+
+New attempts in either language retain canonical English answer snapshots in
+SQLite. Exact known saved snapshots can be displayed in either language without
+rewriting them. Earlier or unknown wording stays in its original language with a
+notice rather than being guessed or replaced. Display changes do not alter scores,
+dates, counts, understanding or historical records. Existing content versions and
+submission tokens remain compatible. No database migration is needed.
 
 ## Version 1 compatibility and project history
 
@@ -179,12 +256,16 @@ JavaScript or SQL, connect to a real SAP system, provide accounts, or promise
 cross-device recovery. SQL tables shown in lessons are educational examples,
 not recorded visitor progress.
 
-Render deployment has **not** been implemented. Future deployment work needs a
-production server such as Gunicorn, environment-based configuration, a separate
-stable production secret, HTTPS cookie settings, a tested runtime, and persistent
-storage with backup arrangements. A new hosted database must start from schema 3,
-not from existing private or preview records. No production configuration or
-hosting resources are created by the local setup steps above.
+Local production preparation is available through `wsgi:app`, Gunicorn and
+`render.yaml`. Live Render deployment has **not** occurred. The supported start
+script initialises a fresh schema-3 database under a private persistent mount and
+validates existing databases without resetting or upgrading them. Production needs
+an external stable secret and HTTPS; the approved 12-hour session behavior remains.
+
+Before deployment, approve the real Impressum/privacy information, data-retention
+and backup arrangements, and actual hosting costs. No original or preview database
+should be uploaded. Follow [the release procedure](docs/PUBLIC-RELEASE.md); the
+configuration file does not itself buy services or authorise deployment.
 
 ## Credits and third-party assets
 

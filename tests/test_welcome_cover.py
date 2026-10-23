@@ -2,6 +2,7 @@
 
 from contextlib import closing
 from pathlib import Path
+from html import unescape
 import tempfile
 import unittest
 from unittest.mock import patch
@@ -26,13 +27,14 @@ class WelcomeCoverTests(unittest.TestCase):
         self.assertEqual(response.location, "/learn/")
         return response
 
-    def test_cover_does_not_require_database_or_create_cookie(self):
-        # The visual entrance must not resolve or mutate visitor state.
+    def test_cover_requires_no_database_and_creates_only_form_protection(self):
+        # Language forms may create CSRF session metadata, never a visitor record.
         with patch.object(db, "get_db", side_effect=AssertionError("Cover touched database")):
             for method in (self.client.get, self.client.head):
                 response = method("/")
                 self.assertEqual(response.status_code, 200)
-                self.assertNotIn("Set-Cookie", response.headers)
+                with self.client.session_transaction() as session:
+                    self.assertEqual(set(session), {"csrf_token"})
         self.assertFalse(self.database.exists())
         self.assertEqual(self.client.get("/learn/").status_code, 503)
         self.assertFalse(self.database.exists())
@@ -43,7 +45,7 @@ class WelcomeCoverTests(unittest.TestCase):
                      'id="cover-enter" href="/learn/"', 'aria-hidden="true">4U',
                      '/static/cover.css', '/static/cover.js', 'defer'):
             self.assertIn(text, html)
-        for text in ('visitor_name', 'csrf_token', '/static/phase2.css', '/static/style.css'):
+        for text in ('visitor_name', '/static/phase2.css', '/static/style.css'):
             self.assertNotIn(text, html)
         for asset in ('cover.css', 'cover.js'):
             with self.client.get('/static/' + asset) as response:
@@ -53,6 +55,7 @@ class WelcomeCoverTests(unittest.TestCase):
         db.initialize_database(self.database)
         self.start()
         name = self.app.config['SESSION_COOKIE_NAME']
+        self.client.get("/")  # Generate the new language form token once.
         cookie = self.client.get_cookie(name).value
         before = self.database.read_bytes()
         for _ in range(3):
@@ -69,6 +72,7 @@ class WelcomeCoverTests(unittest.TestCase):
         for path in ('/learn/', '/sql/', '/progress/'):
             html = self.client.get(path).get_data(as_text=True)
             self.assertNotIn('id="welcome-cover"', html)
+            self.assertNotIn('id="about-learning"', html)
             self.assertIn('Cover Learner', html)
         with self.app.test_request_context():
             from flask import url_for
@@ -91,6 +95,33 @@ class WelcomeCoverTests(unittest.TestCase):
         with closing(db.open_database(self.database)) as connection:
             self.assertEqual(connection.execute('SELECT COUNT(*) FROM visits').fetchone()[0], 2)
             self.assertEqual(connection.execute('SELECT COUNT(*) FROM visits WHERE ended_at IS NULL').fetchone()[0], 0)
+
+    def test_about_translates_without_creating_visit_or_database(self):
+        copies = {
+            "en": ("Discover the project", "About Learning with Francis",
+                   "designed to make learning more organized", "Version 1", "Version 2",
+                   "This project continues to grow", "Concept, Design & Development by Francis Furio"),
+            "de": ("Mehr über das Projekt", "Über Learning with Francis",
+                   "strukturierter, ansprechender und sinnvoller", "Version 1", "Version 2",
+                   "Das Projekt wächst mit dem Lernweg", "Konzept, Design und Entwicklung: Francis Furio"),
+        }
+        with patch.object(db, "get_db", side_effect=AssertionError("About touched database")):
+            for language, phrases in copies.items():
+                self.client.get("/")
+                with self.client.session_transaction() as session:
+                    token = session["csrf_token"]
+                response = self.client.post("/preferences/language", data={
+                    "csrf_token": token, "language": language})
+                self.assertEqual(response.status_code, 303)
+                html = self.client.get("/").text
+                for phrase in phrases:
+                    self.assertIn(phrase, unescape(html))
+                self.assertIn('href="#about-learning"', html)
+                self.assertIn('id="about-learning" aria-labelledby="about-title" tabindex="-1"', html)
+                self.assertLess(html.index('</main>'), html.index('id="about-learning"'))
+                with self.client.session_transaction() as session:
+                    self.assertNotIn("visit_id", session)
+        self.assertFalse(self.database.exists())
 
     def test_cover_cannot_be_submitted_as_mutating_route(self):
         db.initialize_database(self.database)

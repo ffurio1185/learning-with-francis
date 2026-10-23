@@ -90,4 +90,8 @@ when a repository-local identity is requested.
 Keep scope small and agree on extensions before implementation. Accounts,
 registration, learner-code execution, live SAP integration and hosting changes
 are outside the approved local feature set. Creating or editing documentation
-does not authorise new application code. P2.6 and Render deployment have not started.
+does not authorise new application code. P2.6 local public-release preparation is
+explicitly authorised; public publishing/deployment still needs separate approval.
+The production entry point is `wsgi:app`, while the original local factory and
+Version 1 remain unchanged. Use only the clean release history for publishing;
+never merge the separate music-bearing development branch into this candidate.

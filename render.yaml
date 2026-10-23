@@ -1,0 +1,24 @@
+# Preparation only: creating this paid service needs separate owner approval.
+services:
+  - type: web
+    name: learning-with-francis
+    runtime: python
+    repo: https://github.com/ffurio1185/learning-with-francis
+    branch: main
+    plan: 0.5c-512mb
+    region: frankfurt
+    autoDeployTrigger: "off"
+    buildCommand: pip install -r requirements.txt
+    startCommand: sh render-start.sh
+    healthCheckPath: /healthz
+    disk:
+      name: learning-data
+      mountPath: /var/data
+      sizeGB: 1
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.14.4
+      - key: LWF_DATA_DIR
+        value: /var/data
+      - key: LWF_SECRET_KEY
+        generateValue: true

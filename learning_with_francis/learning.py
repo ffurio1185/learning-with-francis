@@ -7,9 +7,11 @@ import secrets
 from flask import Blueprint, abort, current_app, g, redirect, render_template, request, session, url_for
 from itsdangerous import BadData, URLSafeTimedSerializer
 
+from flask_babel import gettext
+
 from .db import get_db
 from .security import valid_csrf
-from . import sql_content, visitors
+from . import sql_content, sql_display, visitors
 from .subjects import SUBJECTS
 
 bp = Blueprint("learning", __name__)
@@ -33,7 +35,8 @@ def subject_urls(endpoint, values):
 @bp.context_processor
 def subject_template_context():
     info = getattr(g, "learning_subject", {"slug": "sql", **SUBJECTS["sql"]})
-    return {"subject": {"slug": info["slug"], "name": info["name"], "title": info["title"]}}
+    return {"subject": {"slug": info["slug"], "name": info["name"], "title": sql_display.title_text(info["slug"], info["title"])},
+            "learning_content_language": sql_display.content_language(info["slug"])}
 
 
 def visit_required(function):
@@ -62,12 +65,12 @@ def validate_submission(token, kind):
     try:
         data = signer().loads(token, max_age=12 * 60 * 60)
     except (BadData, TypeError):
-        raise ValueError("This activity form has expired or is invalid. Please open it again.") from None
+        raise ValueError(gettext("This activity form has expired or is invalid. Please open it again.")) from None
     if (not isinstance(data, dict) or data.get("visit") != g.learning_visit["visit_id"]
         or data.get("kind") != kind or data.get("version") != content.CONTENT_VERSION
         or data.get("topic", sql_content.TOPIC_ID) != content.TOPIC_ID
         or not isinstance(data.get("nonce"), str) or len(data["nonce"]) != 43):
-        raise ValueError("This activity form belongs to a different visit or activity. Please open it again.")
+        raise ValueError(gettext("This activity form belongs to a different visit or activity. Please open it again."))
     return data["nonce"]
 
 
@@ -78,11 +81,11 @@ def grade_answers(form, kind, questions=None):
     source = content.questions_for(kind) if questions is None else questions
     expected = {q["id"] for q in source}
     if any(key.startswith(("q", "practice")) and key not in expected for key in form):
-        raise ValueError("Please submit answers only for this activity's questions.")
+        raise ValueError(gettext("Please submit answers only for this activity's questions."))
     for question in source:
         selected = form.getlist(question["id"])
         if len(selected) != 1 or selected[0] not in question["choices"]:
-            raise ValueError("Please choose one listed answer for every question.")
+            raise ValueError(gettext("Please choose one listed answer for every question."))
         answers.append({**question, "selected": selected[0],
                         "is_correct": int(selected[0] == question["correct"])})
     return answers
@@ -109,7 +112,7 @@ def save_attempt(kind, nonce, answers):
             if (previous["visit_id"] != visit_id or previous["activity_kind"] != kind or previous["topic_id"] != content.TOPIC_ID
                 or [(row["question_id"], row["selected_option"]) for row in saved]
                     != [(row["id"], row["selected"]) for row in answers]):
-                abort(409, description="This form was already submitted with different answers. Use Try Again.")
+                abort(409, description=gettext("This form was already submitted with different answers. Use Try Again."))
             return previous["attempt_id"]
         attempt_id = secrets.token_urlsafe(24)
         score = sum(answer["is_correct"] for answer in answers)
@@ -164,7 +167,7 @@ def activity(kind):
     if request.method == "POST":
         try:
             if not valid_csrf(request.form.get("csrf_token")):
-                raise ValueError("This form has expired. Please try again.")
+                raise ValueError(gettext("This form has expired. Please try again."))
             nonce = validate_submission(request.form.get("submission_token"), kind)
             answers = grade_answers(request.form, kind)
         except ValueError as failure:
@@ -173,14 +176,14 @@ def activity(kind):
             attempt_id = save_attempt(kind, nonce, answers)
             return redirect(url_for("learning.results", attempt_id=attempt_id), code=303)
     # Keep a valid form token on validation errors; a corrected resubmission is still one attempt.
-    token = request.form.get("submission_token") if error else None
+    token = request.form.get("submission_token") if error else getattr(g, "language_draft", {}).get("submission_token")
     if token:
         try:
             validate_submission(token, kind)
         except ValueError:
             token = None
     return render_template("sql_activity.html", visit=g.learning_visit, kind=kind,
-                           questions=content.public_questions(kind), error=error,
+                           questions=sql_display.public_questions(content, kind), error=error,
                            selected=request.form, submission_token=token or submission_token(kind)), status
 
 
@@ -194,19 +197,19 @@ def practice():
     try:
         if request.method == "POST":
             if not valid_csrf(request.form.get("csrf_token")):
-                raise ValueError("This form has expired. Please try again.")
+                raise ValueError(gettext("This form has expired. Please try again."))
             data = practice_token_data(request.form.get("submission_token"), "practice-question")
             run_id, position = data["run"], data.get("position")
             if type(position) is not int or not 0 <= position < len(content.PRACTICE):
-                raise ValueError("This practice question is invalid. Please start again.")
+                raise ValueError(gettext("This practice question is invalid. Please start again."))
             if request.form.get("position") != str(position):
-                raise ValueError("This form does not match the displayed question. Please try again.")
+                raise ValueError(gettext("This form does not match the displayed question. Please try again."))
             question = content.PRACTICE[position]
             answers = grade_answers(request.form, "practice", (question,))
             # A token is issued only for the next unanswered question. Check again
             # on submission, allowing a repeated POST for an already-saved answer.
             if position > practice_position(run_id):
-                raise ValueError("Please answer the earlier practice questions first.")
+                raise ValueError(gettext("Please answer the earlier practice questions first."))
             attempt_id = save_attempt("practice", f"{run_id}:{position}", answers)
             return redirect(url_for("learning.results", attempt_id=attempt_id), code=303)
         if request.args.get("run"):
@@ -217,11 +220,12 @@ def practice():
         # Recover only an in-range question index. Never render a forged index.
         if type(position) is not int or not 0 <= position < len(content.PRACTICE):
             position = 0
+    g.language_return_path = url_for("learning.practice", run=practice_token(run_id, "practice-round"))
     if position == len(content.PRACTICE) and not error:
         return render_template("practice_complete.html", visit=g.learning_visit, total=len(content.PRACTICE))
     question = content.PRACTICE[position]
     return render_template("sql_activity.html", visit=g.learning_visit, kind="practice",
-                           questions=content.public_questions("practice", (question,)),
+                           questions=sql_display.public_questions(content, "practice", (question,)),
                            error=error, selected=selected, practice_position=position,
                            practice_total=len(content.PRACTICE),
                            submission_token=practice_token(run_id, "practice-question", position)), status
@@ -241,13 +245,13 @@ def practice_token_data(token, purpose):
     try:
         data = signer().loads(token, max_age=12 * 60 * 60)
     except (BadData, TypeError):
-        raise ValueError("This practice form has expired or is invalid. Please start again.") from None
+        raise ValueError(gettext("This practice form has expired or is invalid. Please start again.")) from None
     if (not isinstance(data, dict) or data.get("visit") != g.learning_visit["visit_id"]
         or data.get("kind") != purpose or data.get("version") != content.PRACTICE_VERSION
         or data.get("topic", sql_content.TOPIC_ID) != content.TOPIC_ID
         or not isinstance(data.get("run"), str) or len(data["run"]) != 43
         or any(char not in "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-" for char in data["run"])):
-        raise ValueError("This practice form belongs to a different visit or round. Please start again.")
+        raise ValueError(gettext("This practice form belongs to a different visit or round. Please start again."))
     return data
 
 
@@ -298,8 +302,7 @@ def results(attempt_id):
     for row in get_db().execute("SELECT * FROM learning_answers WHERE attempt_id = ? ORDER BY position", (attempt_id,)):
         answers.append({**dict(row), "choices": json.loads(row["choices_json"])})
     name = g.learning_visit["display_name"]
-    feedback = content.quiz_feedback(attempt["score"], name) if attempt["activity_kind"] == "quiz" else (
-        f"Well done, {name}! You solved the practice exercise." if attempt["score"] else
-        f"Keep practicing, {name}! Read the explanation and try again.")
+    feedback = sql_display.feedback(attempt["activity_kind"], attempt["score"], name)
+    answers = sql_display.saved_answers(answers, content)
     return render_template("sql_results.html", visit=g.learning_visit, attempt=attempt,
                            answers=answers, feedback=feedback, practice_navigation=practice_navigation(attempt))

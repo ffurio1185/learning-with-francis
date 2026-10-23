@@ -51,4 +51,24 @@ a:focus-visible { outline: 3px solid #175eac; outline-offset: 3px; }
 @media (max-width: 40rem) {
     .progress-summary { grid-template-columns: 1fr; }
     main { padding: 1rem; }
+    /* Keep enlarged progress text and controls within narrow screens. */
+    .progress-page { overflow-wrap: anywhere; }
 }
+
+/* Shared language controls; cover styling remains isolated in cover.css. */
+.app-languages { margin: 0 0 1.5rem; }
+.app-languages fieldset { border: 0; margin: 0; padding: 0; min-width: 0; }
+.app-languages legend { margin-bottom: .4rem; font-weight: 600; }
+.app-languages .language-options { display: flex; flex-wrap: wrap; gap: .5rem; }
+.app-languages button { display: inline-flex; align-items: center; gap: .5rem; min-height: 44px; background: white; color: #175eac; }
+.app-languages button[aria-pressed="true"] { background: #175eac; color: white; }
+.app-languages button:hover { box-shadow: 0 0 0 3px rgb(23 94 172 / 15%); }
+.app-languages img { flex-shrink: 0; }
+.interface-scope { border-left: 3px solid #175eac; padding-left: 1rem; }
+
+/* Long German headings must also reflow at enlarged text sizes. */
+html[lang="de"] main { overflow-wrap: anywhere; hyphens: auto; }
+
+/* Native selects otherwise keep the width of their longest translated option. */
+.topic-filter { min-width: 0; }
+.topic-filter select { min-width: 0; width: 100%; max-width: 100%; }

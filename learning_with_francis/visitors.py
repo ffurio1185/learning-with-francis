@@ -3,20 +3,22 @@
 import secrets
 import unicodedata
 
+from flask_babel import gettext
+
 from .db import get_db
 
 
 def validate_name(value):
     if not isinstance(value, str):
-        raise ValueError("Please enter your name.")
+        raise ValueError(gettext("Please enter your name."))
     name = value.strip()
     if not 1 <= len(name) <= 50:
-        raise ValueError("Please enter a name between 1 and 50 characters.")
+        raise ValueError(gettext("Please enter a name between 1 and 50 characters."))
     # Support international names, spaces, apostrophes and hyphens, not markup/control characters.
     if not any(unicodedata.category(char).startswith("L") for char in name) or any(
         not (unicodedata.category(char)[0] in "LM" or char in " '-’") for char in name
     ):
-        raise ValueError("Use letters, spaces, apostrophes or hyphens for your name.")
+        raise ValueError(gettext("Use letters, spaces, apostrophes or hyphens for your name."))
     return name
 
 

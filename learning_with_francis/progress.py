@@ -2,6 +2,8 @@
 
 from flask import Blueprint, abort, flash, g, redirect, render_template, request, url_for
 
+from flask_babel import gettext
+
 from .db import get_db
 from .learning import visit_required
 from .security import valid_csrf
@@ -66,11 +68,11 @@ def learning_overview(visit_id):
 def change_status(visit_id, topic_id, new_status, user_confirmed=False):
     """Save an owned status change and history atomically; never infer understanding."""
     if new_status not in STATUSES:
-        raise ValueError("Choose Still Learning, Needs Review, or Completed.")
+        raise ValueError(gettext("Choose Still Learning, Needs Review, or Completed."))
     if type(user_confirmed) is not bool:
-        raise ValueError("Confirmation must come from your confirmation checkbox.")
+        raise ValueError(gettext("Confirmation must come from your confirmation checkbox."))
     if new_status == "Completed" and not user_confirmed:
-        raise ValueError("Please confirm that you understand this topic before selecting Completed.")
+        raise ValueError(gettext("Please confirm that you understand this topic before selecting Completed."))
     connection = get_db()
     with connection:
         connection.execute("BEGIN IMMEDIATE")
@@ -116,14 +118,14 @@ def index():
 @visit_required
 def update_status(topic_id):
     if not valid_csrf(request.form.get("csrf_token")):
-        return render_progress("This form has expired. Please reload My Progress and try again.", 400)
+        return render_progress(gettext("This form has expired. Please reload My Progress and try again."), 400)
     try:
         statuses = request.form.getlist("new_status")
         if len(statuses) != 1:
-            raise ValueError("Please choose one learning status.")
+            raise ValueError(gettext("Please choose one learning status."))
         change_status(g.learning_visit["visit_id"], topic_id, statuses[0],
                       user_confirmed=request.form.getlist("user_confirmed") == ["yes"])
     except ValueError as error:
         return render_progress(str(error), 400)
-    flash("Your learning status is saved. Practice and quiz results stay separate from understanding.")
+    flash(gettext("Your learning status is saved. Practice and quiz results stay separate from understanding."))
     return redirect(url_for("progress.index"), code=303)

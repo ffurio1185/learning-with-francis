@@ -2,41 +2,42 @@
 {% from "_time.html" import local_time %}
 {% block title %}{{ subject.title }}{% endblock %}
 {% block content %}
+<div class="lesson-material" lang="{{ learning_content_language }}">
 <h1>{{ subject.name }}: {{ subject.title }}</h1>
-<p>Welcome, {{ visit.display_name }}! Read the short examples, then practise one question at a time. The separate quiz checks five answers together.</p>
+<p>{{ _('Welcome, %(name)s! Read the short examples, then practise one question at a time. The separate quiz checks five answers together.', name=visit.display_name) }}</p>
 {% if subject.slug == 'python' %}
 <section>
-    <h2>1. Give values a name</h2>
-    <p>A variable name refers to a value. Assignment uses <code>=</code>. Quoted text is a string; a whole number is an integer. <code>True</code> and <code>False</code> are booleans.</p>
+    <h2>{{ _('1. Give values a name') }}</h2>
+    <p>{{ _('A variable name refers to a value. Assignment uses') }} <code>=</code>{{ _('. Quoted text is a string; a whole number is an integer.') }} <code>True</code> {{ _('and') }} <code>False</code> {{ _('are booleans.') }}</p>
     <pre><code>name = "Mia"
 age = 20
 count = 2
 count = count + 3
 print(count)  # displays 5</code></pre>
-    <p>The right side of an assignment is evaluated first. The old count is 2; adding 3 and assigning again makes count 5.</p>
+    <p>{{ _('The right side of an assignment is evaluated first. The old count is 2; adding 3 and assigning again makes count 5.') }}</p>
 </section>
 <section>
-    <h2>2. Put a reusable task in a function</h2>
-    <p><code>def</code> defines a function. A parameter names an input. Indent the function body, normally with four spaces. Defining a function does not call it.</p>
+    <h2>{{ _('2. Put a reusable task in a function') }}</h2>
+    <p><code>def</code> {{ _('defines a function. A parameter names an input. Indent the function body, normally with four spaces. Defining a function does not call it.') }}</p>
     <pre><code>def add_one(number):
     return number + 1
 
 result = add_one(4)
 print(result)  # displays 5</code></pre>
-    <p>The call supplies 4 as the argument for number. <code>return</code> sends 5 back; the caller stores it in result. <code>print()</code> displays output rather than returning that result for reuse.</p>
+    <p>{{ _('The call supplies 4 as the argument for number.') }} <code>return</code> {{ _('sends 5 back; the caller stores it in result.') }} <code>print()</code> {{ _('displays output rather than returning that result for reuse.') }}</p>
 </section>
 {% elif subject.slug == 'javascript' %}
 <section>
-    <h2>1. Values and variable bindings</h2>
-    <p>JavaScript uses values such as numbers, quoted strings and booleans (<code>true</code> or <code>false</code>). Use <code>let</code> for a binding you will reassign. <code>const</code> prevents reassignment of the binding; it does not freeze an object's properties.</p>
+    <h2>{{ _('1. Values and variable bindings') }}</h2>
+    <p>{{ _('JavaScript uses values such as numbers, quoted strings and booleans (') }}<code>true</code> {{ _('or') }} <code>false</code>{{ _('). Use') }} <code>let</code> {{ _('for a binding you will reassign.') }} <code>const</code> {{ _("prevents reassignment of the binding; it does not freeze an object's properties.") }}</p>
     <pre><code>let score = 1;
 score = 2;
 const greeting = "Hello";
 const ready = true;</code></pre>
 </section>
 <section>
-    <h2>2. Find an element and react to a click</h2>
-    <p>The DOM is the browser's object representation of HTML. <code>querySelector()</code> finds the first element matching a CSS selector. A <code>#</code> selects an id. A missing match returns <code>null</code>.</p>
+    <h2>{{ _('2. Find an element and react to a click') }}</h2>
+    <p>{{ _("The DOM is the browser's object representation of HTML.") }} <code>querySelector()</code> {{ _('finds the first element matching a CSS selector. A') }} <code>#</code> {{ _('selects an id. A missing match returns') }} <code>null</code>.</p>
     <pre><code>&lt;p id="message"&gt;Ready&lt;/p&gt;
 &lt;button id="greet-button"&gt;Greet&lt;/button&gt;
 &lt;script&gt;
@@ -48,43 +49,44 @@ if (message &amp;&amp; button) {
     });
 }
 &lt;/script&gt;</code></pre>
-    <p>This example puts the script after its elements. <code>addEventListener()</code> registers a function; it runs when the click happens. <code>textContent</code> changes plain text. This is a code-reading example, not a live editor.</p>
+    <p>{{ _('This example puts the script after its elements.') }} <code>addEventListener()</code> {{ _('registers a function; it runs when the click happens.') }} <code>textContent</code> {{ _('changes plain text. This is a code-reading example, not a live editor.') }}</p>
 </section>
 {% elif subject.slug == 'sap' %}
 <section>
-    <h2>1. Connected business information</h2>
-    <p>ERP means Enterprise Resource Planning. SAP provides ERP software connecting areas such as purchasing, inventory, sales and finance. Sharing information helps departments work from consistent records.</p>
-    <p><strong>Master data</strong> describes reusable entities: a supplier's address, a customer or a material. <strong>Transactional data</strong> records particular events, such as one purchase order, goods receipt or invoice.</p>
+    <h2>{{ _('1. Connected business information') }}</h2>
+    <p>{{ _('ERP means Enterprise Resource Planning. SAP provides ERP software connecting areas such as purchasing, inventory, sales and finance. Sharing information helps departments work from consistent records.') }}</p>
+    <p><strong>{{ _('Master data') }}</strong> {{ _("describes reusable entities: a supplier's address, a customer or a material.") }} <strong>{{ _('Transactional data') }}</strong> {{ _('records particular events, such as one purchase order, goods receipt or invoice.') }}</p>
 </section>
 <section>
-    <h2>2. A shop orders chairs</h2>
+    <h2>{{ _('2. A shop orders chairs') }}</h2>
     <ol>
-        <li>Create a <strong>purchase order</strong> specifying the chairs and quantity requested from a supplier.</li>
-        <li>When the chairs arrive, record a <strong>goods receipt</strong>. For this stock example, inventory increases.</li>
-        <li>Check the supplier's <strong>invoice</strong> against the order and received goods; investigate differences.</li>
-        <li>Arrange <strong>payment</strong> after the appropriate checks.</li>
+        <li>{{ _('Create a') }} <strong>{{ _('purchase order') }}</strong> {{ _('specifying the chairs and quantity requested from a supplier.') }}</li>
+        <li>{{ _('When the chairs arrive, record a') }} <strong>{{ _('goods receipt') }}</strong>{{ _('. For this stock example, inventory increases.') }}</li>
+        <li>{{ _("Check the supplier's") }} <strong>{{ _('invoice') }}</strong> {{ _('against the order and received goods; investigate differences.') }}</li>
+        <li>{{ _('Arrange') }} <strong>{{ _('payment') }}</strong> {{ _('after the appropriate checks.') }}</li>
     </ol>
-    <p>For a sale, a <strong>sales order</strong> records what the customer orders; delivery, customer invoicing and payment follow in a simplified example. These are typical learning scenarios, not fixed rules for every SAP installation. Configuration and real workflows vary.</p>
-    <p>This lesson teaches concepts. It does not connect to SAP, run business transactions or provide professional certification.</p>
+    <p>{{ _('For a sale, a') }} <strong>{{ _('sales order') }}</strong> {{ _('records what the customer orders; delivery, customer invoicing and payment follow in a simplified example. These are typical learning scenarios, not fixed rules for every SAP installation. Configuration and real workflows vary.') }}</p>
+    <p>{{ _('This lesson teaches concepts. It does not connect to SAP, run business transactions or provide professional certification.') }}</p>
 </section>
 {% endif %}
-<div class="learning-nav">
-    <a class="button-link" href="{{ url_for('learning.practice') }}">Try the practice exercises</a>
-    <a class="button-link" href="{{ url_for('learning.quiz') }}">Start {{ subject.name }} quiz</a>
 </div>
-<p>Practice gives feedback after every question. The quiz reveals answers and explanations only after all five answers are submitted. Both can be repeated without a limit.</p>
+<div class="learning-nav">
+    <a class="button-link" href="{{ url_for('learning.practice') }}">{{ _('Try the practice exercises') }}</a>
+    <a class="button-link" href="{{ url_for('learning.quiz') }}">{{ _('Start %(subject)s quiz', subject=subject.name) }}</a>
+</div>
+<p>{{ _('Practice gives feedback after every question. The quiz reveals answers and explanations only after all five answers are submitted. Both can be repeated without a limit.') }}</p>
 <section aria-labelledby="activity-heading">
-    <h2 id="activity-heading">Your {{ subject.name }} activity</h2>
+    <h2 id="activity-heading">{{ _('Your %(subject)s activity', subject=subject.name) }}</h2>
     <dl class="activity-counts">
-        <div><dt>Practice attempts</dt><dd id="practice-count">{{ counts.practice_attempts }}</dd></div>
-        <div><dt>Exercises completed correctly</dt><dd id="exercise-count">{{ counts.exercises_completed }}</dd></div>
-        <div><dt>Quiz attempts</dt><dd id="quiz-count">{{ counts.quiz_attempts }}</dd></div>
+        <div><dt>{{ _('Practice attempts') }}</dt><dd id="practice-count">{{ counts.practice_attempts }}</dd></div>
+        <div><dt>{{ _('Exercises completed correctly') }}</dt><dd id="exercise-count">{{ counts.exercises_completed }}</dd></div>
+        <div><dt>{{ _('Quiz attempts') }}</dt><dd id="quiz-count">{{ counts.quiz_attempts }}</dd></div>
     </dl>
-    <p>Each checked practice answer is an attempt; each correct one counts as a completed exercise entry. Repeated rounds retain their separate dated results.</p>
+    <p>{{ _('Each checked practice answer is an attempt; each correct one counts as a completed exercise entry. Repeated rounds retain their separate dated results.') }}</p>
     {% if history %}<ol class="activity-history">
     {% for attempt in history %}
-        <li><a href="{{ url_for('learning.results', attempt_id=attempt.attempt_id) }}">{{ subject.name }} {{ 'quiz' if attempt.activity_kind == 'quiz' else 'practice' }}: {{ attempt.score }} out of {{ attempt.total_questions }}</a> — {{ local_time(attempt.submitted_at) }}</li>
+        <li><a href="{{ url_for('learning.results', attempt_id=attempt.attempt_id) }}">{{ _('%(subject)s quiz', subject=subject.name) if attempt.activity_kind == 'quiz' else _('%(subject)s practice', subject=subject.name) }}: {{ _('%(score)s out of %(total)s', score=attempt.score, total=attempt.total_questions) }}</a> — {{ local_time(attempt.submitted_at) }}</li>
     {% endfor %}
-    </ol>{% else %}<p>No {{ subject.name }} activity recorded for this visit yet.</p>{% endif %}
+    </ol>{% else %}<p>{{ _('No %(subject)s activity recorded for this visit yet.', subject=subject.name) }}</p>{% endif %}
 </section>
 {% endblock %}

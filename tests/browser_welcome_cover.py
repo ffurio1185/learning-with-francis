@@ -54,10 +54,13 @@ def run(report_dir):
                     page.screenshot(path=str(report_dir / 'cover-desktop.png'), full_page=True)
                     assert page.locator('.cover-watermark').evaluate('el => getComputedStyle(el).opacity') == '1'
                     assert page.locator('h1').evaluate('el => getComputedStyle(el).opacity') == '1'
-                    assert page.locator('a, button, input, select').count() == 1
+                    assert page.locator('a, button, input:not([type=hidden]), select').count() == 4
                     enter.hover()
                     assert enter.evaluate('el => getComputedStyle(el).boxShadow') != 'none'
                     page.mouse.move(0, 0)
+                    for label in ('English', 'Deutsch'):
+                        page.keyboard.press('Tab')
+                        expect(page.get_by_role('button', name=label, exact=True)).to_be_focused()
                     page.keyboard.press('Tab')
                     expect(enter).to_be_focused()
                     assert enter.evaluate('el => getComputedStyle(el).outlineStyle') == 'solid'

@@ -1,12 +1,12 @@
 {% extends "learning_base.html" %}
-{% block title %}{{ subject.name }} practice complete{% endblock %}
+{% block title %}{{ _('%(subject)s practice complete', subject=subject.name) }}{% endblock %}
 {% block content %}
-<h1>Practice complete!</h1>
-<p class="visit-notice">Well done, {{ visit.display_name }}! You have practised all {{ total }} {{ subject.name }} questions.</p>
-<p>Your answers and explanations are saved in your visit's activity history. You can practise again as often as you like.</p>
-<p>Finishing this practice round does not mark your {{ subject.name }} understanding Completed.</p>
+<h1>{{ _('Practice complete!') }}</h1>
+<p class="visit-notice">{{ _('Well done, %(name)s! You have practised all %(total)s %(subject)s questions.', name=visit.display_name, total=total, subject=subject.name) }}</p>
+<p>{{ _("Your answers and explanations are saved in your visit's activity history. You can practise again as often as you like.") }}</p>
+<p>{{ _('Finishing this practice round does not mark your %(subject)s understanding Completed.', subject=subject.name) }}</p>
 <div class="learning-nav">
-    <a class="button-link" href="{{ url_for('learning.practice') }}">Start Practicing Again</a>
-    <a href="{{ url_for('learning.lesson') }}">Review the lesson and activity history</a>
+    <a class="button-link" href="{{ url_for('learning.practice') }}">{{ _('Start Practicing Again') }}</a>
+    <a href="{{ url_for('learning.lesson') }}">{{ _('Review the lesson and activity history') }}</a>
 </div>
 {% endblock %}

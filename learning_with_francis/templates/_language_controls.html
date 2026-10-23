@@ -1,0 +1,15 @@
+<form class="{{ 'cover-languages' if cover_controls else 'app-languages' }}" method="post" action="{{ url_for('i18n.set_language') }}">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    {% if not cover_controls %}<input type="hidden" name="return_token" value="{{ language_return_token() }}">{% endif %}
+    <fieldset>
+        <legend>{{ _('Language') }}</legend>
+        <div class="language-options">
+            <button type="submit" name="language" value="en"{% if language_form_id %} form="{{ language_form_id }}" formaction="{{ url_for('i18n.set_language') }}" formmethod="post" formnovalidate{% endif %} aria-pressed="{{ 'true' if current_language == 'en' else 'false' }}">
+                <img src="{{ url_for('static', filename='language-flags/en.svg') }}" width="24" height="16" alt="" aria-hidden="true"> <span lang="en">English</span>
+            </button>
+            <button type="submit" name="language" value="de"{% if language_form_id %} form="{{ language_form_id }}" formaction="{{ url_for('i18n.set_language') }}" formmethod="post" formnovalidate{% endif %} aria-pressed="{{ 'true' if current_language == 'de' else 'false' }}">
+                <img src="{{ url_for('static', filename='language-flags/de.svg') }}" width="24" height="16" alt="" aria-hidden="true"> <span lang="de">Deutsch</span>
+            </button>
+        </div>
+    </fieldset>
+</form>

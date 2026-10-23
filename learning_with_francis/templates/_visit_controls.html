@@ -1,13 +1,13 @@
 {% macro visit_controls() -%}
-<div class="visit-actions" role="group" aria-label="Temporary visit controls">
+<div class="visit-actions" role="group" aria-label="{{ _('Temporary visit controls') }}">
     <form method="post" action="{{ url_for('end_visit') }}">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-        <button type="submit">End Visit</button>
+        <button type="submit">{{ _('End Visit') }}</button>
     </form>
     <form method="post" action="{{ url_for('new_visit') }}">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-        <button type="submit">Start New Visit</button>
+        <button type="submit">{{ _('Start New Visit') }}</button>
     </form>
 </div>
-<p class="visit-help">End Visit before handing this browser to someone else. Closing and reopening the browser may restore this visit. Start New Visit ends it and asks for a name again, then creates a new identity with zero activity and all four subjects Still Learning. Previous results stay saved and cannot be recovered by entering the same name.</p>
+<p class="visit-help">{{ _('End Visit before handing this browser to someone else. Closing and reopening the browser may restore this visit. Start New Visit ends it and asks for a name again, then creates a new identity with zero activity and all four subjects Still Learning. Previous results stay saved and cannot be recovered by entering the same name.') }}</p>
 {%- endmacro %}

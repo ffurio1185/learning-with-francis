@@ -1,55 +1,57 @@
 {% extends "learning_base.html" %}
 {% from "_time.html" import local_time %}
-{% block title %}SELECT and WHERE{% endblock %}
+{% block title %}{{ _('SELECT and WHERE') }}{% endblock %}
 {% block content %}
-<h1>SQL: SELECT and WHERE</h1>
-<p>Welcome, {{ visit.display_name }}! SQL helps you read information from tables. A table has columns (kinds of information) and rows (individual records).</p>
+<div class="lesson-material" lang="{{ learning_content_language }}">
+<h1>{{ _('SQL: SELECT and WHERE') }}</h1>
+<p>{{ _('Welcome, %(name)s! SQL helps you read information from tables. A table has columns (kinds of information) and rows (individual records).', name=visit.display_name) }}</p>
 <section aria-labelledby="sample-heading">
-    <h2 id="sample-heading">Our example: learners</h2>
-    <p>This small example table is lesson material. It contains fictional learners and is separate from your saved progress.</p>
+    <h2 id="sample-heading">{{ _('Our example: learners') }}</h2>
+    <p>{{ _('This small example table is lesson material. It contains fictional learners and is separate from your saved progress.') }}</p>
     <div class="table-container"><table>
         <caption>learners</caption><thead><tr><th scope="col">name</th><th scope="col">city</th><th scope="col">age</th></tr></thead>
         <tbody><tr><td>Alex</td><td>Berlin</td><td>22</td></tr><tr><td>Mia</td><td>Hamburg</td><td>16</td></tr><tr><td>Sam</td><td>Berlin</td><td>19</td></tr></tbody>
     </table></div>
 </section>
 <section>
-    <h2>1. Choose columns with SELECT</h2>
-    <p><code>SELECT</code> says which columns to show. <code>FROM</code> says which table to read. Separate several column names with commas.</p>
+    <h2>{{ _('1. Choose columns with SELECT') }}</h2>
+    <p><code>SELECT</code> {{ _('says which columns to show.') }} <code>FROM</code> {{ _('says which table to read. Separate several column names with commas.') }}</p>
     <pre><code>SELECT name, city FROM learners;</code></pre>
-    <p>This returns Alex/Berlin, Mia/Hamburg and Sam/Berlin. It reads rows without changing them.</p>
+    <p>{{ _('This returns Alex/Berlin, Mia/Hamburg and Sam/Berlin. It reads rows without changing them.') }}</p>
     <pre><code>SELECT * FROM learners;</code></pre>
-    <p>The star <code>*</code> means every column: name, city and age.</p>
+    <p>{{ _('The star') }} <code>*</code> {{ _('means every column: name, city and age.') }}</p>
 </section>
 <section>
-    <h2>2. Choose rows with WHERE</h2>
-    <p><code>WHERE</code> keeps only rows that match a condition. Text values use single quotes; numbers do not need quotes.</p>
+    <h2>{{ _('2. Choose rows with WHERE') }}</h2>
+    <p><code>WHERE</code> {{ _('keeps only rows that match a condition. Text values use single quotes; numbers do not need quotes.') }}</p>
     <pre><code>SELECT name FROM learners WHERE city = 'Berlin';</code></pre>
-    <p>This returns Alex and Sam. <code>=</code> means equal to.</p>
+    <p>{{ _('This returns Alex and Sam.') }} <code>=</code> {{ _('means equal to.') }}</p>
     <pre><code>SELECT name FROM learners WHERE age &gt;= 18;</code></pre>
-    <p>This also returns Alex and Sam. <code>&gt;=</code> means greater than or equal to; <code>&lt;</code> means less than; <code>&gt;</code> means greater than.</p>
+    <p>{{ _('This also returns Alex and Sam.') }} <code>&gt;=</code> {{ _('means greater than or equal to;') }} <code>&lt;</code> {{ _('means less than;') }} <code>&gt;</code> {{ _('means greater than.') }}</p>
     <pre><code>SELECT name FROM learners WHERE age &lt; 18;</code></pre>
-    <p>This returns Mia. A semicolon ends each statement. Without <code>ORDER BY</code>, result order is not guaranteed; these examples focus on which rows match.</p>
+    <p>{{ _('This returns Mia. A semicolon ends each statement. Without') }} <code>ORDER BY</code>{{ _(', result order is not guaranteed; these examples focus on which rows match.') }}</p>
 </section>
-<div class="learning-nav">
-    <a class="button-link" href="{{ url_for('learning.practice') }}">Try the practice exercises</a>
-    <a class="button-link" href="{{ url_for('learning.quiz') }}">Start SQL quiz</a>
 </div>
-<p>Practice covers ten questions, one at a time, with immediate explanations. The separate five-question quiz reveals its answers only after you submit the whole quiz.</p>
+<div class="learning-nav">
+    <a class="button-link" href="{{ url_for('learning.practice') }}">{{ _('Try the practice exercises') }}</a>
+    <a class="button-link" href="{{ url_for('learning.quiz') }}">{{ _('Start %(subject)s quiz', subject='SQL') }}</a>
+</div>
+<p>{{ _('Practice covers ten questions, one at a time, with immediate explanations. The separate five-question quiz reveals its answers only after you submit the whole quiz.') }}</p>
 <section aria-labelledby="activity-heading">
-    <h2 id="activity-heading">Your SQL activity</h2>
+    <h2 id="activity-heading">{{ _('Your %(subject)s activity', subject='SQL') }}</h2>
     <dl class="activity-counts">
-        <div><dt>Practice attempts</dt><dd id="practice-count">{{ counts.practice_attempts }}</dd></div>
-        <div><dt>Exercises completed correctly</dt><dd id="exercise-count">{{ counts.exercises_completed }}</dd></div>
-        <div><dt>Quiz attempts</dt><dd id="quiz-count">{{ counts.quiz_attempts }}</dd></div>
+        <div><dt>{{ _('Practice attempts') }}</dt><dd id="practice-count">{{ counts.practice_attempts }}</dd></div>
+        <div><dt>{{ _('Exercises completed correctly') }}</dt><dd id="exercise-count">{{ counts.exercises_completed }}</dd></div>
+        <div><dt>{{ _('Quiz attempts') }}</dt><dd id="quiz-count">{{ counts.quiz_attempts }}</dd></div>
     </dl>
-    <p>Every new submission is a separate attempt. A correctly answered practice exercise counts as a completion. Refreshing a result or submitting the same form twice does not add another attempt.</p>
+    <p>{{ _('Every new submission is a separate attempt. A correctly answered practice exercise counts as a completion. Refreshing a result or submitting the same form twice does not add another attempt.') }}</p>
     {% if history %}
     <ol class="activity-history">
         {% for attempt in history %}
-        <li><a href="{{ url_for('learning.results', attempt_id=attempt.attempt_id) }}">{{ 'SQL quiz' if attempt.activity_kind == 'quiz' else 'SQL practice' }}: {{ attempt.score }} out of {{ attempt.total_questions }}</a>
+        <li><a href="{{ url_for('learning.results', attempt_id=attempt.attempt_id) }}">{{ _('%(subject)s quiz', subject='SQL') if attempt.activity_kind == 'quiz' else _('%(subject)s practice', subject='SQL') }}: {{ _('%(score)s out of %(total)s', score=attempt.score, total=attempt.total_questions) }}</a>
             — {{ local_time(attempt.submitted_at) }}</li>
         {% endfor %}
     </ol>
-    {% else %}<p>No SQL activity recorded for this visit yet.</p>{% endif %}
+    {% else %}<p>{{ _('No %(subject)s activity recorded for this visit yet.', subject='SQL') }}</p>{% endif %}
 </section>
 {% endblock %}

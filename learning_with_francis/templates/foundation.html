@@ -2,8 +2,9 @@
 {% from "_visit_controls.html" import visit_controls with context %}
 {% from "_subject_icon.html" import subject_icon %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ current_language }}">
 <head>
+    <script src="{{ url_for('static', filename='phase2-interface.js') }}" defer></script>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Learning with Francis</title>
@@ -12,6 +13,8 @@
 </head>
 <body>
     <main>
+    {% set language_form_id = 'welcome-form' if setup_ready and not visit else none %}
+    {% if visit or not setup_ready %}{% include '_language_controls.html' %}{% endif %}
         <h1>Learning with Francis</h1>
         {% if setup_ready %}
         {% for message in get_flashed_messages() %}
@@ -19,46 +22,48 @@
         {% endfor %}
         {% if error %}<p class="visit-error" role="alert" id="name-error">{{ error }}</p>{% endif %}
         {% if visit %}
-        <h2>Welcome to Learning with Francis, {{ visit.display_name }}!</h2>
-        <p id="visit-started">Current visit started: {{ local_time(visit.started_at) }} (Europe/Berlin).</p>
-        <p>This visit has its own progress. Finishing a visit keeps its records but removes access from this browser.</p>
-        <p class="visit-help">Opening another tab continues this visit. Choose Start New Visit below to begin again with zero practice and quiz activity.</p>
+        <h2>{{ _('Welcome to Learning with Francis, %(name)s!', name=visit.display_name) }}</h2>
+        <p id="visit-started">{{ _('Current visit started:') }} {{ local_time(visit.started_at) }} (Europe/Berlin).</p>
+        <p>{{ _('This visit has its own progress. Finishing a visit keeps its records but removes access from this browser.') }}</p>
+        <p class="visit-help">{{ _('Opening another tab continues this visit. Choose Start New Visit below to begin again with zero practice and quiz activity.') }}</p>
         <section aria-labelledby="progress-heading">
-            <h2 id="progress-heading">Your learning subjects</h2>
-            <p><a class="button-link" href="{{ url_for('progress.index') }}">My Progress</a> — view your statuses, practice counts, quiz scores and history.</p>
+            <h2 id="progress-heading">{{ _('Your learning subjects') }}</h2>
+            <p><a class="button-link" href="{{ url_for('progress.index') }}">{{ _('My Progress') }}</a> {{ _('— view your statuses, practice counts, quiz scores and history.') }}</p>
             <ul class="subject-cards">
             {% for item in progress %}
-                <li><h3 class="subject-heading">{{ subject_icon(item.name) }}<span>{{ item.name }}</span></h3><p>{{ item.title }}</p><strong>{{ item.learning_status }}</strong>
-                    <p><a class="lesson-link" href="{{ url_for('learning.lesson', subject=item.subject_id) }}">Open {{ item.name }} lesson</a></p>
+                <li><h3 class="subject-heading">{{ subject_icon(item.name) }}<span>{{ item.name }}</span></h3><p> <span lang="{{ learning_title_language(item.subject_id, item.title) }}">{{ learning_title(item.subject_id, item.title) }}</span></p><strong>{{ status_label(item.learning_status) }}</strong>
+                    <p><a class="lesson-link" href="{{ url_for('learning.lesson', subject=item.subject_id) }}">{{ _('Open %(subject)s lesson', subject=item.name) }}</a></p>
                 </li>
             {% endfor %}
             </ul>
         </section>
         {{ visit_controls() }}
         {% else %}
-        <h2>Start your learning visit</h2>
-        <p>Enter a temporary name for greetings. No account, login or registration is needed.</p>
-        <form class="welcome-form" method="post" action="{{ url_for('start_visit') }}">
+        <h2>{{ _('Start your learning visit') }}</h2>
+        <p>{{ _('Enter a temporary name for greetings. No account, login or registration is needed.') }}</p>
+        <form id="welcome-form" class="welcome-form" method="post" action="{{ url_for('start_visit') }}">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-            <label for="visitor-name">Your name</label>
-            <input id="visitor-name" name="visitor_name" type="text" maxlength="50" required autocomplete="off"
+            <input type="hidden" name="return_token" value="{{ language_return_token() }}">
+            <label for="visitor-name">{{ _('Your name') }}</label>
+            <input data-required-message="{{ _('Please enter your name.') }}" id="visitor-name" name="visitor_name" type="text" maxlength="50" required autocomplete="off"
                 value="{{ entered_name }}" aria-describedby="name-help{% if error %} name-error{% endif %}"
                 {% if error %}aria-invalid="true"{% endif %}>
-            <p id="name-help">Use 1–50 characters: letters, spaces, apostrophes or hyphens.</p>
-            <button type="submit">Start Visit</button>
+            <p id="name-help">{{ _('Use 1–50 characters: letters, spaces, apostrophes or hyphens.') }}</p>
+            <button type="submit">{{ _('Start Visit') }}</button>
         </form>
-        <p class="visit-help">Progress belongs to this browser visit, not your name. Tabs in the same browser share a visit. Use End Visit before handing the browser to someone else. Closing a window may not end a restored browser session. Old visits cannot be reopened by entering a name.</p>
+        {% include '_language_controls.html' %}
+        <p class="visit-help">{{ _('Progress belongs to this browser visit, not your name. Tabs in the same browser share a visit. Use End Visit before handing the browser to someone else. Closing a window may not end a restored browser session. Old visits cannot be reopened by entering a name.') }}</p>
         {% endif %}
-        <p>SQL, Python, JavaScript and SAP each have a beginner lesson, ten practice questions and a five-question quiz available during a visit.</p>
-        <h2 id="available-subjects-heading">Available subjects</h2>
+        <p>{{ _('SQL, Python, JavaScript and SAP each have a beginner lesson, ten practice questions and a five-question quiz available during a visit.') }}</p>
+        <h2 id="available-subjects-heading">{{ _('Available subjects') }}</h2>
         <ul class="available-subjects" role="list" aria-labelledby="available-subjects-heading">
             {% for subject in subjects %}
             <li>{{ subject_icon(subject.name) }}<span>{{ subject.name }}</span></li>
             {% endfor %}
         </ul>
         {% else %}
-        <p>Database setup is needed before this application is ready.</p>
-        <p>Follow the setup instructions in <code>learning_with_francis/README.md</code>.</p>
+        <p>{{ _('Database setup is needed before this application is ready.') }}</p>
+        <p>{{ _('Follow the setup instructions in') }} <code>learning_with_francis/README.md</code>.</p>
         {% endif %}
     </main>
 </body>
