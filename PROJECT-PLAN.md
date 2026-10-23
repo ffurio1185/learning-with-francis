@@ -790,3 +790,187 @@ German information or data-protection duties.
 The next practical action is Francis's approval of these local changes before a
 new personal-GitHub commit/push, followed by separately authorised **Free** Render
 setup. No new commit, push, purchase, service creation or deployment is performed.
+
+
+### Bilingual Privacy Policy draft — 23 October 2026
+
+**Status: implemented and tested locally; awaiting Francis's review. P2.6 remains
+open. L5 and all previously approved enhancements remain closed.** Francis asked
+for a simple English/German policy based on actual functionality, with no invented
+operator details or deletion promises. The base release is published `aab1349`;
+this draft does not authorise a commit, push or deployment.
+
+- Added `/privacy/`, accessible without a visit or learning database, with the
+  existing English/German language controls. Shared links appear on the cover
+  below its introduction, before name entry, and on learning/results/progress/
+  error pages. Layout/styles remain consistent; the cover hero/animation and
+  existing learning content are unchanged. The language-return allowlist adds
+  only this internal endpoint, preserving form/signature/redirect protections.
+- Wording covers the educational purpose; nicknames/random identities, answers,
+  scores, dates, progress/confirmation history; signed Flask cookie and possible
+  drafts; 12-hour access limits; temporary SQLite; Free-hosting data loss; End Visit
+  retaining records; provider processing and privacy rights. It promises neither
+  automatic deletion nor secure erasure/recovery and does not call nicknames
+  anonymous. No actual contact details are inferred or published.
+- A visible draft notice identifies the pending operator identity, postal address
+  and public privacy email. Proposed legitimate interests require operator review,
+  as do retention criteria/rights handling and Render processing/transfer terms.
+  The Impressum remains a separate unfinished item. See
+  [the privacy review and source evidence](docs/PRIVACY-REVIEW.md).
+- **225 Python/SQLite tests passed** (215 existing plus ten privacy checks) and
+  **73 Chromium browser groups passed** (68 existing plus five privacy groups).
+  Focused checks include 16 bilingual desktop/mobile/200%-text cases, keyboard
+  access, no JavaScript, database-independent rendering, no new visits or database
+  writes, saved answers/statuses, End Visit, same-name isolation, CSRF/external-
+  redirect rejection and completion confirmation. No unexpected page/server
+  errors occurred. Syntax/catalog checks passed; disposable databases were removed.
+- The complete publishing manifest now lists **97 files**. Original Version 1,
+  classroom/development files and databases/backups/visitor records stay protected;
+  the tested draft is copied only into the separate public-release folder. No
+  database schema, grading, retention, session expiry or visitor ownership changes
+  are introduced. Public Git history remains at `aab1349` until further approval.
+
+
+### P2.6 — Option B temporary visit retention — 23 October 2026
+
+**Status: implemented and locally tested; awaiting Francis's explicit review and
+approval. No commit, merge, push or deployment is authorised. L5 and all previously
+approved milestones/enhancements remain closed.** Francis approves retaining the
+Flask/SQLite architecture while deleting visit-owned data at End Visit, Start New
+Visit, and request-driven inactivity cleanup. The chosen limit is **30 minutes of
+inactivity**, not a maximum learning duration. This decision supersedes the earlier
+retain-ended-records behavior for the new public-release candidate; historical
+verification/approval records above remain unchanged.
+
+- End Visit deletes the current visit's answers, attempts/scores, topic progress,
+  understanding confirmations, status history and nickname/visitor row, children
+  first in one transaction. Start New Visit does this before name entry. Direct
+  replacement deletes the previous visit and inserts the fresh visit/progress/
+  initial history in one transaction. The session is cleared only after success,
+  retaining the selected language. Failure rolls back; other active visitors and
+  shared subjects/topics/content are unaffected.
+- Fresh **schema 4** adds only an indexed UTC last_activity_at field for this
+  mechanism. Original schema files and lessons/questions are unchanged. Existing
+  schema-3 files are refused unchanged by normal initialization/startup; an explicit
+  backup-and-migrate utility is tested only on generated disposable legacy data.
+  **No original database or backup was opened for application use or upgraded.**
+- Default VISIT_IDLE_SECONDS=1800, configurable through LWF_VISIT_IDLE_SECONDS in
+  production. Startup and subsequent learning/visit requests delete ended/expired
+  visits before resolving access. Successful learning home, lesson, practice,
+  quiz/results and My Progress requests renew activity only while unexpired.
+  Invalid/forged requests, foreign results, cover/privacy/language preference
+  requests, static assets and health checks do not renew it. A successful learning
+  GET following a language change does. Writes retain transaction-time access
+  checks, server grading, deduplication, CSRF and personal completion confirmation.
+- The existing 12-hour cookie signature window is renewed on successful learning
+  requests, permitting continuous learning beyond 12 hours; activity forms retain
+  their existing independent 12-hour token expiry. Expired/deleted visit IDs cannot
+  be restored by old cookies, result URLs, Back navigation or duplicate submissions.
+  Unexpired browser-restored visits may resume; there is no browser-close detection,
+  heartbeat, scheduler, paid service or new personal-data collection.
+- **252 Python/SQLite tests passed**, including 27 focused retention checks plus
+  the complete existing Version 1/Version 2 suite. Checks cover complete four-subject
+  deletion; same-name isolation; atomic rollback on End Visit, replacement and
+  cleanup failures; the 29:59/30:00 boundary; active renewal for over 12 hours using
+  controlled server/signing clocks; invalid-request non-renewal; stale cookies,
+  drafts/tokens and duplicate posts; startup cleanup; schema protection/migration;
+  foreign keys, integrity and secure_delete; all lessons, practice, quiz scoring,
+  histories, English/German switching and confirmation/reversal regressions.
+- **83 Chromium browser groups passed**: 73 existing groups and ten new retention
+  groups. Tests use disposable SQLite files and loopback servers only, including
+  real Gunicorn/Render start-script checks, restart and simulated lost filesystem.
+  All four subjects, saved results, filters, Berlin timestamps, visitor isolation,
+  Back/cookie replay, exact idle boundary, no-JavaScript, keyboard, desktop/mobile,
+  enlarged text, reduced motion and cover animation remain verified. No unexpected
+  browser/server errors occurred; disposable test databases and test servers were
+  removed/stopped. These are emulated browser checks, not a physical-device or
+  full assistive-technology audit.
+- Regression assertions expecting retained ended records now require deletion.
+  Successful page reads may renew only last_activity_at, so semantic snapshots
+  compare all other schema/learning fields; focused tests independently check
+  which requests may touch the timestamp. Initial test failures were obsolete
+  retention/byte-identity expectations and test query ordering; they were corrected
+  and the final full suites passed. Syntax, dependency, catalog consistency and
+  Free-only deployment configuration checks passed.
+- Technical notices are bilingual and explain deletion/inactivity. The public
+  manifest has **102 source/documentation/test files** and contains no databases,
+  visitor records, backups, audio, real secrets or test reports. Version 1 files,
+  the classroom/development repositories and 153 protected source/database/backup
+  hashes were checked unchanged. Existing uncommitted privacy work is preserved.
+
+**Limits and remaining deployment work:** Browser closure cannot reliably trigger
+immediate deletion. Reading without a server request does not renew activity. With
+Render asleep or no relevant requests, expired rows may remain until startup or
+later cleanup; 30 minutes is the access cutoff, not an exact physical erasure
+schedule. Render Free may lose temporary progress earlier. SQLite secure_delete
+reduces ordinary page remnants but does not erase provider logs, snapshots, browser
+copies or backups. No account recovery is offered. Existing privacy/Impressum
+drafts remain untouched and are **not final**; their earlier retention wording
+requires separate review after technical approval. See
+[the technical specification](docs/TEMPORARY-VISITS.md). Next step is Francis's
+review; no publication or deployment is performed.
+
+
+### P2.6 — Final legal documentation integrated locally — 23 October 2026
+
+**Status: local integration completed and verified under Francis's explicit
+approval. No commit, merge, push or deployment is authorised. P2.6 public launch
+remains a separate step; L5 and previously closed milestones stay closed.**
+Francis officially approves Option B, accepts its **252 Python/SQLite tests and
+83 browser groups**, and confirms that the operator/contact/address,
+noncommercial purpose, no-account model, 30-minute inactivity rule and
+Frankfurt/Render Free choices must not be reopened for repeated approval.
+
+- Updated `/privacy/` with the English Privacy Policy and German
+  Datenschutzerklärung based on the approved review drafts. Added `/impressum/`
+  with confirmed operator/contact information and the existing language controls.
+  One shared contact partial prevents inconsistent copies. No invented registry,
+  tax, telephone, DPO or account details are introduced. Confirmed personal contact
+  details appear only in the intended legal-document partial, not this log.
+- Both legal pages are database independent and reachable before name entry,
+  from the cover, all existing learning/progress/results pages and errors. The
+  language-return allowlist adds only Impressum; CSRF, visit binding and safe
+  destinations remain enforced. Reading or switching legal pages does not create
+  visits, change results/statuses or renew the inactivity timestamp.
+- Wording describes nickname/random-ID separation, answers/scores/history,
+  personal completion confirmation, signed (not encrypted) cookies, the renewed
+  12-hour signing window, temporary SQLite, complete transactional End/new-visit
+  deletion and the 30-minute inactivity cutoff. It explicitly explains delayed
+  cleanup while Render sleeps, browser-close limitations, earlier filesystem loss
+  and the separation of provider logs/email from database cleanup. No automatic
+  email deletion, secure-erasure or seven-day provider-wide deletion is promised.
+- Finalized the operator-facing Article 6(1)(f) assessment for this voluntary,
+  minimal educational service/security and the separate necessary-cookie
+  assessment. This is a documented legal assessment, not a regulator's approval.
+  The existing personal understanding checkbox never becomes GDPR consent.
+- Only genuine external facts remain unverified: Render's actual account DPA,
+  operative transfer safeguards and full logging/retention, and account-specific
+  iCloud mailbox processing/transfer terms. Published source information is
+  distinguished from a private account audit. Frankfurt and confirmed contact
+  information are not new open decisions. No EU-only processing claim is made.
+- **257 Python/SQLite tests passed**, including 15 legal-document checks and all
+  existing learning/retention/Version 1 regressions. **83 Chromium browser groups
+  passed**; the legal driver includes **32 English/German layout cases** at
+  320/375/768/1440px and 100%/200% text, visible keyboard focus, and actual
+  no-JavaScript route/navigation checks. All four subject flows, saved scores,
+  visitor isolation, status filters/reversal, manual completion protection,
+  Berlin timestamps, cover animation, End/new deletion and production startup
+  remain verified with disposable databases. No unexpected browser/server errors
+  occurred, and all test databases and test servers were removed/stopped.
+- An initial regression caught a translation-key collision affecting the approved
+  creator credit; the original wording was restored before final verification.
+  All pre-existing active English/German translation values remain unchanged.
+  One new content assertion was adjusted to the actual wording. Final checks
+  pass without changes to lessons, grading, tracker logic or retention functions.
+- The intended publishing manifest now has **105 files**, adding only the legal
+  layout, Impressum and shared contact templates. Syntax/catalog/dependency and
+  Git whitespace checks pass. Version 1, protected classroom/development files,
+  databases/backups and all 153 protected hashes remain unchanged. The only
+  application Python edits are the read-only Impressum route and its language
+  navigation allowlist. Render/requirements/security/learning data code are
+  unchanged; no paid service or subscription has been introduced.
+
+See [the current legal review record](docs/PRIVACY-REVIEW.md). The local documents
+are integrated under approval, but private account verification is still required
+before separately authorised publication. No previously confirmed personal details
+or technical decisions need to be supplied or approved again.

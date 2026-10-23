@@ -77,10 +77,12 @@ A visitor can move among Still Learning, Needs Review and Completed. Completed
 always requires that visitor's explicit personal confirmation. Practice results,
 quiz scores and milestone approval never establish understanding automatically.
 Names are greeting labels; random signed-session visit identities determine
-ownership. End/new-visit controls separate visits while retaining earlier records.
+ownership. End/new-visit controls delete the current visit and its learning records atomically.
+Valid learning requests renew a configurable 30-minute server-side inactivity
+limit. Expired visits are deleted at startup and later learning/visit requests.
 Closing a browser is not a reliable End Visit action.
 
-Preserve approved Version 1, P2.5, the cover and all existing records. Public source
+Preserve approved Version 1, P2.5, the cover and all protected original records. Public source
 contains no private databases, backups, session cookies, credentials or signing
 keys. Use fictional test data and keep secrets outside Git. Preserve third-party
 asset notices. Never commit, push, deploy, delete data or change external

@@ -44,8 +44,10 @@ def visit_required(function):
     def wrapped(*args, **kwargs):
         g.learning_visit = visitors.active_visit(session.get("visit_id"))
         if g.learning_visit is None:
-            session.pop("visit_id", None)
+            from .i18n import clear_visit_session
+            clear_visit_session()
             return redirect(url_for("index"), code=303)
+        g.valid_learning_visit = g.learning_visit["visit_id"]
         return function(*args, **kwargs)
     return wrapped
 

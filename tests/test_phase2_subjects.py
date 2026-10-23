@@ -138,7 +138,7 @@ class SubjectFlowTests(SQLFlowSupport, unittest.TestCase):
         self.client.post('/visits/end', data=csrf)
         for location in locations:
             self.assertEqual(self.client.get(location).status_code, 303)
-        self.assertEqual(self.rows("SELECT COUNT(*) FROM learning_answers"), [(15,)])
+        self.assertEqual(self.rows("SELECT COUNT(*) FROM learning_answers"), [(0,)])
 
     def test_retries_duplicates_conflicting_submissions_and_forged_scores(self):
         for slug in ("python", "javascript", "sap"):

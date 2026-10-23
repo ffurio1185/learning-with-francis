@@ -1,8 +1,10 @@
-"""P2.5 connected tracker checks, using disposable schema 3 databases only."""
+"""P2.5 connected tracker checks, using disposable current-schema databases only."""
 
 from concurrent.futures import ThreadPoolExecutor
 from contextlib import closing
 from html.parser import HTMLParser
+from retention_support import learning_snapshot
+
 import sqlite3
 import unittest
 
@@ -61,7 +63,7 @@ class ProgressTests(SQLFlowSupport, unittest.TestCase):
         return client.post(f'/{slug}/{kind}', data=data)
 
     def test_fresh_visit_shows_four_subjects_zero_activity_and_initial_history(self):
-        before = self.path.read_bytes()
+        before = learning_snapshot(self.path)
         overview = self.overview()
         self.assertEqual([row['subject_id'] for row in overview['topics']], list(SUBJECTS))
         self.assertEqual(overview['totals'], dict(practice_attempts=0, exercises_completed=0, quiz_attempts=0))
@@ -73,7 +75,8 @@ class ProgressTests(SQLFlowSupport, unittest.TestCase):
         self.assertEqual(html.count('class="topic-row"'), 4)
         self.assertEqual(html.count('name="user_confirmed" value="yes"'), 4)
         self.assertTrue(all('checked' not in item for item in Checkboxes(html).items))
-        self.assertEqual(self.path.read_bytes(), before)
+        self.assertEqual(learning_snapshot(self.path), before)
+
 
     def test_real_attempts_counts_scores_and_zero_subjects_without_answer_multiplication(self):
         self.activity(kind='practice', score=0)
@@ -122,24 +125,26 @@ class ProgressTests(SQLFlowSupport, unittest.TestCase):
 
     def test_invalid_and_multiple_statuses_leave_database_unchanged(self):
         token = self.token()
-        before = self.path.read_bytes()
+        before = learning_snapshot(self.path)
         for status in ('', 'complete', 'All', "Completed'; DROP TABLE topics;--"):
             self.assertEqual(self.change(status, 'yes').status_code, 400)
         response = self.client.post('/progress/sql-select-basics/status', data=MultiDict([
             ('csrf_token', token), ('new_status', 'Completed'), ('new_status', 'Still Learning'), ('user_confirmed', 'yes')]))
         self.assertEqual(response.status_code, 400)
         self.assertEqual(self.client.post('/progress/sql-select-basics/status', data={'csrf_token': token}).status_code, 400)
-        self.assertEqual(self.path.read_bytes(), before)
+        self.assertEqual(learning_snapshot(self.path), before)
+
 
     def test_csrf_missing_forged_and_other_visitor_cannot_submit(self):
         other = self.app.test_client()
         self.start(other)
         foreign_token = self.token(other)
-        before = self.path.read_bytes()
+        before = learning_snapshot(self.path)
         for token in (None, 'forged', foreign_token):
             self.assertEqual(self.client.post('/progress/sql-select-basics/status', data={
                 'new_status': 'Needs Review', 'csrf_token': token}).status_code, 400)
-        self.assertEqual(self.path.read_bytes(), before)
+        self.assertEqual(learning_snapshot(self.path), before)
+
 
     def test_same_name_visitors_cannot_share_status_activity_or_results(self):
         other = self.app.test_client()
@@ -212,7 +217,7 @@ class ProgressTests(SQLFlowSupport, unittest.TestCase):
         html = self.client.get('/progress/').get_data(as_text=True)
         self.assertIn('These record your starting statuses, not practice', html)
         self.assertIn('No practice or quiz activity yet', html)
-        self.assertEqual(self.rows('SELECT * FROM learning_attempts WHERE visit_id=?', (old_id,)), before)
+        self.assertEqual(self.rows('SELECT * FROM learning_attempts WHERE visit_id=?', (old_id,)), [])
 
     def test_nonexistent_or_unowned_topic_is_rejected(self):
         other = self.app.test_client()
@@ -222,11 +227,12 @@ class ProgressTests(SQLFlowSupport, unittest.TestCase):
             connection.execute('DELETE FROM topic_status_history WHERE visit_id=? AND topic_id=?', (own_id, 'sap-basics'))
             connection.execute('DELETE FROM topic_progress WHERE visit_id=? AND topic_id=?', (own_id, 'sap-basics'))
             connection.commit()
-        before = self.path.read_bytes()
+        before = learning_snapshot(self.path)
         for topic in ('unknown', 'sap-basics', "sql' OR '1'='1"):
             self.assertEqual(self.client.post(f'/progress/{topic}/status', data={
                 'csrf_token': self.token(), 'new_status': 'Needs Review'}).status_code, 404)
-        self.assertEqual(self.path.read_bytes(), before)
+        self.assertEqual(learning_snapshot(self.path), before)
+
 
     def test_history_failure_rolls_back_status_and_confirmation(self):
         self.change('Completed', 'yes')
@@ -270,7 +276,7 @@ class ProgressTests(SQLFlowSupport, unittest.TestCase):
         self.assertEqual(self.progress(), before)
         self.assertEqual(self.overview()['totals'], dict(practice_attempts=4, exercises_completed=4, quiz_attempts=4))
 
-    def test_end_visit_old_cookie_and_new_visit_preserve_but_hide_old_records(self):
+    def test_end_visit_old_cookie_and_new_visit_delete_old_records(self):
         self.activity()
         self.change('Completed', 'yes')
         old_id = self.owner()
@@ -289,7 +295,7 @@ class ProgressTests(SQLFlowSupport, unittest.TestCase):
         self.assertNotEqual(old_id, self.owner())
         self.assertEqual(self.overview()['totals']['quiz_attempts'], 0)
         self.assertEqual(self.overview()['status_counts'][0]['topic_count'], 4)
-        self.assertEqual(self.rows('SELECT COUNT(*) FROM learning_attempts WHERE visit_id=?', (old_id,)), [(1,)])
+        self.assertEqual(self.rows('SELECT COUNT(*) FROM learning_attempts WHERE visit_id=?', (old_id,)), [(0,)])
 
     def test_persistence_after_application_restart(self):
         self.activity(score=3)
@@ -320,7 +326,7 @@ class ProgressTests(SQLFlowSupport, unittest.TestCase):
         for slug in SUBJECTS:
             paths.extend((f'/{slug}/', f'/{slug}/practice', f'/{slug}/quiz'))
         paths.append(self.activity('sql').location)
-        before = self.path.read_bytes()
+        before = learning_snapshot(self.path)
         for path in paths:
             with self.subTest(path=path):
                 html = self.client.get(path).get_data(as_text=True)
@@ -330,7 +336,8 @@ class ProgressTests(SQLFlowSupport, unittest.TestCase):
                 self.assertIn('Closing and reopening the browser may restore this visit', html)
                 self.assertIn('new identity with zero activity', html)
                 self.assertTrue(HiddenFields(html).fields['csrf_token'])
-        self.assertEqual(self.path.read_bytes(), before)
+        self.assertEqual(learning_snapshot(self.path), before)
+
 
     def test_browser_cookie_loss_or_restore_never_retrieves_another_visitors_progress(self):
         self.activity(score=4)
@@ -355,7 +362,7 @@ class ProgressTests(SQLFlowSupport, unittest.TestCase):
         replay = self.app.test_client()
         replay.set_cookie(cookie_name, cookie)
         self.assertEqual(replay.get('/progress/').status_code, 303)
-        self.assertEqual(self.rows('SELECT * FROM learning_attempts WHERE visit_id=?', (old_id,)), old_rows)
+        self.assertEqual(self.rows('SELECT * FROM learning_attempts WHERE visit_id=?', (old_id,)), [])
 
     def test_unauthenticated_invalid_and_ended_visit_cannot_view_progress(self):
         anonymous = self.app.test_client()

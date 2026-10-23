@@ -1,0 +1,13 @@
+{% extends 'legal_base.html' %}
+{% block title %}{{ _('Impressum') }}{% endblock %}
+{% block heading %}{{ _('Impressum') }}{% endblock %}
+{% block content %}
+<section aria-labelledby="operator-heading"><h2 id="operator-heading">{{ _('Operator and contact') }}</h2>
+{% include '_operator_contact.html' %}
+</section>
+<section aria-labelledby="about-heading"><h2 id="about-heading">{{ _('About this website') }}</h2>
+<p>{{ _("Learning with Francis is Francis Furio’s personal, free, noncommercial educational project, developed during his DCI training. It offers learning material and interactive exercises for SQL, Python, JavaScript and SAP.") }}</p>
+<p>{{ _("Concept, Design & Development by Francis Furio") }}</p>
+<p>{{ _("Information about personal-data processing is available through the Privacy Policy link below.") }}</p>
+</section>
+{% endblock %}

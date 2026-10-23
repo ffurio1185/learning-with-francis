@@ -29,7 +29,7 @@ Do not merge the separate development history into this public release.
 | Persistent disks, Postgres, paid workers/cron | **None** |
 
 `render.yaml` configures these settings but creates nothing locally. The start
-script privately creates schema 3 if absent, validates existing storage without
+script privately creates schema 4 if absent, validates existing storage without
 reset/upgrade, then runs one Gunicorn worker with four threads on Render's `$PORT`.
 Only curriculum metadata is seeded; there are no demonstration visitors/results.
 Never upload an existing database or signing key. HTTPS, Secure/HttpOnly/SameSite
@@ -52,14 +52,20 @@ progress. It appears in the cover's About area, before nickname entry, and on
 lessons, practice, quizzes/results and My Progress. No JavaScript is needed to
 read it. The existing cover hero, animation and learning logic are unchanged.
 
-The existing **12-hour** session/form-token behavior is preserved. A stable secret
-does not preserve a lost database. If a returning cookie references an absent
-visit, the app safely returns to name entry. Starting again creates a random new
-identity and zero activity, even with the same nickname. Same-name visitors never
-share progress. End Visit removes browser access, not retained database rows.
-No account recovery, exact deletion schedule or guaranteed retention is promised.
-A normal process restart on the same remaining directory preserves records; the
-app does not deliberately wipe them at startup.
+The **12-hour** signed-cookie/form-token window remains, with cookies renewed
+by successful learning requests. A separate **30-minute server-side inactivity
+limit** (`LWF_VISIT_IDLE_SECONDS=1800`) controls access to visit data. End Visit and
+Start New Visit delete the current visit's records transactionally. Startup and
+later learning/visit requests remove expired visits before activity renewal.
+A stable secret cannot recover deleted visits or lost temporary storage. Missing
+or expired identities return safely to name entry; matching names never recover
+or share progress. Cleanup can be delayed while Render sleeps. Browser closure,
+background tabs, static/health checks and local answer selection are not learning
+requests. See [the technical retention notes](TEMPORARY-VISITS.md).
+
+Use a **fresh empty runtime database** for this candidate. Existing schema-3 files
+are refused without modification; there is no silent migration. No original
+visitor database or backup is upgraded or copied by this work.
 
 There is no backup/recovery guarantee for this disposable demonstration and no
 paid backup service to configure. Original local backups remain protected. Any
@@ -67,16 +73,23 @@ future durable hosting or backup workflow needs separate approval.
 
 ## Essential before public launch
 
-1. Supply and approve the real operator identity, service/contact address and
-   project contact email for the applicable German Impressum. Make legal/privacy
-   pages reachable from the cover and before nickname entry. No private operator
-   details or placeholder legal assurances have been published by this work.
-2. Supply an accurate privacy notice: nickname, random visit identifier, session
-   cookie, answers/scores/dates, purposes/legal basis, Render processing/logs and
-   any transfers, retention criteria, contact and data rights. A nickname and
-   temporary storage do not automatically make this anonymous or exempt from GDPR.
-   No 30-day deletion or seven-day log policy is implemented. Confirm actual
-   provider retention/processor terms; do not promise immediate deletion on End Visit.
+The locally integrated legal documents are `/privacy/` (English/German) and
+`/impressum/`. Francis has confirmed the operator/contact details and approved
+local integration. The notices now describe the approved Option B deletion and
+30-minute inactivity behavior, including delayed cleanup and temporary storage.
+They are accessible before a visit and from the existing application pages.
+See [the current legal review record](PRIVACY-REVIEW.md).
+
+1. Confirm actual provider-account arrangements: Render's applicable processing
+   agreement, transfer safeguards and log handling/retention. Keep the already
+   approved Frankfurt/Free settings. Seven-day Hobby dashboard availability does
+   not prove secure deletion of every provider copy. The account-specific iCloud
+   processing/transfer arrangements also remain unverified.
+2. Perform the separately approved final release review. No repeat operator,
+   address, noncommercial-purpose or technical-retention approval is needed. Local
+   legal integration is not a certification of provider compliance or permission
+   to commit, push or deploy. No additional paid service is introduced.
+
 3. With approval, push only the reviewed manifest to personal `origin/main`, then
    create the **Free** service with no disk/add-ons. Check the dashboard says Free
    before deploying. No purchase or resource creation is authorised yet.

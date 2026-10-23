@@ -3,6 +3,8 @@
 Use the external Playwright setup described in browser_phase2_progress.py.
 """
 
+from retention_support import learning_snapshot
+
 import argparse
 from contextlib import closing
 import json
@@ -29,7 +31,7 @@ def run(report_dir):
         thread = Thread(target=server.serve_forever, daemon=True)
         thread.start()
         base = f'http://127.0.0.1:{server.server_port}'
-        before = database.read_bytes()
+        before = learning_snapshot(database)
 
         def observe(page):
             page.on('pageerror', lambda error: errors.append(str(error)))
@@ -54,7 +56,9 @@ def run(report_dir):
                     page.screenshot(path=str(report_dir / 'cover-desktop.png'), full_page=True)
                     assert page.locator('.cover-watermark').evaluate('el => getComputedStyle(el).opacity') == '1'
                     assert page.locator('h1').evaluate('el => getComputedStyle(el).opacity') == '1'
-                    assert page.locator('a, button, input:not([type=hidden]), select').count() == 4
+                    # Two language controls, ENTER, Discover and the legal links.
+                    assert page.locator('a, button, input:not([type=hidden]), select').count() == 6
+                    expect(page.get_by_role('link', name='Privacy Policy', exact=True)).to_have_attribute('href', '/privacy/')
                     enter.hover()
                     assert enter.evaluate('el => getComputedStyle(el).boxShadow') != 'none'
                     page.mouse.move(0, 0)
@@ -80,7 +84,7 @@ def run(report_dir):
                     elapsed = monotonic() - began
                     assert 1.1 <= elapsed <= 3, elapsed
                     expect(page.get_by_label('Your name', exact=True)).to_be_visible()
-                    assert database.read_bytes() == before
+                    assert learning_snapshot(database) == before
                     groups.append(f'Keyboard ENTER and repeated activation navigate once after approximately 1.2 seconds ({elapsed:.2f}s); no database writes')
 
                     page.go_back()
@@ -129,7 +133,7 @@ def run(report_dir):
                         assert monotonic() - began < 1.1
                         expect(page.get_by_label('Your name', exact=True)).to_be_visible()
                         context.close()
-                    assert database.read_bytes() == before
+                    assert learning_snapshot(database) == before
                     groups.append('Reduced motion removes entrance animations/delay; disabled JavaScript follows the normal link; no activity created')
 
                     context = browser.new_context(viewport={'width': 375, 'height': 812},
@@ -141,7 +145,7 @@ def run(report_dir):
                     page.get_by_role('link', name='ENTER', exact=True).tap()
                     expect(page).to_have_url(base + '/learn/')
                     expect(page.get_by_label('Your name', exact=True)).to_be_visible()
-                    assert database.read_bytes() == before
+                    assert learning_snapshot(database) == before
                     context.close()
                     groups.append('Touch-enabled mobile viewport enters the existing application without creating a visit')
 
@@ -154,14 +158,14 @@ def run(report_dir):
                     expect(page.get_by_role('heading', name='Welcome to Learning with Francis, Cover Learner!')).to_be_visible()
                     with closing(db.open_database(database)) as connection:
                         visit_id = connection.execute('SELECT visit_id FROM visits').fetchone()[0]
-                    saved = database.read_bytes()
+                    saved = learning_snapshot(database)
                     for _ in range(2):
                         page.goto(base + '/')
                         expect(page.locator('#welcome-cover')).to_be_visible()
                         expect(page.get_by_text('Cover Learner', exact=True)).to_have_count(0)
                         page.get_by_role('link', name='ENTER', exact=True).click()
                         expect(page.get_by_role('heading', name='Welcome to Learning with Francis, Cover Learner!')).to_be_visible()
-                    assert database.read_bytes() == saved
+                    assert learning_snapshot(database) == saved
                     with closing(db.open_database(database)) as connection:
                         assert connection.execute('SELECT visit_id FROM visits').fetchall()[0][0] == visit_id
                         assert connection.execute('SELECT COUNT(*) FROM visits').fetchone()[0] == 1

@@ -33,7 +33,11 @@ def production_config(environ=None):
     demo_mode = env.get("LWF_DEMO_MODE", "0")
     if demo_mode not in ("0", "1"):
         raise RuntimeError("Set LWF_DEMO_MODE to 0 or 1.")
+    idle_text = env.get("LWF_VISIT_IDLE_SECONDS", "1800")
+    if not idle_text.isascii() or not idle_text.isdecimal() or int(idle_text) <= 0 or int(idle_text) > 31536000:
+        raise RuntimeError("Set LWF_VISIT_IDLE_SECONDS to a positive number of seconds (at most one year).")
     return {
+        "VISIT_IDLE_SECONDS": int(idle_text),
         "DEMO_MODE": demo_mode == "1",
         "DATABASE": str(directory / "learning_with_francis.db"),
         "SECRET_KEY": secret,
@@ -48,7 +52,7 @@ def production_config(environ=None):
 
 
 def prepare_database(environ=None):
-    """Initialise a new private schema-3 database, or validate without resetting."""
+    """Initialise a new private current-schema database, or validate without resetting."""
     config = production_config(environ)
     directory = Path(config["DATABASE"]).parent
     old_mask = os.umask(0o077)
@@ -103,4 +107,4 @@ if __name__ == "__main__":
         created = prepare_database()
     except (RuntimeError, OSError, db.DatabaseSetupError) as error:
         raise SystemExit(str(error)) from None
-    print("Initialised fresh production schema 3." if created else "Existing production database validated; records unchanged.")
+    print(f"Initialised fresh production schema {db.SCHEMA_VERSION}." if created else "Existing production database validated; records unchanged.")

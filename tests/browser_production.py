@@ -4,6 +4,8 @@ Uses Render's HTTP-backend topology on trusted localhost; Render supplies public
 TLS later. Requires external Playwright/Chromium. No external service calls.
 """
 
+from retention_support import learning_snapshot
+
 import argparse
 from contextlib import closing
 import json
@@ -65,7 +67,7 @@ def run(report_dir):
         try:
             process = start_server()
             assert rows("SELECT COUNT(*) FROM visits") == [(0,)]
-            groups.append("Actual start script creates fresh schema 3 and Gunicorn serves HTTP-backend readiness on loopback")
+            groups.append("Actual start script creates fresh current-schema and Gunicorn serves HTTP-backend readiness on loopback")
             with sync_playwright() as playwright:
                 browser = playwright.chromium.launch(headless=True)
                 try:
@@ -125,13 +127,13 @@ def run(report_dir):
                     page.screenshot(path=str(report_dir / "production-progress.png"), full_page=True)
                     groups.append("Production CSP permits filters/forms; explicit confirmation and language switching preserve real progress")
 
-                    before = path.read_bytes()
+                    before = learning_snapshot(path)
                     process.terminate()
                     process.wait(timeout=15)
                     process = start_server()
                     page.reload()
                     expect(page.locator(".status-form").first.locator("select")).to_have_value("Completed")
-                    assert path.read_bytes() == before
+                    assert learning_snapshot(path) == before
                     groups.append("Real Gunicorn stop/start preserves database bytes, stable signed session and saved status")
 
                     other = browser.new_context(java_script_enabled=False)
@@ -161,7 +163,7 @@ def run(report_dir):
                     page.screenshot(path=str(report_dir / "free-demo-german.png"), full_page=True)
                     groups.append("Bilingual demo notice remains readable at mobile/desktop widths and enlarged text")
 
-                    saved = path.read_bytes()
+                    saved = learning_snapshot(path)
                     process.terminate()
                     process.wait(timeout=15)
                     env["LWF_DATA_DIR"] = str(private / "replacement-instance")
@@ -178,7 +180,7 @@ def run(report_dir):
                     page.goto(base + "/progress/")
                     expect(page.locator("#no-activity")).to_be_visible()
                     assert rows("SELECT COUNT(*) FROM topic_progress WHERE learning_status='Still Learning'") == [(4,)]
-                    assert old_path.read_bytes() == saved
+                    assert learning_snapshot(old_path) == saved
                     groups.append("Simulated lost Free instance storage creates fresh data; old browser session safely returns to name entry with zero activity")
                     context.close()
                 finally:

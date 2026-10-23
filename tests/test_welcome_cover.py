@@ -93,7 +93,7 @@ class WelcomeCoverTests(unittest.TestCase):
             self.assertEqual(response.location, '/learn/')
             self.assertIn('name="visitor_name"', self.client.get(response.location).get_data(as_text=True))
         with closing(db.open_database(self.database)) as connection:
-            self.assertEqual(connection.execute('SELECT COUNT(*) FROM visits').fetchone()[0], 2)
+            self.assertEqual(connection.execute('SELECT COUNT(*) FROM visits').fetchone()[0], 0)
             self.assertEqual(connection.execute('SELECT COUNT(*) FROM visits WHERE ended_at IS NULL').fetchone()[0], 0)
 
     def test_about_translates_without_creating_visit_or_database(self):

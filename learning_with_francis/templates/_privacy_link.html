@@ -1,0 +1,4 @@
+<nav class="privacy-nav" aria-label="{{ _('Legal information') }}">
+    <a href="{{ url_for('privacy') }}"{% if request.endpoint == 'privacy' %} aria-current="page"{% endif %}>{{ _('Privacy Policy') }}</a>
+    <a href="{{ url_for('impressum') }}"{% if request.endpoint == 'impressum' %} aria-current="page"{% endif %}>{{ _('Impressum') }}</a>
+</nav>

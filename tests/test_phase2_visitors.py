@@ -2,6 +2,8 @@
 
 from contextlib import closing
 from pathlib import Path
+from retention_support import learning_snapshot
+
 import secrets
 import sqlite3
 import tempfile
@@ -101,14 +103,15 @@ class VisitorTests(unittest.TestCase):
 
     def test_invalid_names_are_rejected_without_writing(self):
         token = self.csrf()
-        before = self.path.read_bytes()
+        before = learning_snapshot(self.path)
         for name in ("", "   ", "A" * 51, "1234", "<script>alert(1)</script>", "A\nB", "A\x00B", "--"):
             with self.subTest(name=repr(name)):
                 response = self.client.post("/visits/start", data={"visitor_name": name, "csrf_token": token})
                 self.assertEqual(response.status_code, 400)
                 self.assertIn('role="alert"', response.get_data(as_text=True))
-                self.assertEqual(self.path.read_bytes(), before)
+                self.assertEqual(learning_snapshot(self.path), before)
         self.assertIsNone(self.visit_id())
+
 
     def test_international_names_apostrophes_and_html_escaping(self):
         for name in ("José", "王明", "O'Neil", "Anne-Marie"):
@@ -128,22 +131,24 @@ class VisitorTests(unittest.TestCase):
 
     def test_get_refresh_and_all_assets_do_not_duplicate_visits(self):
         self.start()
-        before = self.path.read_bytes()
+        before = learning_snapshot(self.path)
         for path in ("/learn/", "/learn/", "/static/style.css", "/static/phase2.css"):
             with self.client.get(path) as response:
                 self.assertEqual(response.status_code, 200)
-        self.assertEqual(self.path.read_bytes(), before)
+        self.assertEqual(learning_snapshot(self.path), before)
+
 
     def test_csrf_required_on_every_mutating_route(self):
         self.start()
-        before = self.path.read_bytes()
+        before = learning_snapshot(self.path)
         for route in ("start", "end", "new"):
             for token in (None, "forged", "forgé"):
                 data = {"visitor_name": "Other"}
                 if token is not None:
                     data["csrf_token"] = token
                 self.assertEqual(self.client.post(f"/visits/{route}", data=data).status_code, 400)
-        self.assertEqual(self.path.read_bytes(), before)
+        self.assertEqual(learning_snapshot(self.path), before)
+
 
     def test_cross_session_csrf_is_rejected(self):
         other = self.app.test_client()
@@ -152,7 +157,7 @@ class VisitorTests(unittest.TestCase):
         self.assertEqual(other.post("/visits/start", data={"visitor_name": "Alex", "csrf_token": token}).status_code, 400)
         self.assertEqual(self.query("SELECT COUNT(*) FROM visits"), [(0,)])
 
-    def test_end_visit_revokes_cookie_and_preserves_all_saved_progress(self):
+    def test_end_visit_revokes_cookie_and_deletes_all_saved_progress(self):
         self.start()
         visit_id = self.visit_id()
         cookie = self.client.get_cookie(self.app.config["SESSION_COOKIE_NAME"]).value
@@ -160,9 +165,9 @@ class VisitorTests(unittest.TestCase):
         history_before = self.query("SELECT * FROM topic_status_history")
         self.assertEqual(self.finish().status_code, 303)
         self.assertIsNone(self.visit_id())
-        self.assertIsNotNone(self.query("SELECT ended_at FROM visits WHERE visit_id = ?", (visit_id,))[0][0])
-        self.assertEqual(self.query("SELECT * FROM topic_progress"), progress_before)
-        self.assertEqual(self.query("SELECT * FROM topic_status_history"), history_before)
+        self.assertEqual(self.query("SELECT * FROM visits WHERE visit_id = ?", (visit_id,)), [])
+        self.assertEqual(self.query("SELECT * FROM topic_progress"), [])
+        self.assertEqual(self.query("SELECT * FROM topic_status_history"), [])
         replay = self.app.test_client()
         replay.set_cookie(self.app.config["SESSION_COOKIE_NAME"], cookie)
         html = replay.get("/learn/").get_data(as_text=True)
@@ -178,18 +183,18 @@ class VisitorTests(unittest.TestCase):
         self.assertIsNone(self.visit_id())
         self.assertEqual(self.start().status_code, 303)
         self.assertNotEqual(old_id, self.visit_id())
-        self.assertEqual(self.query("SELECT * FROM topic_progress WHERE visit_id = ?", (old_id,)), before_progress)
+        self.assertEqual(self.query("SELECT * FROM topic_progress WHERE visit_id = ?", (old_id,)), [])
         self.assertEqual(self.query("SELECT learning_status FROM topic_progress WHERE visit_id = ?", (self.visit_id(),)), [("Still Learning",)] * 4)
-        self.assertEqual(self.query("SELECT COUNT(*) FROM visits"), [(2,)])
+        self.assertEqual(self.query("SELECT COUNT(*) FROM visits"), [(1,)])
 
-    def test_direct_start_ends_only_own_previous_visit(self):
+    def test_direct_start_deletes_only_own_previous_visit(self):
         other = self.app.test_client()
         self.start()
         self.start("Alex", other)
         old_id = self.visit_id()
         other_id = self.visit_id(other)
         self.start("New Name")
-        self.assertIsNotNone(self.query("SELECT ended_at FROM visits WHERE visit_id = ?", (old_id,))[0][0])
+        self.assertEqual(self.query("SELECT * FROM visits WHERE visit_id = ?", (old_id,)), [])
         self.assertEqual(self.query("SELECT ended_at FROM visits WHERE visit_id = ?", (other_id,)), [(None,)])
 
     def test_invalid_new_name_does_not_end_existing_visit(self):
@@ -347,6 +352,7 @@ class VisitorMigrationTests(unittest.TestCase):
         with self.assertRaises(db.DatabaseSetupError):
             db.upgrade_database(wrong)
         self.assertEqual(wrong.read_bytes(), b"")
+
 
 
 if __name__ == "__main__":

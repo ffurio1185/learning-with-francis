@@ -8,6 +8,7 @@
     <title>{% block title %}{{ _('%(subject)s learning', subject=subject.name) }}{% endblock %} — Learning with Francis</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='phase2.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='privacy.css') }}">
 </head>
 <body>
 <main>
@@ -24,6 +25,7 @@
     {% block content %}{% endblock %}
     <p class="visit-help">{{ _('A score records practice, not understanding. Your topic stays unchanged. Completed always requires your personal confirmation.') }}</p>
     <p class="visit-help">{{ _('Dates use German local time (Europe/Berlin), including daylight saving time: CET in winter and CEST in summer.') }}</p>
+    {% include '_privacy_link.html' %}
 </main>
 </body>
 </html>

@@ -20,17 +20,21 @@ names. `static/style.css` and `static/topics.js` are shared with the preserved
 tracker; `static/phase2.css` keeps navigation links blue, including visited links,
 without changing progress or removing keyboard focus.
 
-## Reproducible schema 3 setup
+## Reproducible schema 4 setup
 
 `schema.sql` defines four subjects and their initial topics. The migrations add
-visitor/progress/history tables and learning-attempt/answer tables. `init-db`
+visitor/progress/history tables, learning-attempt/answer tables, and an indexed
+UTC last_activity_at timestamp for temporary visits. `init-db`
 creates a missing database once; repeated setup validates a supported database
 without resetting it. Request handling does not silently initialize or upgrade
 files. `check-db` verifies the application marker, schema version and catalogue.
 
-New setup produces schema 3 with no visits or activity. The explicit `upgrade-db`
+New setup produces schema 4 with no visits or activity. The explicit `upgrade-db`
 command exists for supported older Phase 2 schemas: it creates a non-overwritten
-backup, preserves earlier records and rolls back on failure. No existing private
+backup, preserves earlier fields and rolls back on failure. **Do not run upgrades
+on protected/original databases.** Starting this application on a newly upgraded
+disposable database deletes ended/inactive visits under the new retention policy.
+No existing private
 database is distributed with this source. Version 1 and unrelated databases are
 rejected rather than overwritten. Foreign keys are enabled on each connection;
 connections are local to a request or command and are closed afterwards.
@@ -46,9 +50,16 @@ The signed HttpOnly/SameSite session cookie carries a visit ID, not progress or
 the greeting name. `security.py` stores a stable private signing key outside source
 control and binds forms to a session with CSRF tokens that rotate at visit changes.
 The cookie has a 12-hour signature-age limit; browser restoration may retain it.
-End Visit revokes the identity on the server and removes its browser access.
-Start New Visit ends that identity and returns to name entry. Neither action
-deletes saved results. No account recovery or visit-selection screen is provided.
+End Visit deletes the visit and all of its learning records atomically.
+Start New Visit performs the same deletion before name entry; direct replacement
+also deletes the previous identity within the new-visit transaction. A configurable
+30-minute inactivity check runs before learning requests and at app startup;
+successful learning requests renew last_activity_at and the cookie signature.
+Public cover/privacy/static/health and rejected requests do not renew learning
+activity. Closing a browser is not a reliable deletion event; sleeping Render
+instances perform cleanup only when execution resumes. See
+[the retention specification](../docs/TEMPORARY-VISITS.md).
+No account recovery or visit-selection screen is provided.
 
 Private HTML uses no-store cache headers. All learning and progress queries use
 the active identity from the verified session; posted/query-string owner IDs are

@@ -1,4 +1,6 @@
-"""L1 real-browser checks with disposable schema 3 data and loopback serving."""
+"""L1 real-browser checks with disposable current-schema data and loopback serving."""
+
+from retention_support import learning_snapshot
 
 import argparse
 from contextlib import closing
@@ -26,7 +28,7 @@ def run(report_dir):
         thread = Thread(target=server.serve_forever, daemon=True)
         thread.start()
         base = f"http://127.0.0.1:{server.server_port}"
-        before = path.read_bytes()
+        before = learning_snapshot(path)
 
         def observe(page):
             page.on("pageerror", lambda error: errors.append(str(error)))
@@ -62,7 +64,7 @@ def run(report_dir):
                     expect(page.get_by_role("link", name="EINTRETEN", exact=True)).to_have_attribute("href", "/learn/")
                     page.wait_for_timeout(1100)
                     page.screenshot(path=str(report_dir / "cover-german-desktop.png"), full_page=True)
-                    assert path.read_bytes() == before
+                    assert learning_snapshot(path) == before
                     groups.append("English default even in German browser; German cover, selected control, translated labels and 303 redirect; no database writes")
 
                     page.reload()
@@ -93,7 +95,7 @@ def run(report_dir):
                     assert controls["y"] + controls["height"] < content["y"]
                     page.screenshot(path=str(report_dir / "cover-german-mobile-enlarged.png"), full_page=True)
                     language(page, "en")
-                    assert path.read_bytes() == before
+                    assert learning_snapshot(path) == before
                     groups.append("German desktop, phone, tablet, landscape and 200% text reflow without overlap or horizontal overflow; English switch works")
                     context.close()
 
@@ -114,7 +116,7 @@ def run(report_dir):
                         page.goto(base + "/")
                         expect(page.locator("html")).to_have_attribute("lang", "de")
                         context.close()
-                    assert path.read_bytes() == before
+                    assert learning_snapshot(path) == before
                     groups.append("Language selection and ENTER work without JavaScript and with reduced motion; preference survives application navigation")
 
                     context = browser.new_context(reduced_motion="reduce")
@@ -127,16 +129,16 @@ def run(report_dir):
                         current.get_by_label("Your name", exact=True).fill("Language Learner")
                         current.get_by_role("button", name="Start Visit", exact=True).click()
                         expect(current.get_by_role("heading", name="Welcome to Learning with Francis, Language Learner!")).to_be_visible()
-                    saved = path.read_bytes()
+                    saved = learning_snapshot(path)
                     page.goto(base + "/")
                     language(page, "de")
                     other.goto(base + "/")
                     expect(other.locator("html")).to_have_attribute("lang", "en")
-                    assert path.read_bytes() == saved
+                    assert learning_snapshot(path) == saved
                     for current in (page, other):
                         current.goto(base + "/progress/")
                         expect(current.locator("#no-activity")).to_be_visible()
-                    assert path.read_bytes() == saved
+                    assert learning_snapshot(path) == saved
                     with closing(db.open_database(path)) as connection:
                         assert connection.execute("SELECT COUNT(DISTINCT visit_id) FROM visits").fetchone()[0] == 2
                         assert connection.execute("SELECT COUNT(*) FROM learning_attempts").fetchone()[0] == 0
@@ -154,7 +156,7 @@ def run(report_dir):
                     page.goto(base + "/")
                     expect(page.locator("html")).to_have_attribute("lang", "de")
                     with closing(db.open_database(path)) as connection:
-                        assert connection.execute("SELECT COUNT(*) FROM visits WHERE ended_at IS NOT NULL").fetchone()[0] == 2
+                        assert connection.execute("SELECT COUNT(*) FROM visits").fetchone()[0] == 1
                         assert connection.execute("SELECT COUNT(*) FROM learning_attempts").fetchone()[0] == 0
                     groups.append("End Visit and Start New Visit retain German, revoke old access and preserve the other visitor")
                     context.close()

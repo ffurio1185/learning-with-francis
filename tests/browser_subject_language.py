@@ -1,4 +1,6 @@
-"""L4 English/German browser flows; disposable schema 3 only."""
+"""L4 English/German browser flows; disposable current-schema only."""
+
+from retention_support import learning_snapshot
 import argparse
 from contextlib import closing
 import json
@@ -61,13 +63,13 @@ def run(report_dir):
                         language(page, 'en')
                         expect(page.get_by_role('heading', name=f'{subject["name"]}: {subject["title"]}', exact=True)).to_be_visible()
                         codes = page.locator('pre code').all_text_contents()
-                        before = path.read_bytes(); language(page, 'de')
+                        before = learning_snapshot(path); language(page, 'de')
                         expect(page.get_by_role('heading', name=f'{subject["name"]}: {TITLES[slug]}', exact=True)).to_be_visible()
                         expect(page.get_by_role('heading', name=HEADINGS[slug], exact=True)).to_be_visible()
                         expect(page.locator('.lesson-material')).to_have_attribute('lang', 'de')
                         expect(page.locator('.interface-scope')).to_have_count(0)
                         assert codes == page.locator('pre code').all_text_contents()
-                        assert path.read_bytes() == before
+                        assert learning_snapshot(path) == before
                         page.screenshot(path=str(report_dir / f'{slug}-lesson-german-desktop.png'), full_page=True)
                         page.goto(base + '/progress/')
                         expect(page.locator(f'[data-subject="{slug}"] .topic-title')).to_have_text(TITLES[slug])
@@ -83,7 +85,7 @@ def run(report_dir):
                             option = q['correct'] if index % 2 == 0 else next(k for k in q['choices'] if k != q['correct'])
                             page.locator(f'[name="{q["id"]}"][value="{option}"]').check()
                             if index == 3:
-                                before = path.read_bytes(); token = page.locator('[name="submission_token"]').input_value()
+                                before = learning_snapshot(path); token = page.locator('[name="submission_token"]').input_value()
                                 language(page, 'en')
                                 expect(page.locator('#practice-progress')).to_have_text('Question 4 of 10')
                                 expect(page.locator(f'[name="{q["id"]}"][value="{option}"]')).to_be_checked()
@@ -91,14 +93,14 @@ def run(report_dir):
                                 # Practice signatures may receive a fresh timestamp; the visit/round/position must stay identical.
                                 serializer = URLSafeTimedSerializer(app.secret_key, salt='sql-activity-submission')
                                 assert serializer.loads(page.locator('[name="submission_token"]').input_value()) == serializer.loads(token)
-                                assert path.read_bytes() == before
+                                assert learning_snapshot(path) == before
                             page.get_by_role('button', name='Antwort überprüfen', exact=True).click()
                             expect(page.locator('.answer-result strong')).to_have_text('Richtig' if index % 2 == 0 else 'Falsch')
                             expect(page.locator('#personal-feedback')).to_contain_text('richtig gelöst' if index % 2 == 0 else 'Lies die Erklärung')
                             expect(page.locator('.answer-result h2')).to_have_attribute('lang', 'de')
                             assert q['explanation'] not in page.locator('.answer-result').inner_text()
                             expect(page.get_by_text('Richtige Antwort:', exact=False)).to_be_visible()
-                            before = path.read_bytes(); page.reload(); assert path.read_bytes() == before
+                            before = learning_snapshot(path); page.reload(); assert learning_snapshot(path) == before
                             page.get_by_role('link', name='Nächste Frage' if index < 9 else 'Übung beenden', exact=True).click()
                         expect(page.get_by_role('heading', name='Übungsrunde abgeschlossen!', exact=True)).to_be_visible()
                         page.get_by_role('link', name='Erneut üben', exact=True).click()
@@ -115,24 +117,24 @@ def run(report_dir):
                                 option = q['correct'] if index < score else next(k for k in q['choices'] if k != q['correct'])
                                 page.locator(f'[name="{q["id"]}"][value="{option}"]').check()
                             if score == 3:
-                                token = page.locator('[name="submission_token"]').input_value(); before = path.read_bytes()
+                                token = page.locator('[name="submission_token"]').input_value(); before = learning_snapshot(path)
                                 language(page, 'en'); language(page, 'de')
                                 assert page.locator('.activity-form input:checked').count() == 5
                                 assert page.locator('[name="submission_token"]').input_value() == token
-                                assert path.read_bytes() == before
+                                assert learning_snapshot(path) == before
                             page.locator('.activity-form input:checked').last.press('Enter')
                             expect(page.locator('#score')).to_contain_text(f'{score} von 5')
                             expect(page.locator('#personal-feedback')).to_contain_text('Übe weiter' if score <= 2 else 'Quiz bestanden' if score < 5 else 'Volle Punktzahl')
                             expect(page.locator('#personal-feedback')).to_contain_text('Subject Learner!')
                             expect(page.locator('.answer-result')).to_have_count(5)
                             expect(page.locator('.correct-answer')).to_have_count(score)
-                            saved = path.read_bytes(); page.reload(); assert path.read_bytes() == saved
+                            saved = learning_snapshot(path); page.reload(); assert learning_snapshot(path) == saved
                             expect(page.get_by_role('link', name='Erneut versuchen', exact=True)).to_be_visible()
-                        url = page.url; urls.append(url); before = path.read_bytes()
+                        url = page.url; urls.append(url); before = learning_snapshot(path)
                         language(page, 'en')
                         expect(page.locator('#personal-feedback')).to_contain_text('Congratulations, Subject Learner!')
                         expect(page.locator('.answer-result h2').first).to_have_text(content.QUIZ[0]['prompt'])
-                        language(page, 'de'); assert path.read_bytes() == before
+                        language(page, 'de'); assert learning_snapshot(path) == before
                         assert rows('SELECT prompt,explanation FROM learning_answers WHERE attempt_id=? ORDER BY position', (url.rsplit('/', 1)[1],)) == [(q['prompt'],q['explanation']) for q in content.QUIZ]
                         assert rows('SELECT score FROM learning_attempts WHERE topic_id=? AND activity_kind=? ORDER BY rowid', (content.TOPIC_ID, 'quiz')) == [(0,), (2,), (3,), (4,), (5,)]
                         assert rows('SELECT DISTINCT learning_status FROM topic_progress') == [('Still Learning',)]
@@ -175,9 +177,9 @@ def run(report_dir):
                         other.goto(base + f'/{slug}/quiz')
                         q = SUBJECTS[slug]['content'].QUIZ[0]
                         other.locator(f'[name="{q["id"]}"][value="{q["correct"]}"]').check()
-                        before = path.read_bytes(); language(other, 'en'); language(other, 'de')
+                        before = learning_snapshot(path); language(other, 'en'); language(other, 'de')
                         expect(other.locator(f'[name="{q["id"]}"][value="{q["correct"]}"]')).to_be_checked()
-                        assert path.read_bytes() == before
+                        assert learning_snapshot(path) == before
                         for q in SUBJECTS[slug]['content'].QUIZ:
                             other.locator(f'[name="{q["id"]}"][value="{q["correct"]}"]').check()
                         other.locator('.activity-form input:checked').last.press('Enter')
@@ -186,9 +188,9 @@ def run(report_dir):
                         row = other.locator(f'[data-subject="{slug}"]')
                         expect(row.locator('.saved-status')).to_have_text('Noch am Lernen')
                         row.locator('[name="new_status"]').select_option('Completed')
-                        before = path.read_bytes(); row.get_by_role('button',name='Speichern',exact=True).click()
+                        before = learning_snapshot(path); row.get_by_role('button',name='Speichern',exact=True).click()
                         expect(other.locator('.visit-error')).to_contain_text('Bitte bestätige')
-                        assert path.read_bytes() == before
+                        assert learning_snapshot(path) == before
                         row.locator('[name="new_status"]').select_option('Completed')
                         row.locator('[name="user_confirmed"]').check()
                         row.get_by_role('button',name='Speichern',exact=True).click()

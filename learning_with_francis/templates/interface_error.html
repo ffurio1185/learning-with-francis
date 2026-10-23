@@ -5,11 +5,13 @@
     <title>{{ _('Request error') }} — Learning with Francis</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='phase2.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='privacy.css') }}">
 </head>
 <body><main>
     {% include '_language_controls.html' %}
     <h1>{{ _('Request error') }} {{ code }}</h1>
     <p role="alert">{{ message }}</p>
     <a href="{{ url_for('index') }}">{{ _('Learning home') }}</a>
+    {% include '_privacy_link.html' %}
 </main></body>
 </html>

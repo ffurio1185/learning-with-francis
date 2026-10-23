@@ -1,0 +1,21 @@
+/* Legal navigation and documents only; the cover hero and learning controls stay unchanged. */
+.privacy-nav { margin: 1.25rem 0; line-height: 1.6; overflow-wrap: anywhere; }
+.privacy-nav a:link, .privacy-nav a:visited { color: #175eac; text-decoration: underline; }
+.privacy-nav a:hover { color: #104778; }
+.privacy-nav a { display: inline-block; padding: .45rem .2rem; }
+.privacy-nav a:focus-visible { outline: 3px solid #175eac; outline-offset: 3px; }
+.privacy-policy { line-height: 1.7; overflow-wrap: anywhere; }
+.privacy-policy h1 { font-size: clamp(1.75rem, 5vw, 2.5rem); }
+.privacy-policy h2 { font-size: clamp(1.2rem, 3.5vw, 1.5rem); line-height: 1.4; }
+.privacy-policy section { margin-top: 2rem; }
+.privacy-pending { border: 1px solid #aa7a22; border-inline-start: 4px solid #8a641e; border-radius: .5rem; padding: 1rem; background: #fff8e8; color: #4d3813; }
+.privacy-pending h2 { margin-top: 0; }
+.privacy-policy p, .privacy-sources { max-width: 75ch; }
+
+.privacy-nav { display: flex; flex-wrap: wrap; gap: .4rem 1rem; }
+.privacy-nav a { min-height: 44px; align-content: center; }
+.operator-contact { font-style: normal; line-height: 1.8; }
+.privacy-policy .learning-nav { display: flex; flex-wrap: wrap; gap: .75rem 1.25rem; }
+.privacy-policy a:focus-visible { outline: 3px solid #175eac; outline-offset: 3px; }
+.privacy-policy a:link, .privacy-policy a:visited { color: #175eac; }
+.privacy-policy a:hover { color: #104778; }

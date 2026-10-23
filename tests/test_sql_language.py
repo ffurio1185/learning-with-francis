@@ -3,6 +3,8 @@
 from contextlib import closing
 from html import unescape
 from html.parser import HTMLParser
+from retention_support import learning_snapshot
+
 import re
 import unittest
 
@@ -36,21 +38,23 @@ class SQLLanguageTests(SQLFlowSupport, unittest.TestCase):
     def test_english_default_and_german_lesson_keep_exact_executable_examples(self):
         english=self.client.get('/sql/').text
         self.assertIn('SQL: SELECT and WHERE',english)
-        before=self.path.read_bytes()
+        before=learning_snapshot(self.path)
         self.switch()
         german=self.client.get('/sql/').text
         for text in ('SQL: SELECT und WHERE','Spalten mit SELECT auswählen','Zeilen mit WHERE auswählen','Willkommen, Francis!'):
             self.assertIn(text,german)
         self.assertEqual(CodeBlocks(english).blocks,CodeBlocks(german).blocks)
         self.assertNotIn('interface-scope',german)
-        self.assertEqual(self.path.read_bytes(),before)
+        self.assertEqual(learning_snapshot(self.path),before)
+
 
     def test_sql_titles_translate_on_home_progress_and_lesson_without_metadata_writes(self):
-        before=self.path.read_bytes();self.switch()
+        before=learning_snapshot(self.path);self.switch()
         for path in ('/learn/','/progress/'):
             self.assertIn('Tabellen mit SELECT und WHERE lesen',self.client.get(path).text)
         self.assertIn('<title>SELECT und WHERE',self.client.get('/sql/').text)
-        self.assertEqual(self.path.read_bytes(),before)
+        self.assertEqual(learning_snapshot(self.path),before)
+
 
     def test_all_fifteen_public_questions_are_localized_without_keys_or_explanations(self):
         with self.app.test_request_context('/'):
@@ -119,40 +123,43 @@ class SQLLanguageTests(SQLFlowSupport, unittest.TestCase):
 
     def test_quiz_draft_switches_languages_without_changing_token_or_selected_answers(self):
         data=self.payload(3)
-        before=self.path.read_bytes()
+        before=learning_snapshot(self.path)
         response=self.client.post('/preferences/language',data={**data,'language':'de'})
         html=self.client.get(response.location).text
         expected={q['id']:data[q['id']] for q in sql_content.QUIZ}
         self.assertEqual(CheckedAnswers(html).answers,expected)
         self.assertEqual(HiddenFields(html).fields['submission_token'],data['submission_token'])
         self.assertIn('Was wählt SELECT',html)
-        self.assertEqual(self.path.read_bytes(),before)
+        self.assertEqual(learning_snapshot(self.path),before)
         response=self.client.post('/sql/quiz',data={**HiddenFields(html).fields,**expected})
         self.assertIn('3 von 5',self.client.get(response.location).text)
 
+
     def test_english_results_can_be_read_in_german_without_rewriting_any_records(self):
         response=self.submit(4);location=response.location
-        before=self.path.read_bytes()
+        before=learning_snapshot(self.path)
         self.switch(path=location)
         html=self.client.get(location).text
         self.assertIn('Quiz bestanden',html)
         self.assertIn('Was wählt SELECT',html)
         self.switch('en',location)
         self.assertIn(sql_content.QUIZ[0]['prompt'],self.client.get(location).text)
-        self.assertEqual(self.path.read_bytes(),before)
+        self.assertEqual(learning_snapshot(self.path),before)
+
 
     def test_unknown_legacy_snapshot_is_kept_in_original_language_without_guessing(self):
         response=self.submit(5);location=response.location
         with closing(db.open_database(self.path)) as connection:
             connection.execute("UPDATE learning_answers SET prompt='Earlier reviewed question', explanation='Earlier explanation' WHERE question_id='q1'")
             connection.commit()
-        before=self.path.read_bytes();self.switch(path=location)
+        before=learning_snapshot(self.path);self.switch(path=location)
         html=self.client.get(location).text
         self.assertIn('Earlier reviewed question',html)
         self.assertIn('Earlier explanation',html)
         self.assertIn('frühere Formulierung',html)
         self.assertNotIn('Was wählt SELECT in einer Abfrage?',html)
-        self.assertEqual(self.path.read_bytes(),before)
+        self.assertEqual(learning_snapshot(self.path),before)
+
 
     def test_unknown_title_and_changed_choices_preserve_saved_wording(self):
         with self.app.test_request_context('/'):
@@ -170,13 +177,14 @@ class SQLLanguageTests(SQLFlowSupport, unittest.TestCase):
         data=self.payload(5)
         first=self.client.post('/sql/quiz',data=data)
         self.switch(path=first.location)
-        before=self.path.read_bytes()
+        before=learning_snapshot(self.path)
         second=self.client.post('/sql/quiz',data=data)
         self.assertEqual(second.location,first.location)
         data['q1']='a'
         self.assertEqual(self.client.post('/sql/quiz',data=data).status_code,409)
         self.assertEqual(self.rows('SELECT COUNT(*) FROM learning_attempts'),[(1,)])
-        self.assertEqual(self.path.read_bytes(),before)
+        self.assertEqual(learning_snapshot(self.path),before)
+
 
     def test_two_same_name_visitors_keep_private_results_in_different_languages(self):
         other=self.app.test_client();self.start(other)
@@ -197,22 +205,24 @@ class SQLLanguageTests(SQLFlowSupport, unittest.TestCase):
         self.assertIn('Herzlichen Glückwunsch',html)
 
     def test_invalid_answers_and_forged_scores_cannot_bypass_german_grading(self):
-        self.switch();before=self.path.read_bytes();data=self.payload(0)
+        self.switch();before=learning_snapshot(self.path);data=self.payload(0)
         self.assertEqual(self.client.post('/sql/quiz',data=MultiDict({**data,'q1':['a','b']})).status_code,400)
-        self.assertEqual(self.path.read_bytes(),before)
+        self.assertEqual(learning_snapshot(self.path),before)
         data.update(score='5',total_questions='1',language='en',visit_id='foreign')
         self.assertEqual(self.client.post('/sql/quiz',data=data).status_code,303)
         self.assertEqual(self.rows('SELECT score,total_questions FROM learning_attempts'),[(0,5)])
 
+
     def test_results_survive_restart_and_read_only_language_changes(self):
         self.switch();response=self.submit(5)
-        before=self.path.read_bytes()
+        before=learning_snapshot(self.path)
         name=self.app.config['SESSION_COOKIE_NAME']
         client=create_app(self.config).test_client()
         client.set_cookie(name,self.client.get_cookie(name).value)
         self.assertIn('Volle Punktzahl',client.get(response.location).text)
         self.assertIn('5 / 5 richtig',client.get('/progress/').text)
-        self.assertEqual(self.path.read_bytes(),before)
+        self.assertEqual(learning_snapshot(self.path),before)
+
 
     def test_other_subjects_are_localized_after_l4(self):
         self.switch()

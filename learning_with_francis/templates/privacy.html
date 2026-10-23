@@ -1,0 +1,67 @@
+{% extends 'legal_base.html' %}
+{% block title %}{{ _('Privacy Policy') }}{% endblock %}
+{% block heading %}{{ _('Privacy Policy') }}{% endblock %}
+{% block content %}
+<section aria-labelledby="legal-section-1"><h2 id="legal-section-1">{{ _("1. Who is responsible?") }}</h2>
+{% include '_operator_contact.html' %}
+<p>{{ _("I operate Learning with Francis personally as a noncommercial educational project developed during my DCI training. It offers SQL, Python, JavaScript and SAP lessons, practice exercises, quizzes and a personal learning tracker. No account, password or registration is required. Please choose a nickname rather than your real name.") }}</p>
+</section>
+<section aria-labelledby="legal-section-2"><h2 id="legal-section-2">{{ _("2. What information does the application use?") }}</h2>
+<ul>
+<li>{{ _("Your chosen nickname, a randomly generated visit ID, and visit start and last-activity times.") }}</li>
+<li>{{ _("Submitted practice and quiz answers, correctness, scores, question/subject references, attempts and submission dates.") }}</li>
+<li>{{ _("Learning statuses, status changes and dates, including your personal completion confirmation and its timestamp.") }}</li>
+<li>{{ _("A signed Flask session cookie, including language and form-security information and sometimes temporary name or answer drafts during a language change.") }}</li>
+</ul>
+<p>{{ _("A nickname does not make the records anonymous. Different visitors, including those with the same nickname, receive separate random identities. A nickname cannot retrieve an earlier visit. The learning database has no visitor email, postal-address or IP-address fields. Connection information required to deliver the website is described under hosting below.") }}</p>
+<p>{{ _("Providing a nickname and submitting answers is voluntary. A nickname is required to start an interactive visit; without a visit its personal learning features are unavailable. There is no legal obligation to provide this learning information.") }}</p>
+</section>
+<section aria-labelledby="legal-section-3"><h2 id="legal-section-3">{{ _("3. Purposes and legal basis") }}</h2>
+<p>{{ _("It provides personalized greetings, checks your answers, displays explanations and feedback, keeps your progress and history available during an active visit, separates visitors and protects forms. A perfect score never automatically marks a subject Completed: your explicit personal confirmation is required. Scores are learning feedback, with no official grading, certification or legal or similarly significant decision about you.") }}</p>
+<p>{{ _("Legal basis: Article 6(1)(f) GDPR, the legitimate interests in providing and securing this voluntary free learning service. The processing supports your temporary visit and its requested learning features, with separate random identities, minimal data, end-of-visit deletion and an inactivity limit. No advertising profiles or accounts are created. Your personal confirmation of understanding is a learning choice, not GDPR consent.") }}</p>
+</section>
+<section aria-labelledby="legal-section-4"><h2 id="legal-section-4">{{ _("4. Cookies and browser sessions") }}</h2>
+<p>{{ _("The cookie learning_with_francis_visit supports the visit ID, selected language, security tokens, interface messages and possible temporary input drafts. The cover page can set it for language/security forms before a database visit is created. A database visit starts after a successful Start Visit submission.") }}</p>
+<p>{{ _("The cookie is signed against tampering, not encrypted. Production configuration uses HTTPS-only (Secure), HttpOnly and SameSite=Lax protections. The existing 12-hour signature-age window is renewed on successful learning requests; it is separate from the shorter inactivity rule below. Activity forms retain their own 12-hour token limit. Browsers may restore session cookies after closing and reopening. Disabling cookies prevents reliable use of the interactive visit features.") }}</p>
+<p>{{ _("The cookie supports the necessary visit and security functions and your requested language selection. Necessary storage and access for these functions are assessed under §25(2)(2) TDDDG, separately from the GDPR legal basis. The application includes no optional advertising or analytics cookies.") }}</p>
+</section>
+<section aria-labelledby="legal-section-5"><h2 id="legal-section-5">{{ _("5. End Visit and Start New Visit") }}</h2>
+<p>{{ _("After a successful End Visit request, the application deletes that visit’s nickname, visitor row, answers, attempts, scores, progress, completion confirmations and learning/status history in one database transaction. Other visitors and shared learning content are unaffected. The browser session is cleared using the existing mechanism; the selected language can remain.") }}</p>
+<p>{{ _("Start New Visit performs the same deletion before returning to name entry. A valid direct replacement also deletes the old visit and creates a fresh identity with zero activity and all four subjects Still Learning. Failed or invalid requests do not falsely report a successful deletion. Ended or deleted progress cannot be recovered by re-entering a nickname, an old cookie or a saved result link.") }}</p>
+</section>
+<section aria-labelledby="legal-section-6"><h2 id="legal-section-6">{{ _("6. The 30-minute inactivity rule") }}</h2>
+<p>{{ _("A visit expires after 30 minutes without a successful server-side learning request. This is not a maximum learning duration. Opening a lesson, requesting a practice/quiz page, submitting valid answers or using My Progress can renew the period while the visit is still active. Successful learning-home and owned-result requests also qualify.") }}</p>
+<p>{{ _("Simply reading an already open page, selecting an answer or filtering rows locally does not send a qualifying request. Cover/privacy pages, static files, health checks and invalid submissions do not renew the period. A language-preference request alone does not renew it; a successful learning-page request after switching languages does.") }}</p>
+<p>{{ _("Expired records are deleted at application startup and during subsequent learning or visit requests. Expiration is checked before activity renewal, so an expired visit cannot be revived. There is no exact 30-minute physical-deletion guarantee: if Render is asleep or no qualifying cleanup check runs, expired rows can remain until execution resumes and cleanup runs. Closing a browser or leaving a page cannot reliably be detected and does not guarantee immediate deletion. Use End Visit when finished.") }}</p>
+</section>
+<section aria-labelledby="legal-section-7"><h2 id="legal-section-7">{{ _("7. Temporary SQLite storage") }}</h2>
+<p>{{ _("Learning data is held in SQLite on Render Free’s temporary filesystem. It can disappear earlier on a restart, redeployment, spin-down or instance replacement. The application offers no progress recovery or production learning-record backup service. Deleting database rows does not guarantee secure erasure of provider logs, storage snapshots, browser copies or messages you send separately.") }}</p>
+</section>
+<section aria-labelledby="legal-section-8"><h2 id="legal-section-8">{{ _("8. Hosting, technical logs and international processing") }}</h2>
+<p>{{ _("The planned host is Render Services, Inc.; the configured application region is Frankfurt, Germany. Hosting necessarily processes connection data such as your IP address and requested resource. Technical diagnostics may include request information and error/runtime logs. The reviewed start command does not enable Gunicorn access logging; this does not establish that Render has no separate infrastructure or security logs.") }}</p>
+<p>{{ _("Render supplies the hosting infrastructure and may use authorized subprocessors. Its privacy information also describes its own processing of service-usage data. The published subprocessor list is linked below; it is not a statement that every listed provider receives every visitor record.") }}</p>
+<p>{{ _("Render’s published DPA describes transfers outside the EEA, using the EU–US Data Privacy Framework where applicable and EU Standard Contractual Clauses as fallback. Frankfurt does not establish EU-only processing. Information or copies of applicable safeguards can be requested through the contact above.") }}</p>
+<p>{{ _("Provider-log retention is separate from the application’s 30-minute visit rule. Render documents seven-day dashboard log availability for Hobby workspaces. This does not establish the actual retention of all infrastructure, security or usage records, which must be confirmed for the hosting account; database deletion does not erase provider logs.") }}</p>
+<aside class="privacy-pending hosting-verification" aria-labelledby="hosting-check"><h3 id="hosting-check">{{ _("Hosting account verification") }}</h3><p>{{ _("The account-specific Render agreement, operative transfer safeguards and full provider-log retention have not been independently checked. These external account facts still need verification before public launch; the operator details, Frankfurt selection and application deletion rules above are already confirmed.") }}</p></aside>
+</section>
+<section aria-labelledby="legal-section-9"><h2 id="legal-section-9">{{ _("9. Contact by email") }}</h2>
+<p>{{ _("If you email me, I process your address, message and voluntarily included information to answer the inquiry. Correspondence uses the confirmed iCloud contact mailbox and is outside SQLite cleanup. Apple describes international processing, including in the United States. The mailbox’s account-specific terms and applicable processing and transfer arrangements have not been independently verified. See Apple’s privacy information below.") }}</p>
+<p>{{ _("The basis for answering inquiries is Article 6(1)(f) GDPR; Article 6(1)(c) applies where a specific legal obligation requires processing, for example handling a rights request. Retention criteria are resolution of the inquiry, necessary follow-up and any specific applicable legal obligation. Correspondence needs manual mailbox management; no automatic email deletion is implemented and the application cannot delete provider backups.") }}</p>
+</section>
+<section aria-labelledby="legal-section-10"><h2 id="legal-section-10">{{ _("10. Your rights") }}</h2>
+<p>{{ _("Subject to the applicable conditions, you can request access, correction, erasure and restriction. Data portability applies where Article 20 GDPR’s conditions are met. You can object, for reasons relating to your situation, to processing based on legitimate interests. Contact me using the details above. A nickname alone may not identify your visit; only necessary verification information will be requested. Never send session cookies or security tokens. Data already deleted cannot be restored for a request.") }}</p>
+<p>{{ _("You can complain to a competent supervisory authority, including where you live or work. In Lower Saxony, see Der Landesbeauftragte für den Datenschutz Niedersachsen.") }}</p>
+</section>
+<section aria-labelledby="legal-section-11"><h2 id="legal-section-11">{{ _("11. External resources and changes") }}</h2>
+<p>{{ _("The reviewed release uses local learning assets and contains no embedded background music, advertising or analytics trackers. Following an external link takes you to that provider and its privacy practices. Changes to hosting or data handling require a corresponding review of this notice.") }}</p>
+</section>
+<section aria-labelledby="legal-sources"><h2 id="legal-sources">{{ _("Further information") }}</h2><ul class="privacy-sources">
+<li><a href="https://render.com/dpa">{{ _("Render data-processing addendum") }}</a></li>
+<li><a href="https://render.com/security">{{ _("Render security and subprocessors") }}</a></li>
+<li><a href="https://render.com/privacy">{{ _("Render privacy information") }}</a></li>
+<li><a href="https://render.com/docs/free">{{ _("Render Free storage limitations") }}</a></li>
+<li><a href="https://render.com/docs/logging">{{ _("Render log information") }}</a></li>
+<li><a href="https://www.apple.com/legal/privacy/">{{ _("Apple privacy information") }}</a></li>
+<li><a href="https://www.lfd.niedersachsen.de/beschwerde">{{ _("Data protection complaints in Lower Saxony") }}</a></li>
+</ul></section>
+{% endblock %}

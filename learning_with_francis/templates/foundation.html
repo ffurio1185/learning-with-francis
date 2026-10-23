@@ -10,13 +10,16 @@
     <title>Learning with Francis</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='phase2.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='privacy.css') }}">
 </head>
 <body>
     <main>
     {% set language_form_id = 'welcome-form' if setup_ready and not visit else none %}
     {% if visit or not setup_ready %}{% include '_language_controls.html' %}{% endif %}
         <h1>Learning with Francis</h1>
+        {% include '_privacy_link.html' %}
         {% include '_demo_notice.html' %}
+        <p class="visit-help">{{ _('Learning data is temporary. After %(minutes)s minutes without a successful learning request, this visit expires. Cleanup runs at startup and on later learning requests, so it can be delayed while the server sleeps. Closing the browser does not reliably end a visit.', minutes=visit_idle_minutes) }}</p>
         {% if setup_ready %}
         {% for message in get_flashed_messages() %}
         <p class="visit-notice" role="status">{{ message }}</p>
@@ -25,7 +28,7 @@
         {% if visit %}
         <h2>{{ _('Welcome to Learning with Francis, %(name)s!', name=visit.display_name) }}</h2>
         <p id="visit-started">{{ _('Current visit started:') }} {{ local_time(visit.started_at) }} (Europe/Berlin).</p>
-        <p>{{ _('This visit has its own progress. Finishing a visit keeps its records but removes access from this browser.') }}</p>
+        <p>{{ _('This visit has its own progress. End Visit or Start New Visit deletes this visit and its learning data.') }}</p>
         <p class="visit-help">{{ _('Opening another tab continues this visit. Choose Start New Visit below to begin again with zero practice and quiz activity.') }}</p>
         <section aria-labelledby="progress-heading">
             <h2 id="progress-heading">{{ _('Your learning subjects') }}</h2>

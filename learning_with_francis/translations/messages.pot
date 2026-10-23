@@ -1,15 +1,14 @@
-# Translations template for Learning with Francis.
-# Copyright (C) 2026 Francis Furio
-# This file is distributed under the same license as the Learning with
-# Francis project.
+# Translations template for PROJECT.
+# Copyright (C) 2026 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2026.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: Learning with Francis VERSION\n"
+"Project-Id-Version: PROJECT VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2026-10-22 22:29+0200\n"
+"POT-Creation-Date: 2026-10-23 21:36+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,42 +17,46 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.18.0\n"
 
-#: learning_with_francis/__init__.py:79
+#: learning_with_francis/__init__.py:64
+msgid "Your visit expired or ended. Start a new visit to continue."
+msgstr ""
+
+#: learning_with_francis/__init__.py:110
 msgid "You do not have access to this page."
 msgstr ""
 
-#: learning_with_francis/__init__.py:80
+#: learning_with_francis/__init__.py:111
 msgid "This page or result is not available for your visit."
 msgstr ""
 
-#: learning_with_francis/__init__.py:81
+#: learning_with_francis/__init__.py:112
 msgid "This action is not available with that request method."
 msgstr ""
 
-#: learning_with_francis/__init__.py:82 learning_with_francis/learning.py:115
+#: learning_with_francis/__init__.py:113 learning_with_francis/learning.py:117
 msgid "This form was already submitted with different answers. Use Try Again."
 msgstr ""
 
-#: learning_with_francis/__init__.py:83
+#: learning_with_francis/__init__.py:114
 msgid "This submission is too large. Please submit a smaller form."
 msgstr ""
 
-#: learning_with_francis/__init__.py:86
+#: learning_with_francis/__init__.py:117
 msgid "The request could not be processed. Please try again."
 msgstr ""
 
-#: learning_with_francis/__init__.py:101 learning_with_francis/__init__.py:114
+#: learning_with_francis/__init__.py:142 learning_with_francis/__init__.py:155
 #: learning_with_francis/i18n.py:49 learning_with_francis/i18n.py:59
-#: learning_with_francis/learning.py:170 learning_with_francis/learning.py:200
+#: learning_with_francis/learning.py:172 learning_with_francis/learning.py:202
 msgid "This form has expired. Please try again."
 msgstr ""
 
-#: learning_with_francis/__init__.py:119
+#: learning_with_francis/__init__.py:160
 msgid "Start a fresh visit below."
 msgstr ""
 
-#: learning_with_francis/__init__.py:119
-msgid "Your visit has ended. Your saved history is retained."
+#: learning_with_francis/__init__.py:160
+msgid "Your visit has ended. Your learning data has been deleted."
 msgstr ""
 
 #: learning_with_francis/i18n.py:53
@@ -72,41 +75,41 @@ msgstr ""
 msgid "Completed"
 msgstr ""
 
-#: learning_with_francis/learning.py:68
+#: learning_with_francis/learning.py:70
 msgid "This activity form has expired or is invalid. Please open it again."
 msgstr ""
 
-#: learning_with_francis/learning.py:73
+#: learning_with_francis/learning.py:75
 msgid ""
 "This activity form belongs to a different visit or activity. Please open "
 "it again."
 msgstr ""
 
-#: learning_with_francis/learning.py:84
+#: learning_with_francis/learning.py:86
 msgid "Please submit answers only for this activity's questions."
 msgstr ""
 
-#: learning_with_francis/learning.py:88
+#: learning_with_francis/learning.py:90
 msgid "Please choose one listed answer for every question."
 msgstr ""
 
-#: learning_with_francis/learning.py:204
+#: learning_with_francis/learning.py:206
 msgid "This practice question is invalid. Please start again."
 msgstr ""
 
-#: learning_with_francis/learning.py:206
+#: learning_with_francis/learning.py:208
 msgid "This form does not match the displayed question. Please try again."
 msgstr ""
 
-#: learning_with_francis/learning.py:212
+#: learning_with_francis/learning.py:214
 msgid "Please answer the earlier practice questions first."
 msgstr ""
 
-#: learning_with_francis/learning.py:248
+#: learning_with_francis/learning.py:250
 msgid "This practice form has expired or is invalid. Please start again."
 msgstr ""
 
-#: learning_with_francis/learning.py:254
+#: learning_with_francis/learning.py:256
 msgid ""
 "This practice form belongs to a different visit or round. Please start "
 "again."
@@ -1094,21 +1097,61 @@ msgstr ""
 msgid "Basic ERP concepts and business-process scenarios"
 msgstr ""
 
-#: learning_with_francis/templates/foundation.html:48
-#: learning_with_francis/visitors.py:13
+#: learning_with_francis/templates/foundation.html:52
+#: learning_with_francis/visitors.py:16
 msgid "Please enter your name."
 msgstr ""
 
-#: learning_with_francis/visitors.py:16
+#: learning_with_francis/visitors.py:19
 msgid "Please enter a name between 1 and 50 characters."
 msgstr ""
 
-#: learning_with_francis/visitors.py:21
+#: learning_with_francis/visitors.py:24
 msgid "Use letters, spaces, apostrophes or hyphens for your name."
+msgstr ""
+
+#: learning_with_francis/templates/_demo_notice.html:2
+#: learning_with_francis/templates/_demo_notice.html:3
+msgid "Public learning demonstration"
+msgstr ""
+
+#: learning_with_francis/templates/_demo_notice.html:4
+msgid ""
+"Learning with Francis is an evolving learning project. Progress is stored"
+" temporarily and may be lost when the service sleeps, restarts or is "
+"redeployed."
+msgstr ""
+
+#: learning_with_francis/templates/_demo_notice.html:5
+msgid "Please use a nickname and do not rely on this demo to keep your results."
 msgstr ""
 
 #: learning_with_francis/templates/_language_controls.html:5
 msgid "Language"
+msgstr ""
+
+#: learning_with_francis/templates/_operator_contact.html:5
+msgid "Germany"
+msgstr ""
+
+#: learning_with_francis/templates/_operator_contact.html:6
+msgid "Email:"
+msgstr ""
+
+#: learning_with_francis/templates/_privacy_link.html:1
+msgid "Legal information"
+msgstr ""
+
+#: learning_with_francis/templates/_privacy_link.html:2
+#: learning_with_francis/templates/privacy.html:2
+#: learning_with_francis/templates/privacy.html:3
+msgid "Privacy Policy"
+msgstr ""
+
+#: learning_with_francis/templates/_privacy_link.html:3
+#: learning_with_francis/templates/impressum.html:2
+#: learning_with_francis/templates/impressum.html:3
+msgid "Impressum"
 msgstr ""
 
 #: learning_with_francis/templates/_time.html:4
@@ -1136,8 +1179,8 @@ msgid ""
 "End Visit before handing this browser to someone else. Closing and "
 "reopening the browser may restore this visit. Start New Visit ends it and"
 " asks for a name again, then creates a new identity with zero activity "
-"and all four subjects Still Learning. Previous results stay saved and "
-"cannot be recovered by entering the same name."
+"and all four subjects Still Learning. Previous learning data is deleted "
+"and cannot be recovered by entering the same name."
 msgstr ""
 
 #: learning_with_francis/templates/cover.html:7
@@ -1150,126 +1193,136 @@ msgstr ""
 msgid "Welcome"
 msgstr ""
 
-#: learning_with_francis/templates/cover.html:19
+#: learning_with_francis/templates/cover.html:20
 msgid "A little curiosity. A world of possibility."
 msgstr ""
 
-#: learning_with_francis/templates/cover.html:20
+#: learning_with_francis/templates/cover.html:21
 msgid "Welcome to"
 msgstr ""
 
-#: learning_with_francis/templates/cover.html:21
+#: learning_with_francis/templates/cover.html:22
 msgid "Learn something new."
 msgstr ""
 
-#: learning_with_francis/templates/cover.html:21
+#: learning_with_francis/templates/cover.html:22
 msgid "Build understanding, one step at a time."
 msgstr ""
 
-#: learning_with_francis/templates/cover.html:23
+#: learning_with_francis/templates/cover.html:24
 msgid "ENTER"
 msgstr ""
 
-#: learning_with_francis/templates/cover.html:27
+#: learning_with_francis/templates/cover.html:28
 msgid "Your space to learn, practise & grow."
 msgstr ""
 
-#: learning_with_francis/templates/cover.html:29
+#: learning_with_francis/templates/cover.html:30
 msgid "Discover the project"
 msgstr ""
 
-#: learning_with_francis/templates/cover.html:35
+#: learning_with_francis/templates/cover.html:37
 msgid "About Learning with Francis"
 msgstr ""
 
-#: learning_with_francis/templates/cover.html:36
+#: learning_with_francis/templates/cover.html:38
 msgid ""
 "Learning with Francis is an interactive learning platform designed to "
 "make learning more organized, engaging, and meaningful."
 msgstr ""
 
-#: learning_with_francis/templates/cover.html:37
+#: learning_with_francis/templates/cover.html:39
 msgid ""
 "What began as a personal learning progress tracker in Version 1 has "
 "evolved into an interactive learning experience in Version 2, featuring "
 "lessons, practice exercises, quizzes, and personal progress tracking."
 msgstr ""
 
-#: learning_with_francis/templates/cover.html:38
+#: learning_with_francis/templates/cover.html:40
 msgid ""
 "This project continues to grow alongside its creator’s learning journey, "
 "with new ideas and opportunities for future development."
 msgstr ""
 
-#: learning_with_francis/templates/cover.html:39
+#: learning_with_francis/templates/cover.html:41
+#: learning_with_francis/templates/impressum.html:10
 msgid "Concept, Design & Development by Francis Furio"
 msgstr ""
 
-#: learning_with_francis/templates/foundation.html:25
+#: learning_with_francis/templates/foundation.html:22
+#, python-format
+msgid ""
+"Learning data is temporary. After %(minutes)s minutes without a "
+"successful learning request, this visit expires. Cleanup runs at startup "
+"and on later learning requests, so it can be delayed while the server "
+"sleeps. Closing the browser does not reliably end a visit."
+msgstr ""
+
+#: learning_with_francis/templates/foundation.html:29
 #, python-format
 msgid "Welcome to Learning with Francis, %(name)s!"
 msgstr ""
 
-#: learning_with_francis/templates/foundation.html:26
-#: learning_with_francis/templates/progress.html:26
+#: learning_with_francis/templates/foundation.html:30
+#: learning_with_francis/templates/progress.html:28
 msgid "Current visit started:"
 msgstr ""
 
-#: learning_with_francis/templates/foundation.html:27
+#: learning_with_francis/templates/foundation.html:31
 msgid ""
-"This visit has its own progress. Finishing a visit keeps its records but "
-"removes access from this browser."
+"This visit has its own progress. End Visit or Start New Visit deletes "
+"this visit and its learning data."
 msgstr ""
 
-#: learning_with_francis/templates/foundation.html:28
+#: learning_with_francis/templates/foundation.html:32
 msgid ""
 "Opening another tab continues this visit. Choose Start New Visit below to"
 " begin again with zero practice and quiz activity."
 msgstr ""
 
-#: learning_with_francis/templates/foundation.html:30
+#: learning_with_francis/templates/foundation.html:34
 msgid "Your learning subjects"
 msgstr ""
 
-#: learning_with_francis/templates/foundation.html:31
-#: learning_with_francis/templates/learning_base.html:18
-#: learning_with_francis/templates/progress.html:21
+#: learning_with_francis/templates/foundation.html:35
+#: learning_with_francis/templates/learning_base.html:20
 #: learning_with_francis/templates/progress.html:23
+#: learning_with_francis/templates/progress.html:25
 msgid "My Progress"
 msgstr ""
 
-#: learning_with_francis/templates/foundation.html:31
+#: learning_with_francis/templates/foundation.html:35
 msgid "— view your statuses, practice counts, quiz scores and history."
 msgstr ""
 
-#: learning_with_francis/templates/foundation.html:35
+#: learning_with_francis/templates/foundation.html:39
 #, python-format
 msgid "Open %(subject)s lesson"
 msgstr ""
 
-#: learning_with_francis/templates/foundation.html:42
+#: learning_with_francis/templates/foundation.html:46
 msgid "Start your learning visit"
 msgstr ""
 
-#: learning_with_francis/templates/foundation.html:43
+#: learning_with_francis/templates/foundation.html:47
 msgid ""
 "Enter a temporary name for greetings. No account, login or registration "
 "is needed."
 msgstr ""
 
-#: learning_with_francis/templates/foundation.html:47
+#: learning_with_francis/templates/foundation.html:51
 msgid "Your name"
 msgstr ""
 
-#: learning_with_francis/templates/foundation.html:51
+#: learning_with_francis/templates/foundation.html:55
 msgid "Use 1–50 characters: letters, spaces, apostrophes or hyphens."
 msgstr ""
 
-#: learning_with_francis/templates/foundation.html:52
+#: learning_with_francis/templates/foundation.html:56
 msgid "Start Visit"
 msgstr ""
 
-#: learning_with_francis/templates/foundation.html:55
+#: learning_with_francis/templates/foundation.html:59
 msgid ""
 "Progress belongs to this browser visit, not your name. Tabs in the same "
 "browser share a visit. Use End Visit before handing the browser to "
@@ -1277,32 +1330,55 @@ msgid ""
 "Old visits cannot be reopened by entering a name."
 msgstr ""
 
-#: learning_with_francis/templates/foundation.html:57
+#: learning_with_francis/templates/foundation.html:61
 msgid ""
 "SQL, Python, JavaScript and SAP each have a beginner lesson, ten practice"
 " questions and a five-question quiz available during a visit."
 msgstr ""
 
-#: learning_with_francis/templates/foundation.html:58
+#: learning_with_francis/templates/foundation.html:62
 msgid "Available subjects"
 msgstr ""
 
-#: learning_with_francis/templates/foundation.html:65
+#: learning_with_francis/templates/foundation.html:69
 msgid "Database setup is needed before this application is ready."
 msgstr ""
 
-#: learning_with_francis/templates/foundation.html:66
+#: learning_with_francis/templates/foundation.html:70
 msgid "Follow the setup instructions in"
 msgstr ""
 
+#: learning_with_francis/templates/impressum.html:5
+msgid "Operator and contact"
+msgstr ""
+
+#: learning_with_francis/templates/impressum.html:8
+msgid "About this website"
+msgstr ""
+
+#: learning_with_francis/templates/impressum.html:9
+msgid ""
+"Learning with Francis is Francis Furio’s personal, free, noncommercial "
+"educational project, developed during his DCI training. It offers "
+"learning material and interactive exercises for SQL, Python, JavaScript "
+"and SAP."
+msgstr ""
+
+#: learning_with_francis/templates/impressum.html:11
+msgid ""
+"Information about personal-data processing is available through the "
+"Privacy Policy link below."
+msgstr ""
+
 #: learning_with_francis/templates/interface_error.html:5
-#: learning_with_francis/templates/interface_error.html:11
+#: learning_with_francis/templates/interface_error.html:12
 msgid "Request error"
 msgstr ""
 
-#: learning_with_francis/templates/interface_error.html:13
-#: learning_with_francis/templates/learning_base.html:17
-#: learning_with_francis/templates/progress.html:20
+#: learning_with_francis/templates/interface_error.html:14
+#: learning_with_francis/templates/learning_base.html:19
+#: learning_with_francis/templates/legal_base.html:17
+#: learning_with_francis/templates/progress.html:22
 msgid "Learning home"
 msgstr ""
 
@@ -1311,26 +1387,38 @@ msgstr ""
 msgid "%(subject)s learning"
 msgstr ""
 
-#: learning_with_francis/templates/learning_base.html:16
-#: learning_with_francis/templates/progress.html:19
+#: learning_with_francis/templates/learning_base.html:18
+#: learning_with_francis/templates/progress.html:21
 msgid "Learning navigation"
 msgstr ""
 
-#: learning_with_francis/templates/learning_base.html:19
+#: learning_with_francis/templates/learning_base.html:21
 #, python-format
 msgid "%(subject)s lesson"
 msgstr ""
 
-#: learning_with_francis/templates/learning_base.html:24
+#: learning_with_francis/templates/learning_base.html:26
 msgid ""
 "A score records practice, not understanding. Your topic stays unchanged. "
 "Completed always requires your personal confirmation."
 msgstr ""
 
-#: learning_with_francis/templates/learning_base.html:25
+#: learning_with_francis/templates/learning_base.html:27
 msgid ""
 "Dates use German local time (Europe/Berlin), including daylight saving "
 "time: CET in winter and CEST in summer."
+msgstr ""
+
+#: learning_with_francis/templates/legal_base.html:15
+msgid "Legal page navigation"
+msgstr ""
+
+#: learning_with_francis/templates/legal_base.html:16
+msgid "Welcome page"
+msgstr ""
+
+#: learning_with_francis/templates/legal_base.html:20
+msgid "Last updated: 23 October 2026."
 msgstr ""
 
 #: learning_with_francis/templates/practice_complete.html:2
@@ -1371,47 +1459,387 @@ msgstr ""
 msgid "Review the lesson and activity history"
 msgstr ""
 
+#: learning_with_francis/templates/privacy.html:5
+msgid "1. Who is responsible?"
+msgstr ""
+
+#: learning_with_francis/templates/privacy.html:7
+msgid ""
+"I operate Learning with Francis personally as a noncommercial educational"
+" project developed during my DCI training. It offers SQL, Python, "
+"JavaScript and SAP lessons, practice exercises, quizzes and a personal "
+"learning tracker. No account, password or registration is required. "
+"Please choose a nickname rather than your real name."
+msgstr ""
+
+#: learning_with_francis/templates/privacy.html:9
+msgid "2. What information does the application use?"
+msgstr ""
+
+#: learning_with_francis/templates/privacy.html:11
+msgid ""
+"Your chosen nickname, a randomly generated visit ID, and visit start and "
+"last-activity times."
+msgstr ""
+
+#: learning_with_francis/templates/privacy.html:12
+msgid ""
+"Submitted practice and quiz answers, correctness, scores, "
+"question/subject references, attempts and submission dates."
+msgstr ""
+
+#: learning_with_francis/templates/privacy.html:13
+msgid ""
+"Learning statuses, status changes and dates, including your personal "
+"completion confirmation and its timestamp."
+msgstr ""
+
+#: learning_with_francis/templates/privacy.html:14
+msgid ""
+"A signed Flask session cookie, including language and form-security "
+"information and sometimes temporary name or answer drafts during a "
+"language change."
+msgstr ""
+
+#: learning_with_francis/templates/privacy.html:16
+msgid ""
+"A nickname does not make the records anonymous. Different visitors, "
+"including those with the same nickname, receive separate random "
+"identities. A nickname cannot retrieve an earlier visit. The learning "
+"database has no visitor email, postal-address or IP-address fields. "
+"Connection information required to deliver the website is described under"
+" hosting below."
+msgstr ""
+
+#: learning_with_francis/templates/privacy.html:17
+msgid ""
+"Providing a nickname and submitting answers is voluntary. A nickname is "
+"required to start an interactive visit; without a visit its personal "
+"learning features are unavailable. There is no legal obligation to "
+"provide this learning information."
+msgstr ""
+
+#: learning_with_francis/templates/privacy.html:19
+msgid "3. Purposes and legal basis"
+msgstr ""
+
+#: learning_with_francis/templates/privacy.html:20
+msgid ""
+"It provides personalized greetings, checks your answers, displays "
+"explanations and feedback, keeps your progress and history available "
+"during an active visit, separates visitors and protects forms. A perfect "
+"score never automatically marks a subject Completed: your explicit "
+"personal confirmation is required. Scores are learning feedback, with no "
+"official grading, certification or legal or similarly significant "
+"decision about you."
+msgstr ""
+
+#: learning_with_francis/templates/privacy.html:21
+msgid ""
+"Legal basis: Article 6(1)(f) GDPR, the legitimate interests in providing "
+"and securing this voluntary free learning service. The processing "
+"supports your temporary visit and its requested learning features, with "
+"separate random identities, minimal data, end-of-visit deletion and an "
+"inactivity limit. No advertising profiles or accounts are created. Your "
+"personal confirmation of understanding is a learning choice, not GDPR "
+"consent."
+msgstr ""
+
+#: learning_with_francis/templates/privacy.html:23
+msgid "4. Cookies and browser sessions"
+msgstr ""
+
+#: learning_with_francis/templates/privacy.html:24
+msgid ""
+"The cookie learning_with_francis_visit supports the visit ID, selected "
+"language, security tokens, interface messages and possible temporary "
+"input drafts. The cover page can set it for language/security forms "
+"before a database visit is created. A database visit starts after a "
+"successful Start Visit submission."
+msgstr ""
+
+#: learning_with_francis/templates/privacy.html:25
+msgid ""
+"The cookie is signed against tampering, not encrypted. Production "
+"configuration uses HTTPS-only (Secure), HttpOnly and SameSite=Lax "
+"protections. The existing 12-hour signature-age window is renewed on "
+"successful learning requests; it is separate from the shorter inactivity "
+"rule below. Activity forms retain their own 12-hour token limit. Browsers"
+" may restore session cookies after closing and reopening. Disabling "
+"cookies prevents reliable use of the interactive visit features."
+msgstr ""
+
+#: learning_with_francis/templates/privacy.html:26
+msgid ""
+"The cookie supports the necessary visit and security functions and your "
+"requested language selection. Necessary storage and access for these "
+"functions are assessed under §25(2)(2) TDDDG, separately from the GDPR "
+"legal basis. The application includes no optional advertising or "
+"analytics cookies."
+msgstr ""
+
+#: learning_with_francis/templates/privacy.html:28
+msgid "5. End Visit and Start New Visit"
+msgstr ""
+
+#: learning_with_francis/templates/privacy.html:29
+msgid ""
+"After a successful End Visit request, the application deletes that "
+"visit’s nickname, visitor row, answers, attempts, scores, progress, "
+"completion confirmations and learning/status history in one database "
+"transaction. Other visitors and shared learning content are unaffected. "
+"The browser session is cleared using the existing mechanism; the selected"
+" language can remain."
+msgstr ""
+
+#: learning_with_francis/templates/privacy.html:30
+msgid ""
+"Start New Visit performs the same deletion before returning to name "
+"entry. A valid direct replacement also deletes the old visit and creates "
+"a fresh identity with zero activity and all four subjects Still Learning."
+" Failed or invalid requests do not falsely report a successful deletion. "
+"Ended or deleted progress cannot be recovered by re-entering a nickname, "
+"an old cookie or a saved result link."
+msgstr ""
+
+#: learning_with_francis/templates/privacy.html:32
+msgid "6. The 30-minute inactivity rule"
+msgstr ""
+
+#: learning_with_francis/templates/privacy.html:33
+msgid ""
+"A visit expires after 30 minutes without a successful server-side "
+"learning request. This is not a maximum learning duration. Opening a "
+"lesson, requesting a practice/quiz page, submitting valid answers or "
+"using My Progress can renew the period while the visit is still active. "
+"Successful learning-home and owned-result requests also qualify."
+msgstr ""
+
+#: learning_with_francis/templates/privacy.html:34
+msgid ""
+"Simply reading an already open page, selecting an answer or filtering "
+"rows locally does not send a qualifying request. Cover/privacy pages, "
+"static files, health checks and invalid submissions do not renew the "
+"period. A language-preference request alone does not renew it; a "
+"successful learning-page request after switching languages does."
+msgstr ""
+
+#: learning_with_francis/templates/privacy.html:35
+msgid ""
+"Expired records are deleted at application startup and during subsequent "
+"learning or visit requests. Expiration is checked before activity "
+"renewal, so an expired visit cannot be revived. There is no exact "
+"30-minute physical-deletion guarantee: if Render is asleep or no "
+"qualifying cleanup check runs, expired rows can remain until execution "
+"resumes and cleanup runs. Closing a browser or leaving a page cannot "
+"reliably be detected and does not guarantee immediate deletion. Use End "
+"Visit when finished."
+msgstr ""
+
+#: learning_with_francis/templates/privacy.html:37
+msgid "7. Temporary SQLite storage"
+msgstr ""
+
+#: learning_with_francis/templates/privacy.html:38
+msgid ""
+"Learning data is held in SQLite on Render Free’s temporary filesystem. It"
+" can disappear earlier on a restart, redeployment, spin-down or instance "
+"replacement. The application offers no progress recovery or production "
+"learning-record backup service. Deleting database rows does not guarantee"
+" secure erasure of provider logs, storage snapshots, browser copies or "
+"messages you send separately."
+msgstr ""
+
+#: learning_with_francis/templates/privacy.html:40
+msgid "8. Hosting, technical logs and international processing"
+msgstr ""
+
+#: learning_with_francis/templates/privacy.html:41
+msgid ""
+"The planned host is Render Services, Inc.; the configured application "
+"region is Frankfurt, Germany. Hosting necessarily processes connection "
+"data such as your IP address and requested resource. Technical "
+"diagnostics may include request information and error/runtime logs. The "
+"reviewed start command does not enable Gunicorn access logging; this does"
+" not establish that Render has no separate infrastructure or security "
+"logs."
+msgstr ""
+
+#: learning_with_francis/templates/privacy.html:42
+msgid ""
+"Render supplies the hosting infrastructure and may use authorized "
+"subprocessors. Its privacy information also describes its own processing "
+"of service-usage data. The published subprocessor list is linked below; "
+"it is not a statement that every listed provider receives every visitor "
+"record."
+msgstr ""
+
+#: learning_with_francis/templates/privacy.html:43
+msgid ""
+"Render’s published DPA describes transfers outside the EEA, using the "
+"EU–US Data Privacy Framework where applicable and EU Standard Contractual"
+" Clauses as fallback. Frankfurt does not establish EU-only processing. "
+"Information or copies of applicable safeguards can be requested through "
+"the contact above."
+msgstr ""
+
+#: learning_with_francis/templates/privacy.html:44
+msgid ""
+"Provider-log retention is separate from the application’s 30-minute visit"
+" rule. Render documents seven-day dashboard log availability for Hobby "
+"workspaces. This does not establish the actual retention of all "
+"infrastructure, security or usage records, which must be confirmed for "
+"the hosting account; database deletion does not erase provider logs."
+msgstr ""
+
+#: learning_with_francis/templates/privacy.html:45
+msgid "Hosting account verification"
+msgstr ""
+
+#: learning_with_francis/templates/privacy.html:45
+msgid ""
+"The account-specific Render agreement, operative transfer safeguards and "
+"full provider-log retention have not been independently checked. These "
+"external account facts still need verification before public launch; the "
+"operator details, Frankfurt selection and application deletion rules "
+"above are already confirmed."
+msgstr ""
+
+#: learning_with_francis/templates/privacy.html:47
+msgid "9. Contact by email"
+msgstr ""
+
+#: learning_with_francis/templates/privacy.html:48
+msgid ""
+"If you email me, I process your address, message and voluntarily included"
+" information to answer the inquiry. Correspondence uses the confirmed "
+"iCloud contact mailbox and is outside SQLite cleanup. Apple describes "
+"international processing, including in the United States. The mailbox’s "
+"account-specific terms and applicable processing and transfer "
+"arrangements have not been independently verified. See Apple’s privacy "
+"information below."
+msgstr ""
+
+#: learning_with_francis/templates/privacy.html:49
+msgid ""
+"The basis for answering inquiries is Article 6(1)(f) GDPR; Article "
+"6(1)(c) applies where a specific legal obligation requires processing, "
+"for example handling a rights request. Retention criteria are resolution "
+"of the inquiry, necessary follow-up and any specific applicable legal "
+"obligation. Correspondence needs manual mailbox management; no automatic "
+"email deletion is implemented and the application cannot delete provider "
+"backups."
+msgstr ""
+
+#: learning_with_francis/templates/privacy.html:51
+msgid "10. Your rights"
+msgstr ""
+
+#: learning_with_francis/templates/privacy.html:52
+msgid ""
+"Subject to the applicable conditions, you can request access, correction,"
+" erasure and restriction. Data portability applies where Article 20 "
+"GDPR’s conditions are met. You can object, for reasons relating to your "
+"situation, to processing based on legitimate interests. Contact me using "
+"the details above. A nickname alone may not identify your visit; only "
+"necessary verification information will be requested. Never send session "
+"cookies or security tokens. Data already deleted cannot be restored for a"
+" request."
+msgstr ""
+
+#: learning_with_francis/templates/privacy.html:53
+msgid ""
+"You can complain to a competent supervisory authority, including where "
+"you live or work. In Lower Saxony, see Der Landesbeauftragte für den "
+"Datenschutz Niedersachsen."
+msgstr ""
+
+#: learning_with_francis/templates/privacy.html:55
+msgid "11. External resources and changes"
+msgstr ""
+
+#: learning_with_francis/templates/privacy.html:56
+msgid ""
+"The reviewed release uses local learning assets and contains no embedded "
+"background music, advertising or analytics trackers. Following an "
+"external link takes you to that provider and its privacy practices. "
+"Changes to hosting or data handling require a corresponding review of "
+"this notice."
+msgstr ""
+
+#: learning_with_francis/templates/privacy.html:58
+msgid "Further information"
+msgstr ""
+
+#: learning_with_francis/templates/privacy.html:59
+msgid "Render data-processing addendum"
+msgstr ""
+
+#: learning_with_francis/templates/privacy.html:60
+msgid "Render security and subprocessors"
+msgstr ""
+
+#: learning_with_francis/templates/privacy.html:61
+msgid "Render privacy information"
+msgstr ""
+
+#: learning_with_francis/templates/privacy.html:62
+msgid "Render Free storage limitations"
+msgstr ""
+
+#: learning_with_francis/templates/privacy.html:63
+msgid "Render log information"
+msgstr ""
+
+#: learning_with_francis/templates/privacy.html:64
+msgid "Apple privacy information"
+msgstr ""
+
+#: learning_with_francis/templates/privacy.html:65
+msgid "Data protection complaints in Lower Saxony"
+msgstr ""
+
 #: learning_with_francis/templates/progress.html:10
 msgid "My Progress — Learning with Francis"
 msgstr ""
 
-#: learning_with_francis/templates/progress.html:25
+#: learning_with_francis/templates/progress.html:27
 msgid ""
 "These records belong only to your current visit. Starting a new visit "
 "creates fresh progress."
 msgstr ""
 
-#: learning_with_francis/templates/progress.html:27
+#: learning_with_francis/templates/progress.html:29
 msgid ""
 "Opening another tab or returning to this page continues the same visit. "
 "Tabs in the same browser profile share progress. To begin with zero "
 "activity, choose Start New Visit and enter your name again."
 msgstr ""
 
-#: learning_with_francis/templates/progress.html:35
+#: learning_with_francis/templates/progress.html:37
 msgid "Your learning summary"
 msgstr ""
 
-#: learning_with_francis/templates/progress.html:42
-#: learning_with_francis/templates/progress.html:64
+#: learning_with_francis/templates/progress.html:44
+#: learning_with_francis/templates/progress.html:66
 #: learning_with_francis/templates/sql_lesson.html:43
 #: learning_with_francis/templates/subject_lesson.html:81
 msgid "Practice attempts"
 msgstr ""
 
-#: learning_with_francis/templates/progress.html:43
-#: learning_with_francis/templates/progress.html:64
+#: learning_with_francis/templates/progress.html:45
+#: learning_with_francis/templates/progress.html:66
 msgid "Completed exercises"
 msgstr ""
 
-#: learning_with_francis/templates/progress.html:44
-#: learning_with_francis/templates/progress.html:64
+#: learning_with_francis/templates/progress.html:46
+#: learning_with_francis/templates/progress.html:66
 #: learning_with_francis/templates/sql_lesson.html:45
 #: learning_with_francis/templates/subject_lesson.html:83
 msgid "Quiz attempts"
 msgstr ""
 
-#: learning_with_francis/templates/progress.html:46
+#: learning_with_francis/templates/progress.html:48
 msgid ""
 "Totals cover all four subjects, regardless of the filter. Each checked "
 "practice answer is one attempt; each correct practice answer is a "
@@ -1419,196 +1847,196 @@ msgid ""
 "counts once, regardless of its five answers."
 msgstr ""
 
-#: learning_with_francis/templates/progress.html:47
+#: learning_with_francis/templates/progress.html:49
 msgid ""
 "Scores record activity, not understanding. Only you can confirm when you "
 "understand a topic and want to mark it Completed."
 msgstr ""
 
-#: learning_with_francis/templates/progress.html:51
+#: learning_with_francis/templates/progress.html:53
 msgid "Your subjects and learning statuses"
 msgstr ""
 
-#: learning_with_francis/templates/progress.html:54
+#: learning_with_francis/templates/progress.html:56
 msgid "Filter by saved status"
 msgstr ""
 
-#: learning_with_francis/templates/progress.html:56
+#: learning_with_francis/templates/progress.html:58
 msgid "All"
 msgstr ""
 
-#: learning_with_francis/templates/progress.html:60
+#: learning_with_francis/templates/progress.html:62
 msgid "No topics match this filter"
 msgstr ""
 
-#: learning_with_francis/templates/progress.html:61
+#: learning_with_francis/templates/progress.html:63
 msgid "Subject progress table"
 msgstr ""
 
-#: learning_with_francis/templates/progress.html:63
+#: learning_with_francis/templates/progress.html:65
 msgid "Your saved progress, including subjects with no activity"
 msgstr ""
 
-#: learning_with_francis/templates/progress.html:64
+#: learning_with_francis/templates/progress.html:66
 msgid "Subject and learning links"
 msgstr ""
 
-#: learning_with_francis/templates/progress.html:64
+#: learning_with_francis/templates/progress.html:66
 msgid "Current status"
 msgstr ""
 
-#: learning_with_francis/templates/progress.html:64
+#: learning_with_francis/templates/progress.html:66
 msgid "Update status"
 msgstr ""
 
-#: learning_with_francis/templates/progress.html:70
+#: learning_with_francis/templates/progress.html:72
 msgid "Lesson"
 msgstr ""
 
-#: learning_with_francis/templates/progress.html:71
-#: learning_with_francis/templates/progress.html:112
+#: learning_with_francis/templates/progress.html:73
+#: learning_with_francis/templates/progress.html:114
 msgid "Practice"
 msgstr ""
 
-#: learning_with_francis/templates/progress.html:72
-#: learning_with_francis/templates/progress.html:112
+#: learning_with_francis/templates/progress.html:74
+#: learning_with_francis/templates/progress.html:114
 msgid "Quiz"
 msgstr ""
 
-#: learning_with_francis/templates/progress.html:75
+#: learning_with_francis/templates/progress.html:77
 msgid "Confirmed"
 msgstr ""
 
-#: learning_with_francis/templates/progress.html:80
+#: learning_with_francis/templates/progress.html:82
 msgid "Please confirm that you understand this topic."
 msgstr ""
 
-#: learning_with_francis/templates/progress.html:82
+#: learning_with_francis/templates/progress.html:84
 #, python-format
 msgid "New status for %(subject)s"
 msgstr ""
 
-#: learning_with_francis/templates/progress.html:88
+#: learning_with_francis/templates/progress.html:90
 msgid "I confirm that I understand this topic."
 msgstr ""
 
-#: learning_with_francis/templates/progress.html:90
+#: learning_with_francis/templates/progress.html:92
 msgid ""
 "Required for Completed. You can return to Needs Review or Still Learning "
 "at any time."
 msgstr ""
 
-#: learning_with_francis/templates/progress.html:92
+#: learning_with_francis/templates/progress.html:94
 msgid "Save"
 msgstr ""
 
-#: learning_with_francis/templates/progress.html:100
+#: learning_with_francis/templates/progress.html:102
 msgid "No learning topics recorded for this visit."
 msgstr ""
 
-#: learning_with_francis/templates/progress.html:104
+#: learning_with_francis/templates/progress.html:106
 msgid "Practice and quiz history"
 msgstr ""
 
-#: learning_with_francis/templates/progress.html:105
+#: learning_with_francis/templates/progress.html:107
 msgid ""
 "Saved activity, newest first. All dates use German local time "
 "(Europe/Berlin), including daylight saving time: CET in winter and CEST "
 "in summer. Open results to see your answers and explanations."
 msgstr ""
 
-#: learning_with_francis/templates/progress.html:107
+#: learning_with_francis/templates/progress.html:109
 msgid "Activity history"
 msgstr ""
 
-#: learning_with_francis/templates/progress.html:109
+#: learning_with_francis/templates/progress.html:111
 msgid "Your actual practice and quiz results"
 msgstr ""
 
-#: learning_with_francis/templates/progress.html:110
-#: learning_with_francis/templates/progress.html:128
+#: learning_with_francis/templates/progress.html:112
+#: learning_with_francis/templates/progress.html:130
 msgid "Date (Europe/Berlin)"
 msgstr ""
 
-#: learning_with_francis/templates/progress.html:110
-#: learning_with_francis/templates/progress.html:128
+#: learning_with_francis/templates/progress.html:112
+#: learning_with_francis/templates/progress.html:130
 msgid "Subject"
 msgstr ""
 
-#: learning_with_francis/templates/progress.html:110
+#: learning_with_francis/templates/progress.html:112
 msgid "Activity"
 msgstr ""
 
-#: learning_with_francis/templates/progress.html:110
+#: learning_with_francis/templates/progress.html:112
 msgid "Result"
 msgstr ""
 
-#: learning_with_francis/templates/progress.html:110
+#: learning_with_francis/templates/progress.html:112
 msgid "Answers"
 msgstr ""
 
-#: learning_with_francis/templates/progress.html:113
+#: learning_with_francis/templates/progress.html:115
 #, python-format
 msgid "%(score)s / %(total)s correct"
 msgstr ""
 
-#: learning_with_francis/templates/progress.html:113
+#: learning_with_francis/templates/progress.html:115
 msgid "Exercise completed"
 msgstr ""
 
-#: learning_with_francis/templates/progress.html:113
+#: learning_with_francis/templates/progress.html:115
 msgid "Try again"
 msgstr ""
 
-#: learning_with_francis/templates/progress.html:114
+#: learning_with_francis/templates/progress.html:116
 msgid "View results"
 msgstr ""
 
-#: learning_with_francis/templates/progress.html:118
+#: learning_with_francis/templates/progress.html:120
 msgid "No practice or quiz activity yet. Open a subject to get started."
 msgstr ""
 
-#: learning_with_francis/templates/progress.html:122
-#: learning_with_francis/templates/progress.html:125
+#: learning_with_francis/templates/progress.html:124
+#: learning_with_francis/templates/progress.html:127
 msgid "Learning-status history"
 msgstr ""
 
-#: learning_with_francis/templates/progress.html:123
+#: learning_with_francis/templates/progress.html:125
 msgid ""
 "Every new visit starts with four entries marked Visit started — Still "
 "Learning, one for each subject. These record your starting statuses, not "
 "practice, quiz attempts or completed exercises."
 msgstr ""
 
-#: learning_with_francis/templates/progress.html:127
+#: learning_with_francis/templates/progress.html:129
 msgid "Your initial statuses and later changes, newest first (Europe/Berlin)"
 msgstr ""
 
-#: learning_with_francis/templates/progress.html:128
+#: learning_with_francis/templates/progress.html:130
 msgid "Previous status"
 msgstr ""
 
-#: learning_with_francis/templates/progress.html:128
+#: learning_with_francis/templates/progress.html:130
 msgid "New status"
 msgstr ""
 
-#: learning_with_francis/templates/progress.html:128
+#: learning_with_francis/templates/progress.html:130
 msgid "Personal completion confirmation"
 msgstr ""
 
-#: learning_with_francis/templates/progress.html:130
+#: learning_with_francis/templates/progress.html:132
 msgid "Visit started"
 msgstr ""
 
-#: learning_with_francis/templates/progress.html:130
+#: learning_with_francis/templates/progress.html:132
 msgid "Yes"
 msgstr ""
 
-#: learning_with_francis/templates/progress.html:130
+#: learning_with_francis/templates/progress.html:132
 msgid "Not applicable"
 msgstr ""
 
-#: learning_with_francis/templates/progress.html:134
+#: learning_with_francis/templates/progress.html:136
 msgid "No status history recorded for this visit."
 msgstr ""
 
@@ -2091,16 +2519,4 @@ msgid ""
 "Each checked practice answer is an attempt; each correct one counts as a "
 "completed exercise entry. Repeated rounds retain their separate dated "
 "results."
-msgstr ""
-
-#: learning_with_francis/templates/_demo_notice.html
-msgid "Public learning demonstration"
-msgstr ""
-
-#: learning_with_francis/templates/_demo_notice.html
-msgid "Learning with Francis is an evolving learning project. Progress is stored temporarily and may be lost when the service sleeps, restarts or is redeployed."
-msgstr ""
-
-#: learning_with_francis/templates/_demo_notice.html
-msgid "Please use a nickname and do not rely on this demo to keep your results."
 msgstr ""

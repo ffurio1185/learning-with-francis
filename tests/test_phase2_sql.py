@@ -4,6 +4,8 @@ from concurrent.futures import ThreadPoolExecutor
 from contextlib import closing
 from html.parser import HTMLParser
 from pathlib import Path
+from retention_support import learning_snapshot
+
 import sqlite3
 import tempfile
 import unittest
@@ -82,7 +84,7 @@ class SQLFlowTests(SQLFlowSupport, unittest.TestCase):
         self.assertNotIn('href="/python', html)
 
     def test_public_forms_have_no_answer_key_and_get_does_not_save_activity(self):
-        before = self.path.read_bytes()
+        before = learning_snapshot(self.path)
         for kind in ("practice", "quiz"):
             html = self.client.get(f"/sql/{kind}").get_data(as_text=True)
             self.assertEqual(html.count('<input type="radio"'), 3 if kind == "practice" else 15)
@@ -90,7 +92,8 @@ class SQLFlowTests(SQLFlowSupport, unittest.TestCase):
             self.assertNotIn("correct_option", html)
             for question in content.questions_for(kind):
                 self.assertNotIn(question["explanation"], html)
-        self.assertEqual(self.path.read_bytes(), before)
+        self.assertEqual(learning_snapshot(self.path), before)
+
 
     def test_all_six_scores_and_exact_personalized_feedback(self):
         for score in range(6):
@@ -252,7 +255,7 @@ class SQLFlowTests(SQLFlowSupport, unittest.TestCase):
         self.assertEqual(other.post("/sql/quiz", data=data).status_code, 400)
         self.assertEqual(self.rows("SELECT COUNT(*) FROM learning_attempts"), [(1,)])
 
-    def test_end_visit_blocks_results_and_old_forms_but_retains_rows(self):
+    def test_end_visit_blocks_results_and_old_forms_and_deletes_rows(self):
         location = self.submit().location
         data = self.payload()
         fields = HiddenFields(self.client.get("/learn/").get_data(as_text=True)).fields
@@ -262,7 +265,7 @@ class SQLFlowTests(SQLFlowSupport, unittest.TestCase):
         self.assertEqual(self.client.post("/sql/quiz", data=data).status_code, 303)
         self.start(self.client)
         self.assertEqual(self.client.get(location).status_code, 404)
-        self.assertEqual(self.rows("SELECT COUNT(*) FROM learning_answers"), [(5,)])
+        self.assertEqual(self.rows("SELECT COUNT(*) FROM learning_answers"), [(0,)])
 
     def test_answer_insert_failure_rolls_back_attempt_and_all_answers(self):
         with closing(db.open_database(self.path)) as connection:

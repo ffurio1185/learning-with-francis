@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="{{ current_language }}">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex">
+    <title>{% block title %}{% endblock %} — Learning with Francis</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='phase2.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='privacy.css') }}">
+</head>
+<body>
+<main class="privacy-policy">
+    {% include '_language_controls.html' %}
+    <nav class="learning-nav" aria-label="{{ _('Legal page navigation') }}">
+        <a href="{{ url_for('cover') }}">{{ _('Welcome page') }}</a>
+        <a href="{{ url_for('index') }}">{{ _('Learning home') }}</a>
+    </nav>
+    <h1>{% block heading %}{% endblock %}</h1>
+    <p>{{ _('Last updated: 23 October 2026.') }}</p>
+    {% block content %}{% endblock %}
+    {% include '_privacy_link.html' %}
+</main>
+</body>
+</html>

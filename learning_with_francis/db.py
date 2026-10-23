@@ -10,10 +10,13 @@ from flask.cli import with_appcontext
 
 
 APPLICATION_ID = 0x4C574631  # LWF1: distinguishes this database from Version 1.
-SCHEMA_VERSION = 3
+SCHEMA_VERSION = 4
 SCHEMA_PATH = Path(__file__).with_name("schema.sql")
 MIGRATION_PATH = Path(__file__).with_name("migrations") / "002_visitors.sql"
 ACTIVITY_MIGRATION_PATH = Path(__file__).with_name("migrations") / "003_sql_activity.sql"
+
+
+RETENTION_MIGRATION_PATH = Path(__file__).with_name("migrations") / "004_temporary_visits.sql"
 
 
 class DatabaseSetupError(RuntimeError):
@@ -31,15 +34,16 @@ def open_database(db_path):
         connection = sqlite3.connect(path.as_uri() + "?mode=rw", uri=True)
         connection.row_factory = sqlite3.Row
         connection.execute("PRAGMA foreign_keys = ON")
+        connection.execute("PRAGMA secure_delete = ON")
         application_id = connection.execute("PRAGMA application_id").fetchone()[0]
         version = connection.execute("PRAGMA user_version").fetchone()[0]
-        if application_id == APPLICATION_ID and version in (1, 2):
+        if application_id == APPLICATION_ID and version in (1, 2, 3):
             raise DatabaseSetupError("Phase 2 needs the explicit upgrade-db command; left unchanged.")
         if application_id != APPLICATION_ID or version != SCHEMA_VERSION:
             raise DatabaseSetupError("This is not a supported Phase 2 database; left unchanged.")
         connection.execute("SELECT subject_id, name, display_order FROM subjects LIMIT 0")
         connection.execute("SELECT topic_id, subject_id, title FROM topics LIMIT 0")
-        connection.execute("SELECT visit_id, display_name, started_at, ended_at FROM visits LIMIT 0")
+        connection.execute("SELECT visit_id, display_name, started_at, ended_at, last_activity_at FROM visits LIMIT 0")
         connection.execute("SELECT visit_id, topic_id, learning_status, understanding_confirmed_at FROM topic_progress LIMIT 0")
         connection.execute("SELECT history_id, visit_id, topic_id, changed_at FROM topic_status_history LIMIT 0")
         connection.execute("SELECT attempt_id, visit_id, score FROM learning_attempts LIMIT 0")
@@ -79,6 +83,7 @@ def initialize_database(db_path):
             connection.executescript(schema)
             connection.executescript(MIGRATION_PATH.read_text(encoding="utf-8"))
             connection.executescript(ACTIVITY_MIGRATION_PATH.read_text(encoding="utf-8"))
+            connection.executescript(RETENTION_MIGRATION_PATH.read_text(encoding="utf-8"))
         with closing(open_database(path)):
             pass
         return True
@@ -105,18 +110,22 @@ def upgrade_database(db_path):
             connection.execute("PRAGMA foreign_keys = ON")
             marker = connection.execute("PRAGMA application_id").fetchone()[0]
             version = connection.execute("PRAGMA user_version").fetchone()[0]
-            if marker != APPLICATION_ID or version not in (1, 2, SCHEMA_VERSION):
+            if marker != APPLICATION_ID or version not in (1, 2, 3, SCHEMA_VERSION):
                 raise DatabaseSetupError("Not a supported Phase 2 database; left unchanged.")
             if version == SCHEMA_VERSION:
                 with closing(open_database(path)):
                     return None
             tables = [row[0] for row in connection.execute(
                 "SELECT name FROM sqlite_master WHERE type = 'table' ORDER BY name")]
+            # Compare the original columns, even when a migration adds metadata.
+            columns = {table: [row[1] for row in connection.execute(
+                'PRAGMA table_info("' + table.replace('"', '""') + '")')] for table in tables}
             def existing_records():
-                return {table: connection.execute('SELECT * FROM "' + table.replace('"', '""')
-                                                  + '" ORDER BY 1').fetchall() for table in tables}
+                return {table: connection.execute('SELECT ' + ','.join(
+                    '"' + column.replace('"', '""') + '"' for column in columns[table])
+                    + ' FROM "' + table.replace('"', '""') + '" ORDER BY 1').fetchall() for table in tables}
             records = existing_records()
-            backup_suffix = ".before-p2.2.db" if version == 1 else ".before-p2.3.db"
+            backup_suffix = {1: ".before-p2.2.db", 2: ".before-p2.3.db", 3: ".before-temporary-visits.db"}[version]
             backup_path = path.with_name(path.stem + backup_suffix)
             with backup_path.open("xb"):
                 pass
@@ -124,7 +133,7 @@ def upgrade_database(db_path):
                 connection.backup(backup)
             try:
                 bodies = []
-                for target, filename in ((2, MIGRATION_PATH), (3, ACTIVITY_MIGRATION_PATH)):
+                for target, filename in ((2, MIGRATION_PATH), (3, ACTIVITY_MIGRATION_PATH), (4, RETENTION_MIGRATION_PATH)):
                     if version < target:
                         migration = filename.read_text(encoding="utf-8").strip()
                         if not migration.startswith("BEGIN IMMEDIATE;") or not migration.endswith("COMMIT;"):

@@ -4,6 +4,8 @@ from concurrent.futures import ThreadPoolExecutor
 from contextlib import closing
 from datetime import timedelta
 from pathlib import Path
+from retention_support import learning_snapshot
+
 import sqlite3
 import tempfile
 import time
@@ -70,7 +72,7 @@ class ProductionTests(unittest.TestCase):
 
     def test_fresh_database_has_no_visitor_or_demonstration_records(self):
         self.assertTrue(prepare_database(self.env))
-        self.assertEqual(self.rows("PRAGMA user_version"), [(3,)])
+        self.assertEqual(self.rows("PRAGMA user_version"), [(db.SCHEMA_VERSION,)])
         self.assertEqual(self.rows("SELECT COUNT(*) FROM subjects"), [(4,)])
         self.assertEqual(self.rows("SELECT COUNT(*) FROM topics"), [(4,)])
         for table in ("visits", "topic_progress", "topic_status_history", "learning_attempts", "learning_answers"):
@@ -81,14 +83,15 @@ class ProductionTests(unittest.TestCase):
         first = self.app()
         client = first.test_client()
         self.start(client)
-        before = self.path.read_bytes()
+        before = learning_snapshot(self.path)
         self.assertFalse(prepare_database(self.env))
         second = create_production_app(self.env)
         replacement = second.test_client()
         cookie = client.get_cookie(first.config["SESSION_COOKIE_NAME"])
         replacement.set_cookie(second.config["SESSION_COOKIE_NAME"], cookie.value)
         self.assertIn("Release Learner!", self.get(replacement, "/learn/").text)
-        self.assertEqual(self.path.read_bytes(), before)
+        self.assertEqual(learning_snapshot(self.path), before)
+
 
     def test_existing_invalid_database_is_never_replaced_or_upgraded(self):
         self.path.parent.mkdir()
@@ -134,15 +137,16 @@ class ProductionTests(unittest.TestCase):
 
     def test_readiness_checks_database_without_writing_or_exposing_paths(self):
         client = self.app().test_client()
-        before = self.path.read_bytes()
+        before = learning_snapshot(self.path)
         response = self.get(client, "/healthz")
         self.assertEqual(response.json, {"status": "ok"})
-        self.assertEqual(self.path.read_bytes(), before)
+        self.assertEqual(learning_snapshot(self.path), before)
         with patch.object(db, "get_db", side_effect=db.DatabaseSetupError("private-path")):
             response = self.get(client, "/healthz")
         self.assertEqual(response.status_code, 503)
         self.assertEqual(response.json, {"status": "unavailable"})
         self.assertNotIn("private-path", response.text)
+
 
     def test_same_name_isolation_and_ended_visit_replay_protection(self):
         app = self.app()

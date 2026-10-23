@@ -1,6 +1,6 @@
 """Optional Chromium integration checks. Run with Playwright installed outside the project.
 
-Uses its own temporary schema 3 database and loopback server; keeps only reports.
+Uses its own temporary current-schema database and loopback server; keeps only reports.
 Example: PYTHONPATH=.:/tmp/p25-browser-tools PLAYWRIGHT_BROWSERS_PATH=/tmp/p25-browser-cache
          .venv/bin/python -B tests/browser_phase2_progress.py --report-dir /tmp/p25-report
 """
@@ -327,13 +327,13 @@ def run(report_dir):
                 expect(page.locator('#no-activity')).to_be_visible()
                 expect(page.locator('#status-history tbody tr')).to_have_count(4)
                 expect(page.locator('[data-summary-status="Still Learning"]')).to_have_text('4')
-                assert rows('SELECT COUNT(*) FROM learning_attempts') == [(22,)]
+                assert rows('SELECT COUNT(*) FROM learning_attempts') == [(2,)]
                 progress(other)
                 expect(other.locator('#total-quizzes')).to_have_text('1')
                 page.goto(base + '/learn/')
                 page.get_by_role('button', name='End Visit', exact=True).click()
-                expect(page.get_by_text('Your visit has ended. Your saved history is retained.', exact=True)).to_be_visible()
-                groups.append('New visit resets progress; End Visit retains old records without exposing them')
+                expect(page.get_by_text('Your visit has ended. Your learning data has been deleted.', exact=True)).to_be_visible()
+                groups.append('New visit resets progress; End Visit deletes previous records without affecting the other visitor')
 
                 # A normal persistent browser profile retains browsing history across visits.
                 # Screenshot pixels, rather than :visited/getComputedStyle history detection,
@@ -403,7 +403,7 @@ def run(report_dir):
                     expect(link_page.locator('[data-summary-status="Still Learning"]')).to_have_text('4')
                     link_page.goto(base + '/sql/')
                     link_page.get_by_role('button', name='End Visit', exact=True).click()
-                    expect(link_page.get_by_text('Your visit has ended. Your saved history is retained.', exact=True)).to_be_visible()
+                    expect(link_page.get_by_text('Your visit has ended. Your learning data has been deleted.', exact=True)).to_be_visible()
                     groups.append('Persistent-profile lesson links stay blue across a fresh visit; screenshot pixels, hover, keyboard focus and unchanged understanding verified')
                 finally:
                     profile.close()
@@ -423,7 +423,7 @@ def run(report_dir):
                             expect(restored_page.locator('#total-quizzes')).to_have_text('1')
                             expect(restored_page.locator('#total-practice')).to_have_text('1')
                             restored_page.get_by_role('button', name='End Visit', exact=True).click()
-                            expect(restored_page.get_by_text('Your visit has ended. Your saved history is retained.', exact=True)).to_be_visible()
+                            expect(restored_page.get_by_text('Your visit has ended. Your learning data has been deleted.', exact=True)).to_be_visible()
                             restored_page.go_back()
                             expect(restored_page.get_by_label('Your name', exact=True)).to_be_visible()
                             expect(restored_page.locator('#activity-history')).to_have_count(0)
@@ -443,7 +443,7 @@ def run(report_dir):
                         restored_context.close()
                     finally:
                         reopened_browser.close()
-                assert rows('SELECT COUNT(*) FROM learning_attempts') == [(22,)]
+                assert rows('SELECT COUNT(*) FROM learning_attempts') == [(0,)]
                 assert not errors, errors
                 groups.append('Browser close/reopen with restored cookies resumes only the same active visit; End Visit blocks old cookies; no-cookie visitor starts empty')
                 context.close()

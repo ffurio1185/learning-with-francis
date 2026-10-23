@@ -1,4 +1,6 @@
-"""L3 SQL browser checks using disposable schema 3 data, never original records."""
+"""L3 SQL browser checks using disposable current-schema data, never original records."""
+
+from retention_support import learning_snapshot
 
 import argparse
 from contextlib import closing
@@ -47,7 +49,7 @@ def run(report_dir):
                     page.get_by_label('Your name',exact=True).press('Enter')
                     page.get_by_role('link',name='Open SQL lesson',exact=True).click()
                     codes=page.locator('pre code').all_text_contents()
-                    before=path.read_bytes();language(page,'de')
+                    before=learning_snapshot(path);language(page,'de')
                     expect(page.get_by_role('heading',name='SQL: SELECT und WHERE',exact=True)).to_be_visible()
                     expect(page.get_by_role('heading',name='1. Spalten mit SELECT auswählen',exact=True)).to_be_visible()
                     expect(page.get_by_role('heading',name='2. Zeilen mit WHERE auswählen',exact=True)).to_be_visible()
@@ -56,7 +58,7 @@ def run(report_dir):
                     page.screenshot(path=str(report_dir/'sql-lesson-german-desktop.png'),full_page=True)
                     page.goto(base+'/progress/')
                     expect(page.locator('[data-subject="sql"] .topic-title')).to_have_text('Tabellen mit SELECT und WHERE lesen')
-                    assert path.read_bytes()==before
+                    assert learning_snapshot(path)==before
                     groups.append('German SQL lesson and topic titles; English default; unchanged executable examples, fictional table and zero activity')
 
                     page.goto(base+'/sql/practice')
@@ -66,15 +68,15 @@ def run(report_dir):
                         option=q['correct'] if position%2==0 else next(k for k in q['choices'] if k!=q['correct'])
                         page.locator(f'[name="{q["id"]}"][value="{option}"]').check()
                         if position==2:
-                            saved=path.read_bytes();language(page,'en')
+                            saved=learning_snapshot(path);language(page,'en')
                             expect(page.locator('#practice-progress')).to_have_text('Question 3 of 10')
                             expect(page.locator(f'[name="{q["id"]}"][value="{option}"]')).to_be_checked()
-                            language(page,'de');assert path.read_bytes()==saved
+                            language(page,'de');assert learning_snapshot(path)==saved
                         page.get_by_role('button',name='Antwort überprüfen',exact=True).click()
                         expect(page.locator('#personal-feedback')).to_contain_text('richtig gelöst' if position%2==0 else 'Lies die Erklärung')
                         expect(page.locator('.answer-result strong')).to_have_text('Richtig' if position%2==0 else 'Falsch')
                         assert q['explanation'] not in page.locator('.answer-result').inner_text()
-                        saved=path.read_bytes();page.reload();assert path.read_bytes()==saved
+                        saved=learning_snapshot(path);page.reload();assert learning_snapshot(path)==saved
                         page.get_by_role('link',name='Nächste Frage' if position<9 else 'Übung beenden',exact=True).click()
                     expect(page.get_by_role('heading',name='Übungsrunde abgeschlossen!',exact=True)).to_be_visible()
                     page.get_by_role('link',name='Erneut üben',exact=True).click()
@@ -92,30 +94,30 @@ def run(report_dir):
                             page.locator(f'[name="{q["id"]}"][value="{option}"]').check()
                         if score==3:
                             token=page.locator('.activity-form [name="submission_token"]').input_value()
-                            saved=path.read_bytes();language(page,'en');language(page,'de')
+                            saved=learning_snapshot(path);language(page,'en');language(page,'de')
                             assert page.locator('.activity-form input:checked').count()==5
                             assert page.locator('.activity-form [name="submission_token"]').input_value()==token
-                            assert path.read_bytes()==saved
+                            assert learning_snapshot(path)==saved
                         page.locator('.activity-form input:checked').last.press('Enter')
                         expect(page.locator('#score')).to_contain_text(f'{score} von 5')
                         expect(page.locator('#personal-feedback')).to_contain_text('Übe weiter' if score<=2 else 'Quiz bestanden' if score<5 else 'Volle Punktzahl')
                         expect(page.locator('#personal-feedback')).to_contain_text('SQL Learner!')
                         expect(page.locator('.answer-result')).to_have_count(5)
                         expect(page.get_by_text('Richtige Antwort:',exact=False)).to_have_count(5)
-                        saved=path.read_bytes();page.reload();assert path.read_bytes()==saved
+                        saved=learning_snapshot(path);page.reload();assert learning_snapshot(path)==saved
                         expect(page.get_by_role('link',name='Erneut versuchen',exact=True)).to_be_visible()
                     result_url=page.url
                     assert rows("SELECT score FROM learning_attempts WHERE activity_kind='quiz' ORDER BY rowid")==[(0,),(2,),(3,),(5,)]
                     assert rows('SELECT DISTINCT learning_status FROM topic_progress')==[('Still Learning',)]
                     groups.append('Five-question German quiz, no early answer reveal, all feedback bands, unlimited retries, draft/token preservation and accurate scores without automatic completion')
 
-                    saved=path.read_bytes()
+                    saved=learning_snapshot(path)
                     language(page,'en')
                     expect(page.locator('#personal-feedback')).to_contain_text('Congratulations, SQL Learner!')
                     expect(page.locator('.answer-result h2').first).to_have_text(sql_content.QUIZ[0]['prompt'])
                     language(page,'de')
                     expect(page.locator('.answer-result h2').first).to_have_text('Was wählt SELECT in einer Abfrage aus?')
-                    assert path.read_bytes()==saved
+                    assert learning_snapshot(path)==saved
                     assert rows("SELECT prompt FROM learning_answers WHERE question_id='q1' AND attempt_id IN (SELECT attempt_id FROM learning_attempts WHERE activity_kind='quiz')")==[(sql_content.QUIZ[0]['prompt'],)]*4
                     page.goto(base+'/progress/')
                     expect(page.locator('#total-practice')).to_have_text('10')
@@ -152,9 +154,9 @@ def run(report_dir):
                     other.goto(base+'/sql/quiz')
                     first=sql_content.QUIZ[0]
                     other.locator(f'[name="{first["id"]}"][value="{first["correct"]}"]').check()
-                    before=path.read_bytes();language(other,'de')
+                    before=learning_snapshot(path);language(other,'de')
                     expect(other.locator(f'[name="{first["id"]}"][value="{first["correct"]}"]')).to_be_checked()
-                    assert path.read_bytes()==before
+                    assert learning_snapshot(path)==before
                     for q in sql_content.QUIZ:
                         other.locator(f'[name="{q["id"]}"][value="{q["correct"]}"]').check()
                     other.locator('.activity-form input:checked').last.press('Enter')
@@ -163,10 +165,10 @@ def run(report_dir):
                     other_row=other.locator('[data-subject="sql"]')
                     expect(other_row.locator('.saved-status')).to_have_text('Noch am Lernen')
                     other_row.locator('[name="new_status"]').select_option('Completed')
-                    before=path.read_bytes()
+                    before=learning_snapshot(path)
                     other_row.get_by_role('button',name='Speichern',exact=True).click()
                     expect(other.locator('.visit-error')).to_contain_text('Bitte bestätige')
-                    assert path.read_bytes()==before
+                    assert learning_snapshot(path)==before
                     # Validation re-renders the saved status; choose the intended new status again.
                     other_row.locator('[name="new_status"]').select_option('Completed')
                     other_row.locator('[name="user_confirmed"]').check()

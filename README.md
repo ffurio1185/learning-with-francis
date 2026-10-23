@@ -106,6 +106,16 @@ See [the Free setup and launch requirements](docs/PUBLIC-RELEASE.md).
 
 ## Temporary visits and privacy
 
+The English **Privacy Policy** and German **Datenschutzerklärung** are available
+at `/privacy/`; the **Impressum** is at `/impressum/`, with the same language
+controls. Both are linked from the cover, name-entry, learning, progress and error
+pages and work without an active visit. Francis has approved local integration
+and the confirmed operator/contact details. The notices describe Option B deletion
+and inactivity accurately. Account-specific provider agreements, international
+transfer arrangements and logging remain external verification items before
+public launch; see [the legal review record](docs/PRIVACY-REVIEW.md).
+Local integration does not authorise a commit, push or deployment.
+
 A name is a greeting label, never an identifier. Every new visit receives a random
 ID and fresh progress. Identical names do not recover or share earlier results.
 The signed session cookie selects the current visit; progress and result queries
@@ -119,10 +129,16 @@ Use **End Visit** before handing the browser to someone else. **Start New Visit*
 ends the active identity and returns to name entry for a fresh visit. Separate
 browser profiles can be used to compare independent visitors.
 
-Names, answers, scores and dates are retained in the local database after a visit
-ends, while that ended visit loses browser access. There is no account recovery,
-cross-device progress or automatic deletion feature. No original learner records,
-preview databases, backups or private signing keys are included in this snapshot.
+End Visit and Start New Visit delete the current visit's nickname, answers,
+attempts, scores, progress and confirmation/history records in one transaction.
+A configurable **30-minute inactivity limit** is renewed by successful learning
+requests, not by browser heartbeats. Expired visits are deleted at application
+startup and later learning/visit requests. Reading without a server request does
+not renew activity. Browser closure cannot reliably end a visit, and cleanup may
+be delayed while Render sleeps. There is no account recovery or cross-device
+progress. See [temporary visit behavior](docs/TEMPORARY-VISITS.md).
+No original learner records, preview databases, backups or private signing keys
+are included in this snapshot.
 
 ## Project layout
 
@@ -158,11 +174,11 @@ Run the Python and SQLite regression suite:
 
 The original published source had 125 tests; bilingual/content checks and later
 cover verification brought the application suite to 194. This Free demonstration
-candidate adds 16 production-boundary and five Free-storage/notice tests, for
-**215 tests**. They cover both versions, database setup,
+candidate adds 16 production-boundary, five Free-storage/notice and 15 legal-page
+checks plus 27 temporary-retention checks, for **257 tests**. They cover both versions, database setup,
 transactions, grading, repeated practice, visitor isolation, confirmation
 protection, saved history, timezone display and cover routing. Tests generate
-schema 3 data and signing keys in disposable `/tmp` directories. Version 1 tests
+current-schema data and signing keys in disposable `/tmp` directories. Version 1 tests
 create their own database from `tests/fixtures/version1-schema.sql`; no original
 database is required.
 
@@ -178,12 +194,21 @@ installed Playwright and Chromium, start their own loopback server, and remove
 their disposable test databases. With those tools available, run:
 
 ```sh
-python -B tests/browser_phase2_progress.py --report-dir /tmp/francis-progress-checks
-python -B tests/browser_welcome_cover.py --report-dir /tmp/francis-cover-checks
-python -B tests/browser_language.py --report-dir /tmp/francis-language-checks
-python -B tests/browser_interface_language.py --report-dir /tmp/francis-interface-checks
-python -B tests/browser_sql_language.py --report-dir /tmp/francis-sql-language-checks
-python -B tests/browser_subject_language.py --report-dir /tmp/francis-subject-language-checks
+PYTHONPATH=. python -B tests/browser_phase2_progress.py --report-dir /tmp/francis-progress-checks
+PYTHONPATH=. python -B tests/browser_welcome_cover.py --report-dir /tmp/francis-cover-checks
+PYTHONPATH=. python -B tests/browser_language.py --report-dir /tmp/francis-language-checks
+PYTHONPATH=. python -B tests/browser_interface_language.py --report-dir /tmp/francis-interface-checks
+PYTHONPATH=. python -B tests/browser_sql_language.py --report-dir /tmp/francis-sql-language-checks
+PYTHONPATH=. python -B tests/browser_subject_language.py --report-dir /tmp/francis-subject-language-checks
+```
+
+The production driver adds eight groups, the integrated legal-page driver five, and
+`tests/browser_temporary_visits.py` ten (83 browser groups overall):
+
+```sh
+PYTHONPATH=. python -B tests/browser_production.py --report-dir /tmp/francis-production-checks
+PYTHONPATH=. python -B tests/browser_privacy.py --report-dir /tmp/francis-privacy-checks
+PYTHONPATH=. python -B tests/browser_temporary_visits.py --report-dir /tmp/francis-retention-checks
 ```
 
 Use the Python environment containing Flask and Playwright for these optional
@@ -271,13 +296,15 @@ not recorded visitor progress.
 
 Local production preparation is available through `wsgi:app`, Gunicorn and
 `render.yaml`. Live Render deployment has **not** occurred. The supported start
-script initialises a fresh schema-3 database under a private persistent mount and
+script initialises a fresh schema-4 database in private temporary storage and
 validates existing databases without resetting or upgrading them. Production needs
-an external stable secret and HTTPS; the approved 12-hour session behavior remains.
+an external stable secret and HTTPS. The 12-hour cookie signature window remains;
+successful learning requests renew it, subject to the 30-minute server-side idle limit.
 
-Before deployment, approve the real Impressum/privacy information, data-retention
-and backup arrangements, and actual hosting costs. No original or preview database
-should be uploaded. Follow [the release procedure](docs/PUBLIC-RELEASE.md); the
+Before deployment, verify the remaining external provider-account processing,
+transfer and logging facts, then approve the separate release/deployment action.
+Operator details, local legal integration, Option B and Free hosting are already
+approved. No original or preview database should be uploaded. Follow [the release procedure](docs/PUBLIC-RELEASE.md); the
 configuration file does not itself buy services or authorise deployment.
 
 ## Credits and third-party assets

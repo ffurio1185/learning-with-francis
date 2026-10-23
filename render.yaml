@@ -18,5 +18,7 @@ services:
         value: /tmp/learning-with-francis
       - key: LWF_DEMO_MODE
         value: "1"
+      - key: LWF_VISIT_IDLE_SECONDS
+        value: "1800"
       - key: LWF_SECRET_KEY
         generateValue: true

@@ -2,6 +2,8 @@
 
 from concurrent.futures import ThreadPoolExecutor
 from contextlib import closing
+from retention_support import learning_snapshot
+
 import gettext
 from pathlib import Path
 import tempfile
@@ -178,17 +180,18 @@ class LanguageVisitTests(SQLFlowSupport, unittest.TestCase):
         self.submit(3)
         self.submit(1, "practice")
         data = self.payload(5)
-        before = self.path.read_bytes()
+        before = learning_snapshot(self.path)
         with self.client.session_transaction() as session:
             old = dict(session)
         self.choose("de")
-        self.assertEqual(self.path.read_bytes(), before)
+        self.assertEqual(learning_snapshot(self.path), before)
         with self.client.session_transaction() as session:
             self.assertEqual({k: v for k, v in session.items() if k != "language"}, old)
         # Language is a preference: saved SQL identifiers/answers remain canonical.
         self.assertEqual(self.client.post("/sql/quiz", data=data).status_code, 303)
         self.assertEqual(self.rows("SELECT score FROM learning_attempts WHERE activity_kind = 'quiz' ORDER BY rowid"), [(3,), (5,)])
         self.assertEqual(self.rows("SELECT DISTINCT learning_status FROM topic_progress"), [("Still Learning",)])
+
 
     def test_visit_start_preserves_only_valid_language_and_clears_old_tokens(self):
         self.choose("de")
@@ -215,7 +218,7 @@ class LanguageVisitTests(SQLFlowSupport, unittest.TestCase):
                 self.assertNotIn("visit_id", session)
                 self.assertEqual(session["language"], "de")
                 self.assertNotIn("csrf_token", session)
-            self.assertIsNotNone(self.rows("SELECT ended_at FROM visits WHERE visit_id = ?", (previous_id,))[0][0])
+            self.assertEqual(self.rows("SELECT * FROM visits WHERE visit_id = ?", (previous_id,)), [])
             self.assertEqual(self.client.get("/progress/").location, "/learn/")
             self.start(self.client)
             with self.client.session_transaction() as session:
@@ -228,13 +231,14 @@ class LanguageVisitTests(SQLFlowSupport, unittest.TestCase):
         self.choose("de")
         self.choose("en", other)
         first = self.submit(5)
-        before = self.path.read_bytes()
+        before = learning_snapshot(self.path)
         self.assertEqual(other.get(first.location).status_code, 404)
         self.assertIn("No practice or quiz activity yet", other.get("/progress/").text)
         self.assertIn("5 / 5 richtig", self.client.get("/progress/").text)
-        self.assertEqual(self.path.read_bytes(), before)
+        self.assertEqual(learning_snapshot(self.path), before)
         self.assertIn('<html lang="de">', self.client.get("/").text)
         self.assertIn('<html lang="en">', other.get("/").text)
+
 
     def test_invalid_preference_is_discarded_at_visit_boundary(self):
         with self.client.session_transaction() as session:

@@ -1,6 +1,8 @@
-"""L4 localization flows: disposable schema 3, canonical records, private visits."""
+"""L4 localization flows: disposable current-schema, canonical records, private visits."""
 from contextlib import closing
 from html import unescape
+from retention_support import learning_snapshot
+
 import json
 import re
 import unittest
@@ -42,7 +44,7 @@ class SubjectLanguageTests(SQLFlowSupport, unittest.TestCase):
 
     def test_lessons_both_languages_keep_exact_code_and_do_not_write_metadata(self):
         english = {s: self.client.get(f'/{s}/').text for s in SLUGS}
-        before = self.path.read_bytes(); self.switch()
+        before = learning_snapshot(self.path); self.switch()
         for slug in SLUGS:
             with self.subTest(subject=slug):
                 german = self.client.get(f'/{slug}/').text
@@ -53,7 +55,8 @@ class SubjectLanguageTests(SQLFlowSupport, unittest.TestCase):
                 self.assertIn(SUBJECTS[slug]['title'], english[slug])
                 for path in ('/learn/', '/progress/'):
                     self.assertIn(TITLES[slug], self.client.get(path).text)
-        self.assertEqual(self.path.read_bytes(), before)
+        self.assertEqual(learning_snapshot(self.path), before)
+
 
     def test_all_forty_five_questions_translate_without_leaking_explanations_or_keys(self):
         self.switch()
@@ -105,31 +108,32 @@ class SubjectLanguageTests(SQLFlowSupport, unittest.TestCase):
                 self.assertIn(f'Frage {index + 1} von 10', html)
                 choice = q['correct'] if index % 2 == 0 else next(k for k in q['choices'] if k != q['correct'])
                 if index == 3:
-                    before = self.path.read_bytes()
+                    before = learning_snapshot(self.path)
                     response = self.client.post('/preferences/language', data={**fields, q['id']: choice, 'language': 'en'})
                     html = self.client.get(response.location).text
                     self.assertEqual(CheckedAnswers(html).answers, {q['id']: choice})
                     self.assertEqual(HiddenFields(html).fields['position'], '3')
                     response = self.client.post('/preferences/language', data={**HiddenFields(html).fields, q['id']: choice, 'language': 'de'})
                     fields = HiddenFields(self.client.get(response.location).text).fields
-                    self.assertEqual(self.path.read_bytes(), before)
+                    self.assertEqual(learning_snapshot(self.path), before)
                 response = self.client.post(f'/{slug}/practice', data={**fields, q['id']: choice})
                 self.assertEqual(response.status_code, 303)
                 html = unescape(self.client.get(response.location).text)
                 self.assertIn('richtig gelöst' if index % 2 == 0 else 'Lies die Erklärung', html)
                 self.assertIn('Richtige Antwort:', html)
                 self.assertNotIn(q['explanation'], html)
-                before = self.path.read_bytes(); self.client.get(response.location)
-                self.assertEqual(self.path.read_bytes(), before)
+                before = learning_snapshot(self.path); self.client.get(response.location)
+                self.assertEqual(learning_snapshot(self.path), before)
                 path = unescape(re.search(r'id="practice-next" href="([^"]+)"', html)[1])
             self.assertIn('Übungsrunde abgeschlossen!', self.client.get(path).text)
             self.assertIn('Frage 1 von 10', self.client.get(f'/{slug}/practice').text)
             self.assertEqual(self.rows('SELECT COUNT(*),SUM(score) FROM learning_attempts WHERE topic_id=?', (SUBJECTS[slug]['content'].TOPIC_ID,)), [(10, 5)])
         self.assertEqual(self.rows('SELECT DISTINCT learning_status FROM topic_progress'), [('Still Learning',)])
 
+
     def test_quiz_drafts_keep_original_identity_answers_and_database_unchanged_both_ways(self):
         for slug in SLUGS:
-            data = self.quiz_data(slug, 3); before = self.path.read_bytes()
+            data = self.quiz_data(slug, 3); before = learning_snapshot(self.path)
             for language in ('de', 'en', 'de'):
                 response = self.client.post('/preferences/language', data={**data, 'language': language})
                 html = self.client.get(response.location).text
@@ -137,12 +141,13 @@ class SubjectLanguageTests(SQLFlowSupport, unittest.TestCase):
                 fields = HiddenFields(html).fields
                 self.assertEqual(fields['submission_token'], data['submission_token'])
                 data.update(fields)
-            self.assertEqual(self.path.read_bytes(), before)
+            self.assertEqual(learning_snapshot(self.path), before)
+
 
     def test_existing_english_results_switch_to_german_and_back_read_only(self):
         for slug in SLUGS:
             self.switch('en'); url = self.quiz_result(slug, 4)
-            english = self.client.get(url).text; before = self.path.read_bytes()
+            english = self.client.get(url).text; before = learning_snapshot(self.path)
             self.switch(path=url)
             german = self.client.get(url).text
             self.assertIn('Quiz bestanden', german)
@@ -150,18 +155,20 @@ class SubjectLanguageTests(SQLFlowSupport, unittest.TestCase):
             self.switch('en', path=url)
             self.assertEqual(self.client.get(url).text.count('class="answer-result correct-answer"'), 4)
             self.assertIn(SUBJECTS[slug]['content'].QUIZ[0]['prompt'], unescape(english))
-            self.assertEqual(self.path.read_bytes(), before)
+            self.assertEqual(learning_snapshot(self.path), before)
+
 
     def test_cross_language_duplicates_are_idempotent_and_changed_answers_rejected(self):
         for slug in SLUGS:
             data = self.quiz_data(slug); response = self.client.post(f'/{slug}/quiz', data=data)
-            self.switch(path=response.location); before = self.path.read_bytes()
+            self.switch(path=response.location); before = learning_snapshot(self.path)
             duplicate = self.client.post(f'/{slug}/quiz', data=data)
             self.assertEqual(duplicate.location, response.location)
             data['q1'] = next(k for k in SUBJECTS[slug]['content'].QUIZ[0]['choices'] if k != data['q1'])
             self.assertEqual(self.client.post(f'/{slug}/quiz', data=data).status_code, 409)
-            self.assertEqual(self.path.read_bytes(), before)
+            self.assertEqual(learning_snapshot(self.path), before)
         self.assertEqual(self.rows('SELECT COUNT(*) FROM learning_attempts'), [(3,)])
+
 
     def test_unknown_saved_wording_keeps_original_english_without_rewriting_records(self):
         for slug in SLUGS:
@@ -169,12 +176,13 @@ class SubjectLanguageTests(SQLFlowSupport, unittest.TestCase):
             with closing(db.open_database(self.path)) as connection:
                 connection.execute('UPDATE learning_answers SET prompt=? WHERE attempt_id=? AND question_id=?', ('Earlier lesson wording', url.rsplit('/', 1)[1], 'q1'))
                 connection.commit()
-            self.switch(path=url); before = self.path.read_bytes()
+            self.switch(path=url); before = learning_snapshot(self.path)
             html = self.client.get(url).text
             self.assertIn('Earlier lesson wording', html)
             self.assertIn('frühere Formulierung', html)
             self.assertIn('<h2 lang="en">Earlier lesson wording', html)
-            self.assertEqual(self.path.read_bytes(), before)
+            self.assertEqual(learning_snapshot(self.path), before)
+
 
     def test_subject_scoped_lookup_does_not_confuse_reused_question_ids(self):
         self.switch()
@@ -217,40 +225,43 @@ class SubjectLanguageTests(SQLFlowSupport, unittest.TestCase):
     def test_invalid_answers_tokens_and_forged_scores_never_bypass_python_grading(self):
         self.switch()
         for slug in SLUGS:
-            data = self.quiz_data(slug, 0); before = self.path.read_bytes()
+            data = self.quiz_data(slug, 0); before = learning_snapshot(self.path)
             for invalid in (MultiDict({**data, 'q1': ['a', 'b']}), {**data, 'q1': 'foreign'}, {**data, 'csrf_token': 'forged'}):
                 self.assertEqual(self.client.post(f'/{slug}/quiz', data=invalid).status_code, 400)
-                self.assertEqual(self.path.read_bytes(), before)
+                self.assertEqual(learning_snapshot(self.path), before)
             data.update(score='5', total_questions='1', visit_id='foreign')
             response = self.client.post(f'/{slug}/quiz', data=data)
             self.assertEqual(response.status_code, 303)
         self.assertEqual(self.rows('SELECT score,total_questions FROM learning_attempts'), [(0, 5)] * 3)
 
+
     def test_personal_completion_required_for_each_subject_and_reversible_across_languages(self):
         self.switch()
         for slug in SLUGS:
             topic = SUBJECTS[slug]['content'].TOPIC_ID
-            fields = self.fields_at('/progress/'); before = self.path.read_bytes()
+            fields = self.fields_at('/progress/'); before = learning_snapshot(self.path)
             for confirmation in ('', 'true', '1'):
                 response = self.client.post(f'/progress/{topic}/status', data={**fields, 'new_status': 'Completed', 'user_confirmed': confirmation})
                 self.assertEqual(response.status_code, 400)
-                self.assertEqual(self.path.read_bytes(), before)
+                self.assertEqual(learning_snapshot(self.path), before)
             self.assertEqual(self.client.post(f'/progress/{topic}/status', data={**fields, 'new_status': 'Completed', 'user_confirmed': 'yes'}).status_code, 303)
             self.switch('en'); fields = self.fields_at('/progress/')
             self.assertEqual(self.client.post(f'/progress/{topic}/status', data={**fields, 'new_status': 'Needs Review'}).status_code, 303)
             self.assertEqual(self.rows('SELECT learning_status,understanding_confirmed_at FROM topic_progress WHERE topic_id=?', (topic,)), [('Needs Review', None)])
             self.switch()
 
+
     def test_language_preference_and_saved_results_survive_application_restart(self):
-        self.switch(); urls = [self.quiz_result(s) for s in SLUGS]; before = self.path.read_bytes()
+        self.switch(); urls = [self.quiz_result(s) for s in SLUGS]; before = learning_snapshot(self.path)
         name = self.app.config['SESSION_COOKIE_NAME']; cookie = self.client.get_cookie(name).value
         restarted = create_app(self.config).test_client(); restarted.set_cookie(name, cookie)
         for url in urls:
             self.assertIn('Volle Punktzahl', restarted.get(url).text)
         self.assertIn('id="total-quizzes">3', restarted.get('/progress/').text)
-        self.assertEqual(self.path.read_bytes(), before)
+        self.assertEqual(learning_snapshot(self.path), before)
 
-    def test_new_and_ended_visits_clear_drafts_keep_language_and_retain_previous_results(self):
+
+    def test_new_and_ended_visits_clear_drafts_keep_language_and_delete_previous_results(self):
         self.switch(); urls = [self.quiz_result(s) for s in SLUGS]
         fields = self.fields_at('/learn/')
         self.assertEqual(self.client.post('/visits/new', data=fields).status_code, 303)
@@ -258,7 +269,7 @@ class SubjectLanguageTests(SQLFlowSupport, unittest.TestCase):
         self.assertIn('id="total-quizzes">0', self.client.get('/progress/').text)
         self.assertIn('<html lang="de">', self.client.get('/learn/').text)
         for url in urls: self.assertEqual(self.client.get(url).status_code, 404)
-        self.assertEqual(self.rows('SELECT COUNT(*) FROM learning_attempts'), [(3,)])
+        self.assertEqual(self.rows('SELECT COUNT(*) FROM learning_attempts'), [(0,)])
         fields = self.fields_at('/learn/')
         self.assertEqual(self.client.post('/visits/end', data=fields).status_code, 303)
         with self.client.session_transaction() as saved:

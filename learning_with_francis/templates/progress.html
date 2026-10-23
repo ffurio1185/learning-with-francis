@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='phase2.css') }}">
     <script src="{{ url_for('static', filename='phase2-topics.js') }}" defer></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='privacy.css') }}">
 </head>
 <body>
 <main class="progress-page">
@@ -134,6 +135,7 @@
         </div>
         {% else %}<p class="empty-message">{{ _('No status history recorded for this visit.') }}</p>{% endif %}
     </section>
+    {% include '_privacy_link.html' %}
 </main>
 </body>
 </html>

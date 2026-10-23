@@ -8,6 +8,7 @@
     <title>{{ _('Welcome') }} · Learning with Francis</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='cover.css') }}">
     <script src="{{ url_for('static', filename='cover.js') }}" defer></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='privacy.css') }}">
 </head>
 <body>
     <main class="welcome-cover" id="welcome-cover" aria-labelledby="welcome-title">
@@ -38,6 +39,7 @@
             <p>{{ _('What began as a personal learning progress tracker in Version 1 has evolved into an interactive learning experience in Version 2, featuring lessons, practice exercises, quizzes, and personal progress tracking.') }}</p>
             <p>{{ _('This project continues to grow alongside its creator’s learning journey, with new ideas and opportunities for future development.') }}</p>
             <p class="cover-creator">{{ _('Concept, Design & Development by Francis Furio') }}</p>
+            {% include '_privacy_link.html' %}
         </div>
     </section>
 </body>

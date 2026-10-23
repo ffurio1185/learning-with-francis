@@ -2,6 +2,8 @@
 
 from contextlib import closing
 from datetime import datetime, timezone
+from retention_support import learning_snapshot
+
 import unittest
 
 from learning_with_francis import db
@@ -52,7 +54,7 @@ class BerlinPageTests(SQLFlowSupport, unittest.TestCase):
                 (visit_id,topic_id,previous_status,new_status,changed_at,user_confirmed)
                 VALUES (?,'sql-select-basics','Still Learning','Completed','2026-07-15 12:30:00',1)""", (owner,))
             connection.commit()
-        before = self.path.read_bytes()
+        before = learning_snapshot(self.path)
         home = self.client.get('/learn/').get_data(as_text=True)
         progress = self.client.get('/progress/').get_data(as_text=True)
         lesson = self.client.get('/sql/').get_data(as_text=True)
@@ -64,8 +66,9 @@ class BerlinPageTests(SQLFlowSupport, unittest.TestCase):
             self.assertIn('datetime="2026-10-22T02:29:38+02:00"', html)
             self.assertNotIn('Date (UTC)', html)
         self.assertEqual(progress.count('15.07.2026 14:30:00 CEST'), 2)
-        self.assertEqual(self.path.read_bytes(), before)
+        self.assertEqual(learning_snapshot(self.path), before)
         self.assertEqual(self.rows('SELECT submitted_at FROM learning_attempts'), [('2026-10-22 00:29:38',)])
+
 
     def test_shared_result_and_subject_lesson_show_practice_in_local_time(self):
         # A real submitted practice attempt, then an old UTC fixture date in this disposable DB.
@@ -77,12 +80,13 @@ class BerlinPageTests(SQLFlowSupport, unittest.TestCase):
             connection.execute("UPDATE learning_attempts SET submitted_at='2026-12-31 23:30:00'")
             connection.commit()
         attempt_id = result.location.rsplit('/', 1)[1]
-        before = self.path.read_bytes()
+        before = learning_snapshot(self.path)
         for path in ('/python/', f'/python/results/{attempt_id}', '/progress/'):
             html = self.client.get(path).get_data(as_text=True)
             self.assertIn('01.01.2027 00:30:00 CET', html)
             self.assertIn('datetime="2027-01-01T00:30:00+01:00"', html)
-        self.assertEqual(self.path.read_bytes(), before)
+        self.assertEqual(learning_snapshot(self.path), before)
+
 
     def test_newly_submitted_activity_is_stored_in_utc_and_displayed_in_berlin(self):
         before = datetime.now(timezone.utc)
